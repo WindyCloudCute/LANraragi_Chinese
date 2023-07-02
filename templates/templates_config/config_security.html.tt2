@@ -1,20 +1,20 @@
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Enable Password </h2>
+        <h2 class="ih"> 启用密码 </h2>
     </td>
     <td class="config-td">
         [% IF enablepass %]
         <input id="enablepass" name="enablepass" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="enablepass" name="enablepass" class="fa" type="checkbox"> [% END %]
         <label for="enablepass">
-            <br>If enabled, everything that isn't reading will require a password.
+            <br>如果启用那么所有高级操作都需要密码。
         </label>
     </td>
 </tr>
 
 <tr class="passwordfields">
     <td class="option-td">
-        <h2 class="ih"> New Password </h2>
+        <h2 class="ih"> 新密码 </h2>
     </td>
     <td class="config-td">
         <input class="stdinput" style="width:100%" maxlength="255" size="20" name="newpassword" type="password">
@@ -23,26 +23,26 @@
 
 <tr class="passwordfields">
     <td class="option-td">
-        <h2 class="ih"> New Password Confirmation </h2>
+        <h2 class="ih"> 确认密码 </h2>
     </td>
     <td class="config-td">
         <input class="stdinput" style="width:100%" maxlength="255" size="20" name="newpassword2" type="password">
-        <br> Only edit these fields if you want to change your password. <br />
-        The one already stored will be used otherwise.
+        <br> 当你需要修改密码时才需要填写以上两个输入框, <br />
+        如果不需要修改则不需要填写,保持为空即可。
     </td>
 </tr>
 
 <tr class="passwordfields">
     <td class="option-td">
-        <h2 class="ih"> No-Fun Mode </h2>
+        <h2 class="ih"> 全局密码 </h2>
     </td>
     <td class="config-td">
         [% IF nofunmode %]
         <input id="nofunmode" name="nofunmode" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="nofunmode" name="nofunmode" class="fa" type="checkbox"> [% END %]
         <label for="nofunmode">
-            <br>Enabling No-Fun Mode will lock reading archives behind the password as well. <br />
-            Fully effective after restarting LANraragi.
+            <br>启用后所有人访问都需要先输入密码才可以登录。 <br />
+            启用此操作视为所有可以登录的人都是管理员,需要重启LANraragi。
         </label>
     </td>
 </tr>
@@ -54,25 +54,24 @@
     <td class="config-td">
         <input id="apikey" class="stdinput" style="width:100%" maxlength="255" size="20" value="[% apikey %]"
             name="apikey" type="text">
-        <br>If you wish to use the Client API and have a password, you'll have to set a key here.<br />
-        Empty keys will <b>not</b> work!
-        <br>This key will need to be provided in every protected API call as the <i>Authorization</i> header.
+        <br>如果您希望客户端使用 API 时需要填写密码，则你必须在此处设置一个字符串,必须是英文或者数字。<br />
+        <b>保持为空</b>将不起作用!
+        <br>每个受保护的 API 调用都需要提供此密钥作为<i>Authorization</i>标头。
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Enable CORS for the Client API </h2>
+        <h2 class="ih"> 为客户端 API 启用 CORS </h2>
     </td>
     <td class="config-td">
         [% IF enablecors %]
         <input id="enablecors" name="enablecors" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="enablecors" name="enablecors" class="fa" type="checkbox"> [% END %]
         <label for="enablecors">
-            <br>Have API requests support Cross-Origin Resource Sharing, which allows web browsers to access it off
-            other domains.
-            <br>Turn this on if you want to access this service through a web-based wrapper (e.g. a userscript)
-            used/hosted on another domain.
+            <br>让 API 请求支持域请求，启用将允许 Web 浏览器在其他站点或服务器上调用您的API。
+            <br>如果你想让其他web页面访问您的API,或者其他的服务商托管你的web前端,那么请打开此选项。
+            <br>如果你不知道这个有什么用请保持关闭,永远不要打开它。
         </label>
     </td>
 </tr>
