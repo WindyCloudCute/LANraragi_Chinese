@@ -1,0 +1,56 @@
+{
+    "name": "lanraragi",
+    "version": "0.8.90",
+    "version_name": "The Hearts Filthy Lesson",
+    "description": "I'm under Japanese influence and my honor's at stake!",
+    "scripts": {
+        "test": "prove -r -l -v tests/",
+        "lanraragi-installer": "perl ./tools/install.pl",
+        "lint": "eslint --ext .js public/",
+        "start": "perl ./script/launcher.pl -f ./script/lanraragi",
+        "dev-server": "perl ./script/launcher.pl -m -v ./script/lanraragi",
+        "dev-server-verbose": "export LRR_DEVSERVER=1 && perl ./script/launcher.pl -m -v ./script/lanraragi",
+        "kill-workers": "(kill -15 `cat ./public/temp/shinobu.pid-s6` || true) && (kill -15 `cat ./public/temp/minion.pid-s6` || true) && (pkill -9 -f ./script/lanraragi || true)",
+        "docker-build": "docker build -t difegue/lanraragi -f ./tools/build/docker/Dockerfile .",
+        "critic": "perlcritic ./lib/* ./script/* ./tools/install.pl",
+        "backup-db": "perl ./script/backup",
+        "get-version": "perl -Mojo -E \"my \\$conf = j(f(qw(package.json))->slurp); say %\\$conf{version} .q/ - '/. %\\$conf{version_name} .q/'/ \""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Difegue/LANraragi.git"
+    },
+    "author": "dfug",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Difegue/LANraragi/issues"
+    },
+    "homepage": "https://github.com/Difegue/LANraragi#readme",
+    "dependencies": {
+        "@fortawesome/fontawesome-free": "^6.2.1",
+        "@jcubic/tagger": "^0.4.2",
+        "allcollapsible": "^1.1.0",
+        "awesomplete": "^1.1.5",
+        "blueimp-file-upload": "^10.32.0",
+        "clsx": "^1.1.1",
+        "datatables.net": "^1.11.5",
+        "fscreen": "^1.2.0",
+        "inter-ui": "^3.19.3",
+        "jqcloud2": "^2.0.3",
+        "jquery": "^3.6.0",
+        "jquery-contextmenu": "^2.9.2",
+        "marked": "^4.0.14",
+        "open-sans-fontface": "^1.4.0",
+        "preact": "^10.7.1",
+        "react-toastify": "^9.0.0-rc-2",
+        "roboto-fontface": "^0.8.0",
+        "sweetalert2": "^11.4.10",
+        "swiper": "^8.4.5",
+        "tippy.js": "^6.3.7"
+    },
+    "devDependencies": {
+        "eslint": "^7.32.0",
+        "eslint-config-airbnb-base": "^15.0.0",
+        "eslint-plugin-import": "^2.26.0"
+    }
+}

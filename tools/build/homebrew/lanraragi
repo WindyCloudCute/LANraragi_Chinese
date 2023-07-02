@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# prefix/place where lrr is installed
+workdir=$(dirname $0)/$(dirname $(readlink $0))/../libexec
+
+# default locations
+if [[ ${OSTYPE} == "darwin"* ]]; then
+  _LRR_DATA_DIRECTORY="${HOME}/Library/Application Support/LANraragi/content"
+  _LRR_THUMB_DIRECTORY="${HOME}/Library/Application Support/LANraragi/content/thumb"
+  _LRR_DATABASE_DIRECTORY="${HOME}/Library/Application Support/LANraragi/database"
+  _LRR_LOG_DIRECTORY="${HOME}/Library/Logs/LANraragi"
+  _LRR_TEMP_DIRECTORY="${HOME}/Library/Application Support/LANraragi/temp"
+else
+  _LRR_DATA_DIRECTORY="${HOME}/LANraragi/content"
+  _LRR_DATABASE_DIRECTORY="${HOME}/LANraragi/database"
+  _LRR_LOG_DIRECTORY="${HOME}/LANraragi/log"
+  _LRR_TEMP_DIRECTORY="${HOME}/LANraragi/temp"
+fi
+
+# initialize if not set
+if [[ ${LRR_DATA_DIRECTORY} == "" ]]; then
+  export LRR_DATA_DIRECTORY="${_LRR_DATA_DIRECTORY}"
+fi
+if [[ ${LRR_THUMB_DIRECTORY} == "" ]]; then
+  export LRR_THUMB_DIRECTORY="${_LRR_THUMB_DIRECTORY}"
+fi
+if [[ ${LRR_DATABASE_DIRECTORY} == "" ]]; then
+  export LRR_DATABASE_DIRECTORY="${_LRR_DATABASE_DIRECTORY}"
+fi
+if [[ ${LRR_LOG_DIRECTORY} == "" ]]; then
+  export LRR_LOG_DIRECTORY="${_LRR_LOG_DIRECTORY}"
+fi
+if [[ ${LRR_TEMP_DIRECTORY} == "" ]]; then
+  export LRR_TEMP_DIRECTORY="${_LRR_TEMP_DIRECTORY}"
+fi
+
+# output -- Directories are created by LRR's launcher.pl if they don't exist
+echo "Data Directory      is set to '${LRR_DATA_DIRECTORY}'"
+echo "Thumbnail Directory is set to '${LRR_THUMB_DIRECTORY}'"
+echo "Database Directory  is set to '${LRR_DATABASE_DIRECTORY}'"
+echo "Log Directory       is set to '${LRR_LOG_DIRECTORY}'"
+echo "Temporary Folder    is set to '${LRR_TEMP_DIRECTORY}'"
+
+# create dirs
+mkdir -p "${LRR_DATA_DIRECTORY}"
+mkdir -p "${LRR_THUMB_DIRECTORY}"
+mkdir -p "${LRR_DATABASE_DIRECTORY}"
+mkdir -p "${LRR_LOG_DIRECTORY}"
+mkdir -p "${LRR_TEMP_DIRECTORY}"
+
+# @INC export
+export PERL5LIB="${workdir}/lib/perl5"
+
+# launch command
+redis-server "${workdir}/redis.conf" --logfile "${LRR_LOG_DIRECTORY}/redis.log" --dir "${LRR_DATABASE_DIRECTORY}"
+npm start --prefix "${workdir}" && redis-cli shutdown

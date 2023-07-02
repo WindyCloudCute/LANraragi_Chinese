@@ -1,0 +1,9 @@
+<!-- LRR Standard Footer -->
+
+<p class="ip">
+    [% IF descstr %]
+    [% descstr %]
+    <br>
+    [% END %]
+    Powered by <a href="https://github.com/Difegue/LANraragi"> LANraragi.</a>
+</p>
