@@ -11,7 +11,7 @@
         "dev-server": "perl ./script/launcher.pl -m -v ./script/lanraragi",
         "dev-server-verbose": "export LRR_DEVSERVER=1 && perl ./script/launcher.pl -m -v ./script/lanraragi",
         "kill-workers": "(kill -15 `cat ./public/temp/shinobu.pid-s6` || true) && (kill -15 `cat ./public/temp/minion.pid-s6` || true) && (pkill -9 -f ./script/lanraragi || true)",
-        "docker-build": "docker build -t windycloud/lanraragi_cn:latest -f ./tools/build/docker/Dockerfile .",
+        "docker-build": "docker build -t windycloud/lanraragi_cn:0.8.90 -f ./tools/build/docker/Dockerfile .",
         "critic": "perlcritic ./lib/* ./script/* ./tools/install.pl",
         "backup-db": "perl ./script/backup",
         "get-version": "perl -Mojo -E \"my \\$conf = j(f(qw(package.json))->slurp); say %\\$conf{version} .q/ - '/. %\\$conf{version_name} .q/'/ \""
