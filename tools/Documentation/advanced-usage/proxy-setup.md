@@ -59,8 +59,8 @@ services:
       - http_proxy=http://192.168.10.186:1082
       - https_proxy=http://192.168.10.186:1082
     volumes:
-      - [database]:/home/koyomi/lanraragi/database
-      - [content]:/home/koyomi/lanraragi/content
+      - [database]:/root/lanraragi/database
+      - [content]:/root/lanraragi/content
     ports:
       - 7070:3000
     restart: unless-stopped

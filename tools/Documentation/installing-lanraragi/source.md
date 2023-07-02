@@ -37,11 +37,11 @@ For macOS, you should be able to install the dependencies using Homebrew.
 ## Installing LRR
 
 All you need to do is clone the git repo somewhere (or download one of [the releases](https://github.com/Difegue/LANraragi/releases)) and run the installer.  
-I recommend doing this with a brand new Linux user account. (I'm using "koyomi" here):
+I recommend doing this with a brand new Linux user account. (I'm using "root" here):
 
 ```
-git clone -b master http://github.com/Difegue/LANraragi /home/koyomi/lanraragi
-cd /home/koyomi/lanraragi && sudo npm run lanraragi-installer install-full
+git clone -b master http://github.com/Difegue/LANraragi /root/lanraragi
+cd /root/lanraragi && sudo npm run lanraragi-installer install-full
 ```
 
 {% hint style="info"}

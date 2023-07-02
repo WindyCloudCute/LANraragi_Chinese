@@ -22,8 +22,8 @@ You can check your Docker version by executing `docker version`.
 Once you're done, execute:
 ```bash
 docker run --name=lanraragi -p 3000:3000 \
---mount type=bind,source=[YOUR_CONTENT_DIRECTORY],target=/home/koyomi/lanraragi/content \
---mount type=bind,source=[YOUR_DATABASE_DIRECTORY],target=/home/koyomi/lanraragi/database \
+--mount type=bind,source=[YOUR_CONTENT_DIRECTORY],target=/root/lanraragi/content \
+--mount type=bind,source=[YOUR_DATABASE_DIRECTORY],target=/root/lanraragi/database \
 difegue/lanraragi
 ```
 {% hint style="info" %}
@@ -39,8 +39,8 @@ You can also mount the database directory to a dedicated Docker volume:
 ```bash
 docker volume create lrr-database
 docker run --name=lanraragi -p 3000:3000 \
---mount type=bind,source=[YOUR_CONTENT_DIRECTORY],target=/home/koyomi/lanraragi/content \
---mount source=lrr-database,target=/home/koyomi/lanraragi/database \
+--mount type=bind,source=[YOUR_CONTENT_DIRECTORY],target=/root/lanraragi/content \
+--mount source=lrr-database,target=/root/lanraragi/database \
 difegue/lanraragi
 ```
 
@@ -116,8 +116,8 @@ docker pull difegue/lanraragi
 docker stop lanraragi
 docker rm lanraragi
 docker run --name=lanraragi -p 3000:3000 \
-           --mount type=bind,source=[YOUR_CONTENT_DIRECTORY],target=/home/koyomi/lanraragi/content \
-           --mount type=bind,source=[YOUR_DATABASE_DIRECTORY],target=/home/koyomi/lanraragi/database \
+           --mount type=bind,source=[YOUR_CONTENT_DIRECTORY],target=/root/lanraragi/content \
+           --mount type=bind,source=[YOUR_DATABASE_DIRECTORY],target=/root/lanraragi/database \
            difegue/lanraragi
 ```
 
