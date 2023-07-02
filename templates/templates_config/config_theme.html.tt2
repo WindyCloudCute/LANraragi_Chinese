@@ -1,10 +1,10 @@
 <tr>
     <td></td>
     <td class="config-td"><br>
-        The selected theme will apply to the entire application and be shown to all users.<br>
-        If you're using a browser that supports "theme-color", the theme's primary color will also be applied
-        there.<br><br>
-        Click on a theme to preview it before saving!
+        所选主题将应用于整个应用程序并显示给所有用户.<br>
+        如果您使用的浏览器支持“theme-color”，则主题的主要颜色也将被应用
+        在该处.<br><br>
+        保存前单击主题进行预览!
     </td>
 
 </tr>

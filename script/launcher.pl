@@ -9,6 +9,7 @@ use Mojo::Server::Morbo;
 use Mojo::Server::Prefork;
 use Mojo::Util qw(extract_usage getopt);
 use File::Path qw(make_path);
+use utf8;
 
 getopt
   'm|morbo'      => \my $morbo,
@@ -55,7 +56,7 @@ if ($morbo) {
     $backend->daemon->listen(@listen);
     $backend->run($app);
 } else {
-    print "Server PID will be at " . $hypno_pid . "\n";
+    print "服务器PID存放在 " . $hypno_pid . "\n";
 
     $backend = Mojo::Server::Prefork->new( keep_alive_timeout => 30 );
     $backend->pid_file($hypno_pid);

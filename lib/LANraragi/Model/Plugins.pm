@@ -2,9 +2,9 @@ package LANraragi::Model::Plugins;
 
 use strict;
 use warnings;
-use utf8;
-use feature 'fc';
 
+use feature 'fc';
+use utf8;
 use Redis;
 use Encode;
 use Mojo::JSON qw(decode_json encode_json);

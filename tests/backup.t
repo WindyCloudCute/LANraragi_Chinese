@@ -1,8 +1,8 @@
 use strict;
 use warnings;
-use utf8;
-use Cwd;
 
+use Cwd;
+use utf8;
 use Mojo::Base 'Mojolicious';
 
 use Test::More tests => 1;

@@ -17,7 +17,7 @@ Server.isScriptRunning = false;
  */
 Server.callAPI = function (endpoint, method, successMessage, errorMessage, successCallback) {
     return fetch(endpoint, { method })
-        .then((response) => (response.ok ? response.json() : { success: 0, error: "Response was not OK" }))
+        .then((response) => (response.ok ? response.json() : { success: 0, error: "响应不正确" }))
         .then((data) => {
             if (Object.prototype.hasOwnProperty.call(data, "success") && !data.success) {
                 throw new Error(data.error);
@@ -52,7 +52,7 @@ Server.callAPI = function (endpoint, method, successMessage, errorMessage, succe
  */
 Server.checkJobStatus = function (jobId, useDetail, callback, failureCallback) {
     fetch(useDetail ? `/api/minion/${jobId}/detail` : `/api/minion/${jobId}`, { method: "GET" })
-        .then((response) => (response.ok ? response.json() : { success: 0, error: "Response was not OK" }))
+        .then((response) => (response.ok ? response.json() : { success: 0, error: "响应不正确" }))
         .then((data) => {
             if (data.error) throw new Error(data.error);
 
@@ -70,7 +70,7 @@ Server.checkJobStatus = function (jobId, useDetail, callback, failureCallback) {
                 callback(data);
             }
         })
-        .catch((error) => { LRR.showErrorToast("Error checking Minion job status", error); failureCallback(error); });
+        .catch((error) => { LRR.showErrorToast("检查Minion工作状态时出错", error); failureCallback(error); });
 };
 
 /**
@@ -83,25 +83,25 @@ Server.saveFormData = function (formSelector) {
     const postData = new FormData($(formSelector)[0]);
 
     return fetch(window.location.href, { method: "POST", body: postData })
-        .then((response) => (response.ok ? response.json() : { success: 0, error: "Response was not OK" }))
+        .then((response) => (response.ok ? response.json() : { success: 0, error: "响应不正确" }))
         .then((data) => {
             if (data.success) {
                 LRR.toast({
-                    heading: "Saved Successfully!",
+                    heading: "保存成功!",
                     icon: "success",
                 });
             } else {
                 throw new Error(data.message);
             }
         })
-        .catch((error) => LRR.showErrorToast("Error while saving", error));
+        .catch((error) => LRR.showErrorToast("保存出错", error));
 };
 
 Server.triggerScript = function (namespace) {
     const scriptArg = $(`#${namespace}_ARG`).val();
 
     if (Server.isScriptRunning) {
-        LRR.showErrorToast("A script is already running.", "Please wait for it to terminate.");
+        LRR.showErrorToast("一个脚本已在运行.", "请等待它终止.");
         return;
     }
 
@@ -111,7 +111,7 @@ Server.triggerScript = function (namespace) {
 
     // Save data before triggering script
     Server.saveFormData("#editPluginForm")
-        .then(Server.callAPI(`/api/plugins/queue?plugin=${namespace}&arg=${scriptArg}`, "POST", null, "Error while executing Script :",
+        .then(Server.callAPI(`/api/plugins/queue?plugin=${namespace}&arg=${scriptArg}`, "POST", null, "执行脚本时出错 :",
             (data) => {
                 // Check minion job state periodically while we're on this page
                 Server.checkJobStatus(
@@ -124,7 +124,7 @@ Server.triggerScript = function (namespace) {
 
                         if (d.result.success === 1) {
                             LRR.toast({
-                                heading: "Script result",
+                                heading: "脚本效果",
                                 text: `<pre>${JSON.stringify(d.result.data, null, 4)}</pre>`,
                                 icon: "info",
                                 hideAfter: 10000,
@@ -144,7 +144,7 @@ Server.triggerScript = function (namespace) {
 };
 
 Server.cleanTemporaryFolder = function () {
-    Server.callAPI("/api/tempfolder", "DELETE", "Temporary Folder Cleaned!", "Error while cleaning Temporary Folder :",
+    Server.callAPI("/api/tempfolder", "DELETE", "临时文件夹已清理！", "清理临时文件夹时出错 :",
         (data) => {
             $("#tempsize").html(data.newsize);
         },
@@ -152,26 +152,26 @@ Server.cleanTemporaryFolder = function () {
 };
 
 Server.invalidateCache = function () {
-    Server.callAPI("/api/search/cache", "DELETE", "Threw away the Search Cache!", "Error while deleting cache! Check Logs.", null);
+    Server.callAPI("/api/search/cache", "DELETE", "丢弃搜索缓存!", "删除缓存时出错！ 请检查日志.", null);
 };
 
 Server.clearAllNewFlags = function () {
-    Server.callAPI("/api/database/isnew", "DELETE", "All archives are no longer new!", "Error while clearing flags! Check Logs.", null);
+    Server.callAPI("/api/database/isnew", "DELETE", "所有档案都不再是新的！", "清理NEW标签时出错！ 请检查日志.", null);
 };
 
 Server.dropDatabase = function () {
     LRR.showPopUp({
-        title: "This is a (very) destructive operation! ",
-        text: "Are you sure you want to wipe the database?",
+        title: "这是一个（非常）破坏性的操作! ",
+        text: "您确定要擦除数据库吗?",
         icon: "warning",
         showCancelButton: true,
         focusConfirm: false,
-        confirmButtonText: "Yes, do it!",
+        confirmButtonText: "是的，这样做!",
         reverseButtons: true,
         confirmButtonColor: "#d33",
     }).then((result) => {
         if (result.isConfirmed) {
-            Server.callAPI("/api/database/drop", "POST", "Sayonara! Redirecting you...", "Error while resetting the database? Check Logs.",
+            Server.callAPI("/api/database/drop", "POST", "再见! 重定向...", "重置数据库时出错？ 请检查日志.",
                 () => {
                     setTimeout(() => { document.location.href = "./"; }, 1500);
                 },
@@ -181,18 +181,18 @@ Server.dropDatabase = function () {
 };
 
 Server.cleanDatabase = function () {
-    Server.callAPI("/api/database/clean", "POST", null, "Error while cleaning the database! Check Logs.",
+    Server.callAPI("/api/database/clean", "POST", null, "清理数据库时出错！ 请检查日志.",
         (data) => {
             LRR.toast({
-                heading: `Successfully cleaned the database and removed ${data.deleted} entries!`,
+                heading: `成功清理数据库并删除 ${data.deleted} 条!`,
                 icon: "success",
                 hideAfter: 7000,
             });
 
             if (data.unlinked > 0) {
                 LRR.toast({
-                    heading: `${data.unlinked} other entries have been unlinked from the database and will be deleted on the next cleanup!`,
-                    text: "Do a backup now if some files disappeared from your archive index.",
+                    heading: `${data.unlinked} 其他条目已从数据库中取消链接，将在下次清理时删除!`,
+                    text: "如果某些文件从存档索引中消失，请立即进行备份.",
                     icon: "warning",
                     hideAfter: 16000,
                 });
@@ -204,8 +204,8 @@ Server.cleanDatabase = function () {
 Server.regenerateThumbnails = function (force) {
     const forceparam = force ? 1 : 0;
     Server.callAPI(`/api/regen_thumbs?force=${forceparam}`, "POST",
-        "Queued up a job to regenerate thumbnails! Stay tuned for updates or check the Minion console.",
-        "Error while sending job to Minion:",
+        "正在排队处理重新生成缩略图工作! 请继续关注更新或检查 Minion 控制台.",
+        "向 Minion 发送作业时出错:",
         (data) => {
             // Disable the buttons to avoid accidental double-clicks.
             $("#genthumb-button").prop("disabled", true);
@@ -219,7 +219,7 @@ Server.regenerateThumbnails = function (force) {
                     $("#genthumb-button").prop("disabled", false);
                     $("#forcethumb-button").prop("disabled", false);
                     LRR.toast({
-                        heading: "All thumbnails generated! Encountered the following errors:",
+                        heading: "所有缩略图生成！ 但遇到以下错误:",
                         text: d.result.errors,
                         icon: "success",
                         hideAfter: 15000,
@@ -230,7 +230,7 @@ Server.regenerateThumbnails = function (force) {
                 (error) => {
                     $("#genthumb-button").prop("disabled", false);
                     $("#forcethumb-button").prop("disabled", false);
-                    LRR.showErrorToast("The thumbnail regen job failed!", error);
+                    LRR.showErrorToast("缩略图重建失败!", error);
                 },
             );
         },
@@ -239,12 +239,12 @@ Server.regenerateThumbnails = function (force) {
 
 // Adds an archive to a category. Basic implementation to use everywhere.
 Server.addArchiveToCategory = function (arcId, catId) {
-    Server.callAPI(`/api/categories/${catId}/${arcId}`, "PUT", `Added ${arcId} to Category ${catId}!`, "Error adding/removing archive to category", null);
+    Server.callAPI(`/api/categories/${catId}/${arcId}`, "PUT", `添加 ${arcId}到${catId}!`, "将档案添加/移除到类别时出错", null);
 };
 
 // Ditto, but for removing.
 Server.removeArchiveFromCategory = function (arcId, catId) {
-    Server.callAPI(`/api/categories/${catId}/${arcId}`, "DELETE", `Removed ${arcId} from Category ${catId}!`, "Error adding/removing archive to category", null);
+    Server.callAPI(`/api/categories/${catId}/${arcId}`, "DELETE", `从${catId}移除${arcId}!`, "将档案添加/移除到类别时出错", null);
 };
 
 /**
@@ -255,12 +255,12 @@ Server.removeArchiveFromCategory = function (arcId, catId) {
  */
 Server.deleteArchive = function (arcId, callback) {
     fetch(`/api/archives/${arcId}`, { method: "DELETE" })
-        .then((response) => (response.ok ? response.json() : { success: 0, error: "Response was not OK" }))
+        .then((response) => (response.ok ? response.json() : { success: 0, error: "响应不正确" }))
         .then((data) => {
             if (data.success === "0") {
                 LRR.toast({
-                    heading: "Couldn't delete archive file. <br> (Maybe it has already been deleted beforehand?)",
-                    text: "Archive metadata has been deleted properly. <br> Please delete the file manually before returning to Library View.",
+                    heading: "无法删除存档文件. <br> (或许已被删除?)",
+                    text: "存档元数据已完整删除. <br> 请在返资源库之前手动删除文件.",
                     icon: "warning",
                     hideAfter: 20000,
                 });
@@ -268,7 +268,7 @@ Server.deleteArchive = function (arcId, callback) {
                 $("#goback").show();
             } else {
                 LRR.toast({
-                    heading: "Archive successfully deleted. Redirecting you ...",
+                    heading: "存档已成功删除，重定向 ...",
                     text: `File name : ${data.filename}`,
                     icon: "success",
                     hideAfter: 7000,
@@ -276,5 +276,5 @@ Server.deleteArchive = function (arcId, callback) {
                 setTimeout(callback, 1500);
             }
         })
-        .catch((error) => LRR.showErrorToast("Error while deleting archive", error));
+        .catch((error) => LRR.showErrorToast("删除存档时出错", error));
 };

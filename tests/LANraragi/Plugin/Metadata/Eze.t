@@ -1,11 +1,11 @@
 # LANraragi::Plugin::Metadata::Eze
 use strict;
 use warnings;
-use utf8;
+
 use Data::Dumper;
 use File::Temp qw(tempfile);
 use File::Copy "cp";
-
+use utf8;
 use Cwd qw( getcwd );
 
 use Test::Trap;

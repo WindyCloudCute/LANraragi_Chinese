@@ -2,7 +2,7 @@ package LANraragi::Utils::Routing;
 
 use strict;
 use warnings;
-use utf8;
+
 
 use Mojolicious::Plugin::Status;
 use Mojolicious::Plugin::Minion::Admin;

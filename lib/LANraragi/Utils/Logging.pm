@@ -2,7 +2,7 @@ package LANraragi::Utils::Logging;
 
 use strict;
 use warnings;
-use utf8;
+
 
 use feature 'say';
 use POSIX;
@@ -56,7 +56,7 @@ sub get_logger {
         $log->level('debug');
     }
 
-    # Step down into trace if we're launched from npm run dev-server
+    # Step down into trace if we're launched from npm run dev-server-verbose
     if ( $ENV{LRR_DEVSERVER} ) {
         $log->level('trace');
     }

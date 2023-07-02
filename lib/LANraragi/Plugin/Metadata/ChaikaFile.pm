@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Mojo::JSON qw(from_json);
-
+use utf8;
 use LANraragi::Utils::Logging qw(get_plugin_logger);
 use LANraragi::Utils::Archive qw(is_file_in_archive extract_file_from_archive);
 

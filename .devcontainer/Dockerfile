@@ -8,7 +8,7 @@ ARG UPGRADE_PACKAGES="false"
 ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8
 
 # Install needed packages and setup non-root user. Use a separate RUN statement to add your own dependencies.
-ARG USERNAME=koyomi
+ARG USERNAME=root
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 RUN export DEBIAN_FRONTEND=noninteractive \

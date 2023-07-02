@@ -8,7 +8,7 @@ no warnings 'experimental::signatures';
 use URI::Escape;
 use Mojo::JSON qw(from_json);
 use Mojo::UserAgent;
-
+use utf8;
 #You can also use the LRR Internal API when fitting.
 use LANraragi::Model::Plugins;
 use LANraragi::Utils::Logging qw(get_plugin_logger);

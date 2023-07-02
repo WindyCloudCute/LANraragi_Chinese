@@ -22,9 +22,9 @@ Category.initializeAll = function () {
 
 Category.addNewCategory = function (isDynamic) {
     LRR.showPopUp({
-        title: "Enter a name for the new category",
+        title: "输入一个分类的名称",
         input: "text",
-        inputPlaceholder: "My Category",
+        inputPlaceholder: "我的分类",
         inputAttributes: {
             autocapitalize: "off",
         },
@@ -32,7 +32,7 @@ Category.addNewCategory = function (isDynamic) {
         reverseButtons: true,
         inputValidator: (value) => {
             if (!value) {
-                return "Please enter a category name.";
+                return "请输入一个分类的名称.";
             }
             return undefined;
         },
@@ -42,7 +42,7 @@ Category.addNewCategory = function (isDynamic) {
             const searchtag = isDynamic ? "language:english" : "";
 
             // Make an API request to create category, search is empty -> static, otherwise dynamic
-            Server.callAPI(`/api/categories?name=${result.value}&search=${searchtag}`, "PUT", `Category "${result.value}" created!`, "Error creating category:",
+            Server.callAPI(`/api/categories?name=${result.value}&search=${searchtag}`, "PUT", `分类 "${result.value}" 已创建!`, "创建分类出错:",
                 (data) => {
                     // Reload categories and select the newly created ID
                     Category.loadCategories(data.category_id);
@@ -63,7 +63,7 @@ Category.loadCategories = function (selectedID) {
             const catCombobox = document.getElementById("category");
             catCombobox.options.length = 0;
             // Add default
-            catCombobox.options[catCombobox.options.length] = new Option("-- No Category --", "", true, false);
+            catCombobox.options[catCombobox.options.length] = new Option("-- 无分类 --", "", true, false);
 
             // Add categories, select if the ID matches the optional argument
             data.forEach((c) => {
@@ -73,7 +73,7 @@ Category.loadCategories = function (selectedID) {
             // Update form with selected category details
             Category.updateCategoryDetails();
         })
-        .catch((error) => LRR.showErrorToast("Error getting categories from server", error));
+        .catch((error) => LRR.showErrorToast("从服务器获取分类出错", error));
 };
 
 Category.updateCategoryDetails = function () {
@@ -139,7 +139,7 @@ Category.saveCurrentCategoryDetails = function () {
     Category.indicateSaving();
 
     // PUT update with name and search (search is empty if this is a static category)
-    Server.callAPI(`/api/categories/${categoryID}?name=${catName}&search=${searchtag}&pinned=${pinned}`, "PUT", null, "Error updating category:",
+    Server.callAPI(`/api/categories/${categoryID}?name=${catName}&search=${searchtag}&pinned=${pinned}`, "PUT", null, "更新分类时出错:",
         (data) => {
             // Reload categories and select the newly created ID
             Category.indicateSaved();
@@ -152,7 +152,7 @@ Category.updateArchiveInCategory = function (id, checked) {
     const categoryID = document.getElementById("category").value;
     Category.indicateSaving();
     // PUT/DELETE api/categories/catID/archiveID
-    Server.callAPI(`/api/categories/${categoryID}/${id}`, checked ? "PUT" : "DELETE", null, "Error adding/removing archive to category",
+    Server.callAPI(`/api/categories/${categoryID}/${id}`, checked ? "PUT" : "DELETE", null, "添加/移除文件到分类时出错",
         () => {
             // Reload categories and select the archive list properly
             Category.indicateSaved();
@@ -164,16 +164,16 @@ Category.updateArchiveInCategory = function (id, checked) {
 Category.deleteSelectedCategory = function () {
     const categoryID = document.getElementById("category").value;
     LRR.showPopUp({
-        text: "The category will be deleted permanently.",
+        text: "该类别将被永久删除.",
         icon: "warning",
         showCancelButton: true,
         focusConfirm: false,
-        confirmButtonText: "Yes, delete it!",
+        confirmButtonText: "是的，删除!",
         reverseButtons: true,
         confirmButtonColor: "#d33",
     }).then((result) => {
         if (result.isConfirmed) {
-            Server.callAPI(`/api/categories/${categoryID}`, "DELETE", "Category deleted!", "Error deleting category",
+            Server.callAPI(`/api/categories/${categoryID}`, "DELETE", "分类已删除!", "删除分类出错",
                 () => {
                 // Reload categories to show the archive list properly
                     Category.loadCategories();
@@ -184,18 +184,18 @@ Category.deleteSelectedCategory = function () {
 };
 
 Category.indicateSaving = function () {
-    document.getElementById("status").innerHTML = "<i class=\"fas fa-spin fa-2x fa-compact-disc\"></i> Saving your modifications...";
+    document.getElementById("status").innerHTML = "<i class=\"fas fa-spin fa-2x fa-compact-disc\"></i> 保存您的修改中...";
 };
 
 Category.indicateSaved = function () {
-    document.getElementById("status").innerHTML = "<i class=\"fas fa-2x fa-check-circle\"></i> Saved!";
+    document.getElementById("status").innerHTML = "<i class=\"fas fa-2x fa-check-circle\"></i> 已保存!";
 };
 
 Category.predicateHelp = function () {
     LRR.toast({
         toastId: "predicateHelp",
-        heading: "Writing a Predicate",
-        text: "Predicates follow the same syntax as searches in the Archive Index. Check the <a href=\"https://sugoi.gitbook.io/lanraragi/basic-operations/searching\">Documentation</a> for more information.",
+        heading: "填入关键词",
+        text: "关键词遵循与“存档索引”中的搜索相同的语法。参考 <a href=\"https://sugoi.gitbook.io/lanraragi/basic-operations/searching\">此文件</a> 获取更多信息.",
         icon: "info",
         hideAfter: 20000,
     });

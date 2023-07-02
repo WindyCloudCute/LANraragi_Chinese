@@ -15,14 +15,14 @@ Plugins.initializeAll = function () {
         done(e, data) {
             if (data.result.success) {
                 LRR.toast({
-                    heading: "Plugin successfully uploaded!",
-                    text: `The plugin "${data.result.name}" has been successfully added. Refresh the page to see it.`,
+                    heading: "插件上传成功!",
+                    text: `该插件 "${data.result.name}" 已添加成功. 刷新页面即可查看.`,
                     icon: "info",
                     hideAfter: 10000,
                 });
             } else {
                 LRR.toast({
-                    heading: "Error uploading plugin",
+                    heading: "上传插件出错",
                     text: data.result.error,
                     icon: "error",
                     hideAfter: false,

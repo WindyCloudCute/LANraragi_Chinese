@@ -2,7 +2,7 @@ package LANraragi::Model::Opds;
 
 use strict;
 use warnings;
-use utf8;
+
 
 use Redis;
 use POSIX qw(strftime);
@@ -115,6 +115,10 @@ sub get_opds_data {
         $arcdata->{mimetype} = "application/epub+zip";
     } else {
         $arcdata->{mimetype} = "application/x-cbz";
+    }
+
+    if ( $arcdata->{lastreadtime} > 0) {
+      $arcdata->{lastreaddate} = strftime( "%Y-%m-%dT%H:%M:%SZ", gmtime($arcdata->{lastreadtime}) );
     }
 
     for ( values %{$arcdata} ) { $_ = xml_escape($_); }

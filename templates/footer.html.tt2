@@ -5,5 +5,7 @@
     [% descstr %]
     <br>
     [% END %]
-    Powered by <a href="https://github.com/Difegue/LANraragi"> LANraragi.</a>
+    使用 <a href="https://github.com/Difegue/LANraragi"> LANraragi </a> ❤ 稳定运行.
+    <br>
+    汉化由 <a href="https://bs.windycloud.cn"> LANraragi_CN_Windy </a> ⚡ 强力驱动.
 </p>

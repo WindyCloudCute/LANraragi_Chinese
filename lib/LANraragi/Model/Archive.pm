@@ -2,7 +2,7 @@ package LANraragi::Model::Archive;
 
 use strict;
 use warnings;
-use utf8;
+
 
 use feature qw(signatures);
 no warnings 'experimental::signatures';
@@ -27,14 +27,14 @@ use LANraragi::Utils::Database
 sub get_title($id) {
 
     my $logger = get_logger( "Archives", "lanraragi" );
-    my $redis  = LANraragi::Model::Config->get_redis;
+    my $redis = LANraragi::Model::Config->get_redis;
 
     if ( $id eq "" ) {
         $logger->debug("No archive ID provided.");
         return ();
     }
 
-    return $redis->hget( $id, "title" );
+    return redis_decode($redis->hget( $id, "title" ));
 }
 
 # Functions used when dealing with archives.
@@ -105,7 +105,7 @@ sub serve_thumbnail {
     my $subfolder = substr( $id, 0, 2 );
     my $thumbname = "$thumbdir/$subfolder/$id.jpg";
 
-    if ( $page > 0 ) {
+    if ( $page - 1 > 0 ) {
         $thumbname = "$thumbdir/$subfolder/$id/$page.jpg";
     }
 

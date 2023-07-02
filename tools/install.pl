@@ -2,11 +2,11 @@
 
 use strict;
 use warnings;
-use utf8;
+
 use open ':std', ':encoding(UTF-8)';
 use Cwd;
 use Config;
-
+use utf8;
 use feature qw(say);
 use File::Path qw(make_path);
 
@@ -63,18 +63,18 @@ say("⣿⣿⣿⣿⣿⣿⣿⣿⡇⢀⢀⢀⢀⣸⣿⣿⣿⣿⣿⣿⣿⣿⢀⢀⢀
 say("⠙⢿⣿⣿⣿⣿⣿⣿⡇⢀⣠⣴⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⢀⣀⣤⣾⣿⠟⠃");
 say("⢀⢀⠈⠙⠿⣿⣿⣿⣷⣿⠿⠛⠁⢀⢀⢀⠉⠻⢿⣿⣿⣿⣾⡿⠟⠉");
 say("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-say("~~~~~LANraragi Installer~~~~~");
+say("~~~~~LANraragi  安装程序~~~~~");
 say("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
 unless ( @ARGV > 0 ) {
-    say("Execution: npm run lanraragi-installer [mode]");
+    say("执行：npm run lanraragi-installer [模式]");
     say("--------------------------");
-    say("Available modes are: ");
-    say("* install-front: Install/Update Clientside dependencies.");
-    say("* install-back: Install/Update Perl dependencies.");
-    say("* install-full: Install/Update all dependencies.");
+    say("可用模式有：");
+    say("* install-front: 安装/更新依赖项。");
+    say("* install-back : 安装/更新 Perl 依赖项。");
+    say("* install-full : 安装/更新所有依赖项。");
     say("");
-    say("If installing from source, please use install-full.");
+    say("如果是第一次安装依赖，请使用 install-full。");
     exit;
 }
 
@@ -82,7 +82,7 @@ my $front = $ARGV[0] eq "install-front";
 my $back  = $ARGV[0] eq "install-back";
 my $full  = $ARGV[0] eq "install-full";
 
-say( "Working Directory: " . getcwd );
+say( "工作目录: " . getcwd );
 say("");
 
 # Provide cpanm with the correct module installation dir when using Homebrew
@@ -97,28 +97,28 @@ install_package( "Config::AutoConf", $cpanopt );
 IPC::Cmd->import('can_run');
 require Config::AutoConf;
 
-say("\r\nWill now check if all LRR software dependencies are met. \r\n");
+say("\r\n现在开始检查所有软件依赖是否满足运行 LRR 。 \r\n");
 
 #Check for Redis
-say("Checking for Redis...");
+say("检查Redis...");
 can_run('redis-server')
-  or die 'NOT FOUND! Please install a Redis server before proceeding.';
-say("OK!");
+  or die '未找到Redis服务器! 请在继续前安装redis-server.';
+say("完成!");
 
 #Check for GhostScript
-say("Checking for GhostScript...");
+say("检查GhostScript...");
 can_run('gs')
-  or warn 'NOT FOUND! PDF support will not work properly. Please install the "gs" tool.';
-say("OK!");
+  or warn '未找到! PDF PDF 支持将无法正常工作。 请安装"gs"工具。';
+say("完成!");
 
 #Check for libarchive
-say("Checking for libarchive...");
+say("检查libarchive...");
 Config::AutoConf->new()->check_header("archive.h")
-  or die 'NOT FOUND! Please install libarchive and ensure its headers are present.';
-say("OK!");
+  or die '未找到! 请安装libarchive并保证headers能被引用。';
+say("完成!");
 
 #Check for PerlMagick
-say("Checking for ImageMagick/PerlMagick...");
+say("检查ImageMagick/PerlMagick...");
 my $imgk;
 
 eval {
@@ -127,40 +127,40 @@ eval {
 };
 
 if ($@) {
-    say("NOT FOUND");
-    say("Please install ImageMagick with Perl for thumbnail support.");
-    say("Further instructions are available at https://www.imagemagick.org/script/perl-magick.php .");
-    say("The ImageMagick detection command returned: $imgk -- $@");
+    say("未找到");
+    say("请安装ImageMagick否则缩略图将无法被生成。");
+    say("有关说明访问: https://www.imagemagick.org/script/perl-magick.php 获取。");
+    say("ImageMagick检测命令返回的内容: $imgk -- $@");
 } else {
-    say( "Returned QuantumDepth: " . $imgk );
-    say("OK!");
+    say( "色彩深度: " . $imgk );
+    say("完成!");
 }
 
 #Build & Install CPAN Dependencies
 if ( $back || $full ) {
-    say("\r\nInstalling Perl modules... This might take a while.\r\n");
+    say("\r\n安装 Perl 模块......    这可能需要一些时间。\r\n");
 
     if ( $Config{"osname"} ne "darwin" ) {
-        say("Installing Linux::Inotify2 for non-macOS systems... (This will do nothing if the package is there already)");
+        say("正在为非 macOS 系统安装 Linux::Inotify2...（如果软件包已经存在，这将不会执行任何操作）");
 
         install_package( "Linux::Inotify2", $cpanopt );
     }
 
     if ( system( "cpanm --installdeps ./tools/. --notest" . $cpanopt ) != 0 ) {
-        die "Something went wrong while installing Perl modules - Bailing out.";
+        die "安装Perl模块时出现问题 - 救助。";
     }
 }
 
 #Clientside Dependencies with Provisioning
 if ( $front || $full ) {
 
-    say("\r\nObtaining remote Web dependencies...\r\n");
+    say("\r\n从远程服务器获取依赖...\r\n");
 
     if ( system("npm install") != 0 ) {
-        die "Something went wrong while obtaining node modules - Bailing out.";
+        die "在获取 node 模块时出现了问题 - 退出。";
     }
 
-    say("\r\nProvisioning...\r\n");
+    say("\r\n正在配置...\r\n");
 
     #Load File::Copy
     install_package( "File::Copy", $cpanopt );
@@ -188,7 +188,7 @@ if ( $front || $full ) {
 }
 
 #Done!
-say("\r\nAll set! You can start LANraragi by typing the command: \r\n");
+say("\r\n一切就绪！您可以通过输入以下命令来启动 LANraragi: \r\n");
 say("   ╭─────────────────────────────────────╮");
 say("   │                                     │");
 say("   │              npm start              │");
@@ -205,10 +205,10 @@ sub cp_node_module {
     my $nodemapname = $nodename . ".map";
     my $newmapname  = $newname . ".map";
 
-    say("\r\nCopying $nodename \r\n to $newname");
-    copy( $nodename, $newname ) or die "The copy operation failed: $!";
+    say("\r\n正在复制 $nodename \r\n to $newname");
+    copy( $nodename, $newname ) or die "执行复制操作失败: $!";
 
-    my $mapresult = copy( $nodemapname, $newmapname ) and say("Copied sourcemap file.\r\n");
+    my $mapresult = copy( $nodemapname, $newmapname ) and say("成功复制了 sourcemap 文件。\r\n");
 
 }
 
@@ -222,9 +222,9 @@ sub install_package {
     ## use critic
 
     if ($@) {
-        say("$package not installed! Trying to install now using cpanm$cpanopt");
+        say("$package 没有安装！正在尝试使用 cpanm 安装 $cpanopt");
         system("cpanm $package $cpanopt");
     } else {
-        say("$package package installed, proceeding...");
+        say("$package 包已安装，继续...");
     }
 }

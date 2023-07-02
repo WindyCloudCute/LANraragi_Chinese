@@ -1,7 +1,7 @@
 # LANraragi::Plugin::Metadata::HentagOnline
 use strict;
 use warnings;
-use utf8;
+
 use feature qw(signatures);
 
 use Cwd qw( getcwd );
@@ -9,7 +9,7 @@ use Cwd qw( getcwd );
 use Test::Trap;
 use Test::More;
 use Test::Deep;
-
+use utf8;
 my $cwd = getcwd();
 my $SAMPLES = "$cwd/tests/samples";
 require "$cwd/tests/mocks.pl";

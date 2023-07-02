@@ -2,7 +2,7 @@ package LANraragi::Model::Backup;
 
 use strict;
 use warnings;
-use utf8;
+
 
 use Redis;
 use Mojo::JSON qw(decode_json encode_json);
@@ -17,6 +17,7 @@ use LANraragi::Utils::Logging qw(get_logger);
 #Goes through the Redis archive IDs and builds a JSON string containing their metadata.
 sub build_backup_JSON {
     my $redis = LANraragi::Model::Config->get_redis;
+    my $logger = get_logger( "Backup/Restore", "lanraragi" );
 
     # Basic structure of the backup object
     my %backup = (
@@ -49,6 +50,8 @@ sub build_backup_JSON {
             push @{ $backup{categories} }, \%category;
         };
 
+        $logger->trace("Backing up category $key: $@");
+
     }
 
     # Backup archives themselves next
@@ -75,6 +78,9 @@ sub build_backup_JSON {
 
             push @{ $backup{archives} }, \%arc;
         };
+
+        $logger->trace("Backing up archive $id: $@");
+
     }
 
     $redis->quit();

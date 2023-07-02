@@ -1,7 +1,7 @@
 package LANraragi::Controller::Category;
 use Mojo::Base 'Mojolicious::Controller';
 
-use utf8;
+
 use URI::Escape;
 use Redis;
 use Encode;

@@ -1,38 +1,38 @@
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Shinobu Status </h2>
+        <h2 class="ih"> 运行状态 </h2>
     </td>
     <td class="config-td">
-        <span id="shinobu-ok">The Shinobu File Watcher is currently <h2 class="ih"
+        <span id="shinobu-ok">当前后台监视进程工作 <h2 class="ih"
                 style="display:inline; color:rgb(26, 165, 26)">👍
-                OK!</h2> </span>
-        <span id="shinobu-ko">The Shinobu File Watcher is currently <h2 class="ih"
+                正常!</h2> </span>
+        <span id="shinobu-ko">当前后台监视进程工作 <h2 class="ih"
                 style="display:inline; color:rgb(207, 37, 37)">👹
-                Kaput! </h2></span>
+                异常! </h2></span>
         (PID: <span id="pid"></span>)
-        <br>This File Watcher is responsible for monitoring your content directory and automatically handling new
-        archives as
-        they come. <br>
+        <br>该进程负责监视您的内容目录，并在
+        新档案出现时
+        自动进行处理。 <br>
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <input id="restart-button" class='stdbtn' type='button' value='Restart File Watcher' />
+        <input id="restart-button" class='stdbtn' type='button' value='重启后台文件监视进程' />
     </td>
     <td class="config-td">
-        If Shinobu is dead or unresponsive, you can reboot her by clicking this button.
+        如果进程已死或无响应，您可以通过单击此按钮来重新启动它。
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <input id='open-minion' class='stdbtn' type='button' value='Open Minion Console' />
+        <input id='open-minion' class='stdbtn' type='button' value='打开Minion控制台' />
     </td>
     <td class="config-td">
-        The Minion Worker handles spare tasks that are too long to execute within the request/response lifecycle of web
-        applications.<br>
-        The console shows currently running and concluded tasks.
+        Minion Worker 处理的备用任务太长，无法在Web的请求/响应生命周期内
+        执行。<br>
+        控制台显示当前正在运行和已结束的任务。
     </td>
 </tr>
 

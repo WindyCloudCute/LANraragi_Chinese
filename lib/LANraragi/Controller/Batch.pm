@@ -43,7 +43,7 @@ sub socket {
 
     my $logger = get_logger( "Batch Tagging", "lanraragi" );
 
-    $logger->info('Client connected to Batch Tagging service');
+    $logger->info('客户端连接到 Batch Tagging 服务');
 
     # Increase inactivity timeout for connection a bit to account for clientside timeouts
     $self->inactivity_timeout(80);
@@ -59,10 +59,10 @@ sub socket {
             my $id         = $command->{"archive"};
 
             unless ($id) {
-                $client->finish( 1001 => 'No archives provided.' );
+                $client->finish( 1001 => '没有提供档案.' );
                 return;
             }
-            $logger->debug("Processing $id");
+            $logger->debug("运行 $id");
 
             if ( $operation eq "plugin" ) {
 
@@ -76,7 +76,7 @@ sub socket {
                 my @args = @{ $command->{"args"} };
 
                 if ( !@args ) {
-                    $logger->debug("No user overrides given.");
+                    $logger->debug("没有覆盖插件全局参数.");
 
                     # Try getting the saved defaults
                     @args = get_plugin_parameters($pluginname);
@@ -118,7 +118,7 @@ sub socket {
 
             if ( $operation eq "tagrules" ) {
 
-                $logger->debug("Applying tag rules to $id...");
+                $logger->debug("将标签规则应用于$id...");
                 my $tags = $redis->hget( $id, "tags" );
 
                 my @tagarray = split_tags_to_array($tags);
@@ -127,7 +127,7 @@ sub socket {
 
                 # Merge array with commas
                 my $newtags = join( ', ', @tagarray );
-                $logger->debug("New tags: $newtags");
+                $logger->debug("新标签: $newtags");
                 set_tags( $id, $newtags );
 
                 $client->send(
@@ -145,7 +145,7 @@ sub socket {
             }
 
             if ( $operation eq "delete" ) {
-                $logger->debug("Deleting $id...");
+                $logger->debug("正在删除 $id...");
 
                 my $delStatus = LANraragi::Utils::Database::delete_archive($id);
 
@@ -177,7 +177,7 @@ sub socket {
 
         # If the client doesn't respond, halt processing
         finish => sub {
-            $logger->info('Client disconnected, halting remaining operations');
+            $logger->info('客户端断开连接，停止剩余操作');
             $cancelled = 1;
             $redis->quit();
         }

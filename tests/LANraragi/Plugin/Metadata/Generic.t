@@ -1,10 +1,10 @@
 use strict;
 use warnings;
-use utf8;
+
 use Data::Dumper;
 
 use Module::Pluggable require => 1, search_path => ['LANraragi::Plugin::Metadata'];
-
+use utf8;
 use Test::More;
 use Test::Deep;
 

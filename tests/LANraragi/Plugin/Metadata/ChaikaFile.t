@@ -1,13 +1,13 @@
 # LANraragi::Plugin::Metadata::ChaikaFile
 use strict;
 use warnings;
-use utf8;
+
 use Data::Dumper;
 use File::Temp qw(tempfile);
 use File::Copy "cp";
 
 use Cwd qw( getcwd );
-
+use utf8;
 use Test::Trap;
 use Test::More;
 use Test::Deep;

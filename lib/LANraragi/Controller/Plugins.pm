@@ -157,7 +157,7 @@ sub process_upload {
         if ( $filetext =~ /package LANraragi::Plugin::(Login|Metadata|Scripts|Download)::/ ) {
             $plugintype = $1;
         } else {
-            my $errormess = "Could not find a valid plugin package type in the plugin \"$filename\"!";
+            my $errormess = "在插件 \"$filename\" 中找不到有效的插件包类型!";
             $logger->error($errormess);
 
             $self->render(
@@ -175,7 +175,7 @@ sub process_upload {
         my $dir = getcwd() . ("/lib/LANraragi/Plugin/$plugintype/");
         my $output_file = $dir . $filename;
 
-        $logger->info("Uploading new plugin $filename to $output_file ...");
+        $logger->info("将新插件 $filename 上传到 $output_file ...");
 
         #Delete module if it already exists
         if ( -e $output_file ) {
@@ -198,7 +198,7 @@ sub process_upload {
         };
 
         if ($@) {
-            $logger->error("Could not instantiate plugin at namespace $pluginclass!");
+            $logger->error("无法在命名空间 $pluginclass 处实例化插件！");
             $logger->error($@);
 
             # Cleanup this shameful attempt

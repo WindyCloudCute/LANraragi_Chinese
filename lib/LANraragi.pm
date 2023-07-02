@@ -65,41 +65,33 @@ sub startup {
     eval { $self->LRR_CONF->get_redis->ping(); };
     if ($@) {
         say "(╯・_>・）╯︵ ┻━┻";
-        say "It appears your Redis database is currently not running.";
-        say "The program will cease functioning now.";
+        say "您的Redis数据库目前没有运行。";
+        say "程序将停止运行。";
         die;
     }
-
-    # Check old settings and migrate them if needed
-    if ( $self->LRR_CONF->get_redis->keys('LRR_*') ) {
-        say "Migrating old settings to new format...";
-        migrate_old_settings($self);
-    }
-
-    my $devmode;
 
     # Catch Redis errors on our first connection. This is useful in case of temporary LOADING errors,
     # Where Redis lets us send commands but doesn't necessarily reply to them properly.
     # (https://github.com/redis/redis/issues/4624)
     while (1) {
-        eval { $devmode = $self->LRR_CONF->enable_devmode; };
+        eval { $self->LRR_CONF->get_redis->keys('*') };
 
         last unless ($@);
 
-        say "Redis error encountered: $@";
-        say "Trying again in 2 seconds...";
+        say "遇到Redis错误: $@";
+        say "将在2秒后重试...";
         sleep 2;
     }
 
-    # Enable AOF saving on the Redis server.
-    # This allows us to start creating an aof file using existing RDB snapshot data.
-    # Later LRR releases will then be able to set appendonly directly in redis.conf without fearing data loss.
-    say "Enabling AOF on Redis... This might take a while.";
-    $self->LRR_CONF->get_redis->config_set( "appendonly", "yes" );
+    # Check old settings and migrate them if needed
+    if ( $self->LRR_CONF->get_redis->keys('LRR_*') ) {
+        say "将旧版本设置迁移到新版本...";
+        migrate_old_settings($self);
+    }
 
-    if ($devmode) {
+    if ( $self->LRR_CONF->enable_devmode ) {
         $self->mode('development');
-        $self->LRR_LOGGER->info("LANraragi $version (re-)started. (Debug Mode)");
+        $self->LRR_LOGGER->info("LANraragi $version (重新)启动。(调试模式)");
 
         my $logpath = get_logdir . "/mojo.log";
 
@@ -109,48 +101,50 @@ sub startup {
                 my ( $time, $level, @lines ) = @_;
 
                 open( my $fh, '>>', $logpath )
-                  or die "Could not open file '$logpath' $!";
+                  or die "无法打开文件 '$logpath' $!";
 
-                print $fh "[Mojolicious] " . $lines[0] . " " . $lines[1] . "\n";
+                my $l1 = $lines[0] // "";
+                my $l2 = $lines[1] // "";
+                print $fh "[Mojolicious] $l1 $l2 \n";
                 close $fh;
             }
         );
 
     } else {
         $self->mode('production');
-        $self->LRR_LOGGER->info("LANraragi $version started. (Production Mode)");
+        $self->LRR_LOGGER->info("LANraragi $version 已启动。(生产模式)");
     }
 
     #Plugin listing
     my @plugins = get_plugins("metadata");
     foreach my $pluginfo (@plugins) {
         my $name = $pluginfo->{name};
-        $self->LRR_LOGGER->info( "Plugin Detected: " . $name );
+        $self->LRR_LOGGER->info( "检测到插件: " . $name );
     }
 
     @plugins = get_plugins("script");
     foreach my $pluginfo (@plugins) {
         my $name = $pluginfo->{name};
-        $self->LRR_LOGGER->info( "Script Detected: " . $name );
+        $self->LRR_LOGGER->info( "检测到脚本: " . $name );
     }
 
     @plugins = get_plugins("download");
     foreach my $pluginfo (@plugins) {
         my $name = $pluginfo->{name};
-        $self->LRR_LOGGER->info( "Downloader Detected: " . $name );
+        $self->LRR_LOGGER->info( "检测到下载器: " . $name );
     }
 
     # Enable Minion capabilities in the app
     shutdown_from_pid( get_temp . "/minion.pid" );
 
     my $miniondb = $self->LRR_CONF->get_redisad . "/" . $self->LRR_CONF->get_miniondb;
-    say "Minion will use the Redis database at $miniondb";
+    say "Minion将使用位于 $miniondb 的Redis数据库";
     $self->plugin( 'Minion' => { Redis => "redis://$miniondb" } );
-    $self->LRR_LOGGER->info("Successfully connected to Minion database.");
+    $self->LRR_LOGGER->info("成功连接到Minion数据库。");
     $self->minion->missing_after(5);    # Clean up older workers after 5 seconds of unavailability
 
     LANraragi::Utils::Minion::add_tasks( $self->minion );
-    $self->LRR_LOGGER->debug("Registered tasks with Minion.");
+    $self->LRR_LOGGER->debug("添加了Minion的任务");
 
     # Rebuild stat hashes
     # /!\ Enqueuing tasks must be done either before starting the worker, or once the IOLoop is started!
@@ -174,7 +168,7 @@ sub startup {
     );
 
     LANraragi::Utils::Routing::apply_routes($self);
-    $self->LRR_LOGGER->info("Routing done! Ready to receive requests.");
+    $self->LRR_LOGGER->info("路由完成！可以接收外来请求。");
 }
 
 sub shutdown_from_pid {

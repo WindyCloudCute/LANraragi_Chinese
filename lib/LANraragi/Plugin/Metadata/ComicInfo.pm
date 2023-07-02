@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Mojo::DOM;
-
+use utf8;
 #You can also use the LRR Internal API when fitting.
 use LANraragi::Model::Plugins;
 use LANraragi::Utils::Logging qw(get_plugin_logger);

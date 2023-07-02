@@ -3,7 +3,7 @@ package LANraragi::Plugin::Scripts::nHentaiSourceConverter;
 use strict;
 use warnings;
 no warnings 'uninitialized';
-
+use utf8;
 use LANraragi::Utils::Logging qw(get_plugin_logger);
 use LANraragi::Utils::Database qw(invalidate_cache set_tags);
 use LANraragi::Model::Config;
@@ -18,7 +18,7 @@ sub plugin_info {
         namespace   => "nhsrcconv",
         author      => "Guerra24",
         version     => "1.0",
-        description => "Converts \"source:{id}\" tags with 6 or less digits into \"source:nhentai.net/g/{id}\""
+        description => "转换 \"source:{id}\" 6 位或更少位数的标签 \"source:nhentai.net/g/{id}\""
     );
 
 }

@@ -57,8 +57,8 @@ IndexTable.initializeAll = function () {
         order: [[0, "asc"]],
         dom: "<\"top\"ip>rt<\"bottom\"p><\"clear\">",
         language: {
-            info: "Showing _START_ to _END_ of _TOTAL_ ancient chinese lithographies.",
-            infoEmpty: "<h1><br/><i class=\"fas fa-4x fa-toilet-paper-slash\"></i><br/><br/>No archives to show you! Try <a href=\"upload\">uploading some</a>?</h1><br/>",
+            info: "展示 _START_ 到 _END_ 共 _TOTAL_ 作品.",
+            infoEmpty: "<h1><br/><i class=\"fas fa-4x fa-toilet-paper-slash\"></i><br/><br/>当前没有档案！ 试试 <a href=\"upload\">上传一些</a>?</h1><br/>",
             processing: "<div id=\"progress\" class=\"indeterminate\"\"><div class=\"bar-container\"><div class=\"bar\" style=\" width: 80%; \"></div></div></div>",
         },
         preDrawCallback: IndexTable.initializeThumbView, // callbacks for thumbnail view
