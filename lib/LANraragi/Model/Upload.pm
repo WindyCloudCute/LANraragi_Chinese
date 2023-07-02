@@ -2,7 +2,7 @@ package LANraragi::Model::Upload;
 
 use strict;
 use warnings;
-
+use utf8;
 use Redis;
 use URI::Escape;
 use File::Basename;
@@ -34,11 +34,11 @@ sub handle_incoming_file {
     my ( $tempfile, $catid, $tags ) = @_;
     my ( $filename, $dirs, $suffix ) = fileparse( $tempfile, qr/\.[^.]*/ );
     $filename = $filename . $suffix;
-    my $logger = get_logger( "File Upload/Download", "lanraragi" );
+    my $logger = get_logger( "文件上传/下载", "lanraragi" );
 
     # Check if file is an archive
     unless ( is_archive($filename) ) {
-        return ( 0, "deadbeef", $filename, "Unsupported File Extension ($filename)" );
+        return ( 0, "deadbeef", $filename, "不支持的文件扩展名 ($filename)" );
     }
 
     # Compute an ID here
@@ -63,18 +63,18 @@ sub handle_incoming_file {
         unlink $tempfile;
 
         # The file already exists
-        my $suffix = " Enable replace duplicated archive in config to replace old ones.";
+        my $suffix = " 启用在配置中替换重复的存档以替换旧的档案。";
         my $msg =
           $isdupe
-          ? "This file already exists in the Library." . $suffix
-          : "A file with the same name is present in the Library." . $suffix;
+          ? "该文件已存在于库中。" . $suffix
+          : "库中存在具有相同名称的文件。" . $suffix;
 
         return ( 0, $id, $filename, $msg );
     }
 
     # If we are replacing an existing one, just remove the old one first.
     if ($replace_dupe) {
-        $logger->debug("Delete archive $id before replacing it.");
+        $logger->debug("更换之前删除存档 $id。");
         LANraragi::Utils::Database::delete_archive( $id );
     }
 
@@ -97,9 +97,9 @@ sub handle_incoming_file {
             # If the tag is a source: tag, add it to the URL index
             if ( $t =~ /source:(.*)/i ) {
                 my $url = $1;
-                $logger->debug("Adding $url as an URL for $id");
+                $logger->debug("添加 $url 作为 $id 的 URL");
                 trim_url($url);
-                $logger->debug("Trimmed: $url");
+                $logger->debug("已修剪：$url");
 
                 # No need to encode the value, as URLs are already encoded by design
                 $redis_search->hset( "LRR_URLMAP", $url, $id );
@@ -115,7 +115,7 @@ sub handle_incoming_file {
     move( $output_file . ".upload", $output_file );
 
     unless ( -e $output_file ) {
-        return ( 0, $id, $name, "The file couldn't be moved to your content folder!" );
+        return ( 0, $id, $name, "该文件无法移至您的内容文件夹!" );
     }
 
     # Now that the file has been copied, we can add the timestamp tag and calculate pagecount.
@@ -125,25 +125,25 @@ sub handle_incoming_file {
     $redis->quit();
     $redis_search->quit();
 
-    $logger->debug("Running autoplugin on newly uploaded file $id...");
+    $logger->debug("在新上传的文件 $id 上运行自动插件...");
 
     my ( $succ, $fail, $addedtags, $newtitle ) = LANraragi::Model::Plugins::exec_enabled_plugins_on_file($id);
-    my $successmsg = "$succ Plugins used successfully, $fail Plugins failed, $addedtags tags added. ";
+    my $successmsg = "$succ 插件使用成功,$fail 插件失败,$addedtags 标签已添加。 ";
 
     if ( $newtitle ne "" ) {
         $name = $newtitle;
     }
 
     if ($catid) {
-        $logger->debug("Adding uploaded file to category $catid");
+        $logger->debug("将上传的文件添加到类别 $catid");
 
         my ( $catsucc, $caterr ) = LANraragi::Model::Category::add_to_category( $catid, $id );
         if ($catsucc) {
             my %category = LANraragi::Model::Category::get_category($catid);
             my $catname  = $category{name};
-            $successmsg .= "Added to Category '$catname'!";
+            $successmsg .= "添加到类别“$catname”!";
         } else {
-            $successmsg .= "Couldn't add to Category: $caterr";
+            $successmsg .= "无法添加到类别：$caterr";
         }
     }
 
@@ -159,11 +159,11 @@ sub download_url {
 
     my ( $url, $ua ) = @_;
 
-    my $logger = get_logger( "File Upload/Download", "lanraragi" );
+    my $logger = get_logger( "文件上传/下载", "lanraragi" );
 
     # Download to a temp folder
     die "Not a proper URL" unless $url;
-    $logger->info("Downloading URL $url...This will take some time.");
+    $logger->info("下载 URL $url...这将需要一些时间。");
 
     my $tempdir = tempdir();
 
@@ -172,7 +172,7 @@ sub download_url {
     my $content_disp = $tx->result->headers->content_disposition;
     my $filename     = "Not_an_archive";                                         #placeholder;
 
-    $logger->debug("Content-Disposition Header: $content_disp");
+    $logger->debug("内容 Header: $content_disp");
     if ( $content_disp =~ /.*filename=\"(.*)\".*/gim ) {
         $filename = $1;
     } elsif ( $content_disp =~ /.*filename\*=UTF-8''(.*)/gim ) {
@@ -187,7 +187,7 @@ sub download_url {
         $filename = $1;
     }
 
-    $logger->debug("Filename: $filename");
+    $logger->debug("文件名: $filename");
 
     # remove invalid Windows chars
     $filename =~ s@[\\/:"*?<>|]+@@g;
@@ -202,7 +202,7 @@ sub download_url {
         $filename = substr( $filename, 0, -1 );
     }
     $filename = $filename . $ext;
-    $logger->debug("Filename post clean: $filename");
+    $logger->debug("处理后的文件名: $filename");
     $tx->result->save_to("$tempdir\/$filename");
 
     # Update $tempfile to the exact reference created by the host filesystem

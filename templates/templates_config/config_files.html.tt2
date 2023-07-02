@@ -1,26 +1,26 @@
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Archive Directory </h2>
+        <h2 class="ih"> 档案文件夹 </h2>
     </td>
     <td class="config-td">
         <input class="stdinput" style="width:100%" maxlength="255" size="20" value="[% dirname %]" name="dirname"
-            type="text" [% IF forceddirname %] disabled title="This option is enforced by an environment variable." [%
+            type="text" [% IF forceddirname %] disabled title="此选项由环境变量强制执行。" [%
             END %]>
-        <br> Directory where the archives will be located. It will be created if it doesn't exist.
-        <br>Make sure the OS user running LANraragi has read access to this directory. <br>
+        <br> 档案将被放置的目录,如果不存在,将被自动创建.
+        <br>确保运行 LANraragi 的系统的用户对该目录具有读取权限. <br>
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Synology eCryptFS Compatibility Mode </h2>
+        <h2 class="ih"> 群晖 eCryptFS 兼容模式 </h2>
     </td>
     <td class="config-td">
         [% IF enablecryptofs %]
         <input id="enablecryptofs" name="enablecryptofs" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="enablecryptofs" name="enablecryptofs" class="fa" type="checkbox"> [% END %]
         <label for="enablecryptofs">
-            <br>If enabled, LANraragi will cutoff archive filenames to 143 bytes, which is the max accepted by eCryptFS.
+            <br>如果启用,LANraragi 会将存档文件名截断为 143 字节,这是 eCryptFS 接受的最大值.
         </label>
     </td>
 </tr>
@@ -29,35 +29,35 @@
 
 <tr>
     <td class="option-td">
-        <input id="rescan-button" class='stdbtn' type='button' value='Rescan Archive Directory' />
+        <input id="rescan-button" class='stdbtn' type='button' value='重新扫描存档目录' />
     </td>
     <td class="config-td">
-        Click this button to trigger a rescan of the Archive Directory in case you're missing files, <br>
-        or some data such as total page counts. <br>
+        单击此按钮以触发存档目录的重新扫描,以防丢失文件, <br>
+        或一些数据,例如总页数. <br>
         <br>
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Maximum <br>Temporary Folder Size </h2>
+        <h2 class="ih"> 最大 <br>临时存档占用 </h2>
     </td>
     <td class="config-td">
         <input class="stdinput" style="width:100%" maxlength="255" size="20" value="[% tempmaxsize %]"
             name="tempmaxsize" type="text">
-        <br>In MBs. The temporary folder contains recently opened archives, for faster subsequent reading. <br>
-        It is automatically emptied when it grows past this specified size.
+        <br>以MB为单位。 临时文件夹包含最近打开的档案,以便于后续读取。 <br>
+        当它超过此指定大小时,将自动清空。
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <input id='clean-temp' class='stdbtn' type='button' value='Clean Temporary Folder' />
+        <input id='clean-temp' class='stdbtn' type='button' value='清理临时文件夹' />
     </td>
     <td class="config-td">
-        Current Size:
+        当前大小:
         <h2 style="display:inline"><span id="tempsize"> [%tempsize%] </span> MBs </h2>
-        <br>Empty the temporary folder manually by clicking this button.
+        <br>单击此按钮手动清空临时文件夹。
     </td>
 </tr>
 
@@ -65,11 +65,11 @@
 
 <tr>
     <td class="option-td">
-        <input id='reset-search-cache' class='stdbtn' type='button' value='Reset Search Cache' />
+        <input id='reset-search-cache' class='stdbtn' type='button' value='重置搜索缓存' />
     </td>
     <td class="config-td">
-        The last searches done in the archive index are cached for faster loads. <br>
-        If something went wrong with said cache, you can reset it by clicking this button. <br>
+        存档索引中最后一次执行的搜索将被缓存以加快加载速度。 <br>
+        如果上述缓存出了问题,您可以通过单击此按钮将其重置。 <br> 
         <br>
     </td>
 </tr>
@@ -78,28 +78,26 @@
 
 <tr>
     <td class="option-td">
-        <input id='clear-new-tags' class='stdbtn' type='button' value='Clear NEW flags' />
+        <input id='clear-new-tags' class='stdbtn' type='button' value='清理“NEW”标签' />
     </td>
     <td class="config-td">
-        Newly uploaded archives are marked as "new" in the index until you've opened them. <br>
-        If you want to clear those flags, click this button. <br>
+        在您打开新归档文件之前,它们会在索引中标记为“NEW”。<br>
+        如果要清除这些标志,请单击此按钮。 <br>
         <br>
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <h2 class="ih">Replace duplicated archives</h2>
+        <h2 class="ih">更换重复的档案</h2>
     </td>
     <td class="config-td">
         [% IF replacedupe %]
         <input id="replacedupe" name="replacedupe" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="replacedupe" name="replacedupe" class="fa" type="checkbox"> [% END %]
         <label for="replacedupe">
-            <br>If enabled, LANraragi will overwrite old archives when a newer one (with the same name) is uploaded
-            through the Web Uploader or the Download System.
-            <br> <i class="fas fa-exclamation-triangle" style="color:red"></i> This will delete metadata for old files
-            when they're replaced! Use with caution.
+            <br>如果启用了,当通过Web Uploader或下载系统上载的新档案(具有相同名称)时,Lanraragi将覆盖旧档案。
+            <br> <i class="fas fa-exclamation-triangle" style="color:red"></i> 旧文件更换时,这将删除元数据!谨慎使用。
         </label>
     </td>
 </tr>

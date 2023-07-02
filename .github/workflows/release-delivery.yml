@@ -11,8 +11,8 @@ jobs:
     - uses: actions/checkout@master
     - name: Docker Build and export
       run: |
-        docker build -t difegue/lanraragi -f ./tools/build/docker/Dockerfile-legacy .
-        docker create --name rootfs difegue/lanraragi 
+        docker build -t windycloud/lanraragi_cn -f ./tools/build/docker/Dockerfile-legacy .
+        docker create --name rootfs windycloud/lanraragi_cn 
         docker export --output=package.tar rootfs
     - name: Upload rootfs
       uses: actions/upload-artifact@v1
@@ -96,8 +96,8 @@ jobs:
         docker buildx build \
           --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64 \
           --output "type=image,push=true" \
-          --tag difegue/lanraragi:latest \
-          --tag difegue/lanraragi:$TAG \
+          --tag windycloud/lanraragi_cn:latest \
+          --tag windycloud/lanraragi_cn:$TAG \
           --cache-from "type=local,src=/tmp/buildxcache" \
           --cache-to "type=local,dest=/tmp/buildxcache" \
           --file ./tools/build/docker/Dockerfile .
@@ -120,7 +120,7 @@ jobs:
         args: 'LANraragi {{ RELEASE_VERSION }} is now available! @everyone'
     - uses: Ilshidur/action-discord@master
       with:
-        args: 'https://github.com/Difegue/LANraragi/releases/tag/{{ RELEASE_VERSION }}'
+        args: 'https://github.com/windycloud/lanraragi_cn/releases/tag/{{ RELEASE_VERSION }}'
     - uses: Ilshidur/action-discord@master
       with:
         args: 'Docker image and Windows installer are building... Please wait warmly. ☕'

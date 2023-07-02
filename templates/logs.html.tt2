@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-	<title>[% title %] - Logs</title>
+	<title>[% title %] - 日志</title>
 
 	<meta name="viewport" content="width=device-width" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -28,29 +28,32 @@
 <body>
 
 	<div class='ido' style='text-align:center'>
-		<h2 class='ih' style='text-align:center'>Application Logs</h2>
+		<h2 class='ih' style='text-align:center'>软件日志</h2>
 
 		<br>
-		You can check LANraragi logs here for debugging purposes.<br>
-		By default, this view only shows the last 100 lines of each logfile, newest lines last. <br><br>
+		您可以在此处检查LANraragi日志以进行调试。<br>
+		默认情况下,此视图仅显示每个日志文件的最后100行,最后一行显示最新行。 <br><br>
 		<ul>
-			<li>General Logs pertain to the main application. </li>
-			<li>Shinobu Logs correspond to the Background Worker.</li>
-			<li>Plugin Logs are reserved for metadata plugins only. </li>
-			<li>Mojolicious logs won't tell much unless you're running Debug Mode. </li>
-			<li>Redis logs won't be available from here if you're running from source! </li>
+			<li>常规日志与主应用程序有关。 </li>
+			<li>Shinobu日志对应于后台监视进程。</li>
+			<li>插件日志仅针对元数据插件。 </li>
+			<li>除非您正在运行“调试模式”,否则Mojolicious日志不会告诉您太多信息。 </li>
+			<li>如果您从源代码运行,则Redis日志将无法在此处使用!。 </li>
 		</ul>
+		<br>历代汉化：昭君。访问<a href="http://yuanfangblog.xyz"> 我的博客 </a>和<a href="https://space.bilibili.com/6976331"> Bilibili空间 </a>获取更多信息和教程<br>
+		<br>接手汉化：WindyMadman。访问<a href="https://bs.windycloud.cn/t/lanraragi-cn"> 我的论坛 </a>获取一站式的教程和服务<br>
+		<br>点击下载 <a href="https://f-droid.org/packages/com.utazukin.ichaival"> 安卓客户端汉化版 </a>、<a href="https://github.com/Doraemoe/DuReader/releases"> IOS客户端 </a>、<a href="https://www.microsoft.com/zh-cn/p/lrreader/9mz6bwwvswjh"> Windows客户端 .</a><br>
 		<br><br>
 
-		<h1 class='ih' style='float:left; margin-left: 5%;'>Currently Viewing: <span id="indicator">general</span></h1>
+		<h1 class='ih' style='float:left; margin-left: 5%;'>当前视图: <span id="indicator">通常</span></h1>
 
 		<div style="margin-right: 5%;float: right;">
 
-			<a id="refresh" href="#" title="Refresh">
+			<a id="refresh" href="#" title="刷新">
 				<i style="padding-right: 10px;" class="fa fa-sync-alt fa-2x"></i>
 			</a>
 
-			Lines: <input type="number" min="0" value="100" id="loglines" style="width: 60px;">
+			显示行: <input type="number" min="0" value="100" id="loglines" style="width: 60px;">
 
 		</div>
 
@@ -68,18 +71,18 @@
 
 		<br><br>
 		<span id='buttonstagging'>
-			<input id="show-general" type='button' value='View LANraragi Logs' class='stdbtn'>
+			<input id="show-general" type='button' value='查看 LANraragi 日志' class='stdbtn'>
 
-			<input id="show-shinobu" type='button' value='View Shinobu Logs' class='stdbtn'>
+			<input id="show-shinobu" type='button' value='查看 Shinobu 日志' class='stdbtn'>
 
-			<input id="show-plugins" type='button' value='View Plugin Logs' class='stdbtn'>
+			<input id="show-plugins" type='button' value='查看 插件 日志' class='stdbtn'>
 
-			<input id="show-mojo" type='button' value='View Mojolicious Logs' class='stdbtn'>
+			<input id="show-mojo" type='button' value='查看 Mojolicious 日志' class='stdbtn'>
 
-			<input id="show-redis" type='button' value='View Redis Logs' class='stdbtn'>
+			<input id="show-redis" type='button' value='查看 Redis 日志' class='stdbtn'>
 
 			<br><br>
-			<input id='return' class='stdbtn' type='button' value='Return to Library' />
+			<input id='return' class='stdbtn' type='button' value='返回资料库' />
 
 		</span>
 

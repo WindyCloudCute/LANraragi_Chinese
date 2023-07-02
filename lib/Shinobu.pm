@@ -47,7 +47,7 @@ my $inotifysub = sub {
     my $e    = shift;
     my $name = $e->path;
     my $type = $e->type;
-    $logger->debug("Received inotify event $type on $name");
+    $logger->debug("收到 $name 上的 inotify 事件 $type");
 
     if ( $type eq "create" || $type eq "modify" ) {
         new_file_callback($name);
@@ -63,11 +63,11 @@ sub initialize_from_new_process {
 
     my $userdir = LANraragi::Model::Config->get_userdir;
 
-    $logger->info("Shinobu File Watcher started.");
-    $logger->info("Content folder is $userdir.");
+    $logger->info("Shinobu文件监视器启动.");
+    $logger->info("内容文件夹为: $userdir.");
 
     update_filemap();
-    $logger->info("Initial scan complete! Adding watcher to content folder to monitor for further file edits.");
+    $logger->info("初始扫描完成! 将观监视器添加到内容文件夹以监视进一步的文件变动。");
 
     # Add watcher to content directory
     my $contentwatcher = File::ChangeNotify->instantiate_watcher(
@@ -78,13 +78,13 @@ sub initialize_from_new_process {
     );
 
     my $class = ref($contentwatcher);
-    $logger->debug("Watcher class is $class");
+    $logger->debug("文件监视器类名为: $class");
 
     # Add watcher to tempfolder
     my $tempwatcher = File::ChangeNotify->instantiate_watcher( directories => [ get_temp() ] );
 
     # manual event loop
-    $logger->info("All done! Now dutifully watching your files. ");
+    $logger->info("全部初始化已经完成,文件监视器正在全力监测文件变动。");
 
     while (1) {
 
@@ -106,7 +106,7 @@ sub initialize_from_new_process {
 # This computes IDs for all new archives and henceforth can get rather expensive!
 sub update_filemap {
 
-    $logger->info("Scanning content folder for changes...");
+    $logger->info("正在扫描内容文件夹以查找更改...");
     my $redis = LANraragi::Model::Config->get_redis_config;
 
     # Clear hash
@@ -135,13 +135,13 @@ sub update_filemap {
     my @newfiles     = grep { !$filemaphash{$_} } @files;
     my @deletedfiles = grep { !$fshash{$_} } @filemapfiles;
 
-    $logger->info( "Found " . scalar @newfiles . " new files." );
-    $logger->info( scalar @deletedfiles . " files were found on the filemap but not on the filesystem." );
+    $logger->info( "找到 " . scalar @newfiles . " 个新文件." );
+    $logger->info( scalar @deletedfiles . " 个文件在数据库里找到文件,但在文件系统上找不到文件。" );
 
     # Delete old files from filemap
     foreach my $deletedfile (@deletedfiles) {
-        $logger->debug("Removing $deletedfile from filemap.");
-        $redis->hdel( "LRR_FILEMAP", $deletedfile ) || $logger->warn("Couldn't delete previous filemap data.");
+        $logger->debug("正在从数据库中删除 $deletedfile");
+        $redis->hdel( "LRR_FILEMAP", $deletedfile ) || $logger->warn("无法从数据库中删除以前的文件数据。");
     }
 
     $redis->quit();
@@ -150,7 +150,7 @@ sub update_filemap {
     my $numCpus = Sys::CpuAffinity::getNumCpus();
     my $pl      = Parallel::Loops->new($numCpus);
 
-    $logger->debug("Number of available cores for processing: $numCpus");
+    $logger->debug("可用于处理的核心数量： $numCpus");
     my @sections = split_workload_by_cpu( $numCpus, @newfiles );
 
     # Eval the parallelized file crawl to avoid taking down the entire process in case one of the forked processes dies
@@ -165,7 +165,7 @@ sub update_filemap {
                     eval { add_to_filemap( $redis, $file ); };
 
                     if ($@) {
-                        $logger->error("Error scanning $file: $@");
+                        $logger->error("扫描 $file 文件时出现错误: $@");
                     }
                 }
                 $redis->quit();
@@ -174,7 +174,7 @@ sub update_filemap {
     };
 
     if ($@) {
-        $logger->error("Error while scanning content folder: $@");
+        $logger->error("扫描内容文件夹时出错： $@");
     }
 }
 
@@ -183,14 +183,14 @@ sub add_to_filemap ( $redis_cfg, $file ) {
     my $redis_arc = LANraragi::Model::Config->get_redis;
     if ( is_archive($file) ) {
 
-        $logger->debug("Adding $file to Shinobu filemap.");
+        $logger->debug("将 $file 添加到 Shinobu 数据库。");
 
         #Freshly created files might not be complete yet.
         #We have to wait before doing any form of calculation.
         while (1) {
             last unless -e $file;    # Sanity check to avoid sticking in this loop if the file disappears
             last if open( my $handle, '<', $file );
-            $logger->debug("Waiting for file to be openable");
+            $logger->debug("等待文件允许被打开");
             sleep(1);
         }
 
@@ -198,7 +198,7 @@ sub add_to_filemap ( $redis_cfg, $file ) {
         my $cnt = 0;
         while (1) {
             last if ( ( ( -s $file ) >= 512000 ) || $cnt >= 5 );
-            $logger->debug("Waiting for file to be fully written");
+            $logger->debug("等待文件完全写入磁盘");
             sleep(1);
             $cnt++;
         }
@@ -208,23 +208,23 @@ sub add_to_filemap ( $redis_cfg, $file ) {
         eval { $id = compute_id($file); };
 
         if ($@) {
-            $logger->error("Couldn't open $file for ID computation: $@");
-            $logger->error("Giving up on adding it to the filemap.");
+            $logger->error("无法打开 $file 进行ID计算: $@");
+            $logger->error("放弃将文件添加到数据库.");
             return;
         }
 
-        $logger->debug("Computed ID is $id.");
+        $logger->debug("计算出的ID为: $id.");
 
         # If the id already exists on the server, throw a warning about duplicates
         if ( $redis_cfg->hexists( "LRR_FILEMAP", $file ) ) {
 
             my $filemap_id = $redis_cfg->hget( "LRR_FILEMAP", $file );
 
-            $logger->debug("$file was logged but is already in the filemap!");
+            $logger->debug("$file 文件已经存在于数据库中!");
 
             if ( $filemap_id ne $id ) {
-                $logger->debug("$file has a different ID than the one in the filemap! ($filemap_id)");
-                $logger->info("$file has been modified, updating its ID from $filemap_id to $id.");
+                $logger->debug("$file 文件的ID与数据库中现有的ID不同! ($filemap_id)");
+                $logger->info("$file 文件已被修改,已将其在数据库中的ID从 $filemap_id 修改为 $id.");
 
                 LANraragi::Utils::Database::change_archive_id( $filemap_id, $id );
 
@@ -232,7 +232,7 @@ sub add_to_filemap ( $redis_cfg, $file ) {
                 $redis_cfg->hset( "LRR_FILEMAP", $file, $id );
             } else {
                 $logger->debug(
-                    "$file has the same ID as the one in the filemap. Duplicate inotify events? Cleaning cache just to make sure");
+                    "$file 文件的ID与数据库内的ID一致. 可能是重复的 inotify 事件触发? 为了防止出现其他意外情况现在开始清理缓存");
                 invalidate_cache();
             }
 
@@ -250,19 +250,19 @@ sub add_to_filemap ( $redis_cfg, $file ) {
             #Update the real file path and title if they differ from the saved one
             #This is meant to always track the current filename for the OS.
             unless ( $file eq $filecheck ) {
-                $logger->debug("File name discrepancy detected between DB and filesystem!");
-                $logger->debug("Filesystem: $file");
-                $logger->debug("Database: $filecheck");
+                $logger->debug("在数据库和文件系统之间检测到文件名差异!");
+                $logger->debug("文件系统: $file");
+                $logger->debug("数据库内: $filecheck");
                 my ( $name, $path, $suffix ) = fileparse( $file, qr/\.[^.]*/ );
-                $redis_arc->hset( $id, "file", $file );
-                $redis_arc->hset( $id, "name", redis_encode($name) );
+                $redis_arc->hset( $id, " 所属文件: ", $file );
+                $redis_arc->hset( $id, " 所属名字: ", redis_encode($name) );
                 $redis_arc->wait_all_responses;
                 invalidate_cache();
             }
 
             # Set pagecount in case it's not already there
             unless ( $redis_arc->hget( $id, "pagecount" ) ) {
-                $logger->debug("Pagecount not calculated for $id, doing it now!");
+                $logger->debug("未计算 $id 的页数,立即执行!");
                 LANraragi::Utils::Database::add_pagecount( $redis_arc, $id );
             }
 
@@ -273,7 +273,7 @@ sub add_to_filemap ( $redis_cfg, $file ) {
             invalidate_cache();
         }
     } else {
-        $logger->debug("$file not recognized as archive, skipping.");
+        $logger->debug("$file 未被识别为存档,正在跳过。");
     }
     $redis_arc->quit;
 }
@@ -282,7 +282,7 @@ sub add_to_filemap ( $redis_cfg, $file ) {
 # "handles the addition of new subdirectories by adding them to the watch list"
 sub new_file_callback($name) {
 
-    $logger->debug("New file detected: $name");
+    $logger->debug("检测到新文件: $name");
     unless ( -d $name ) {
 
         my $redis = LANraragi::Model::Config->get_redis_config;
@@ -290,7 +290,7 @@ sub new_file_callback($name) {
         $redis->quit();
 
         if ($@) {
-            $logger->error("Error while handling new file: $@");
+            $logger->error("处理新文件时出错: $@");
         }
     }
 }
@@ -299,7 +299,7 @@ sub new_file_callback($name) {
 # Deleted subdirectories trigger deleted events for every file deleted.
 sub deleted_file_callback($name) {
 
-    $logger->info("$name was deleted from the content folder!");
+    $logger->info("$name 已从内容文件夹中删除!");
     unless ( -d $name ) {
 
         my $redis = LANraragi::Model::Config->get_redis_config;
@@ -316,7 +316,7 @@ sub deleted_file_callback($name) {
 sub add_new_file ( $id, $file ) {
 
     my $redis = LANraragi::Model::Config->get_redis;
-    $logger->info("Adding new file $file with ID $id");
+    $logger->info("添加 ID 为 $id 的新文件 $file");
 
     eval {
         LANraragi::Utils::Database::add_archive_to_redis( $id, $file, $redis );
@@ -328,7 +328,7 @@ sub add_new_file ( $id, $file ) {
     };
 
     if ($@) {
-        $logger->error("Error while adding file: $@");
+        $logger->error("添加文件时出错： $@");
     }
     $redis->quit;
 }

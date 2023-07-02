@@ -28,7 +28,7 @@ Batch.initializeAll = function () {
     // Load all archives, showing a spinner while doing so
     $("#arclist").hide();
 
-    Server.callAPI("/api/archives", "GET", null, "Couldn't load the complete archive list! Please reload the page.",
+    Server.callAPI("/api/archives", "GET", null, "无法加载完整的存档列表! 请重新加载页面.",
         (data) => {
             // Parse the archive list and add <li> elements to arclist
             data.forEach((archive) => {
@@ -75,7 +75,7 @@ Batch.showOverride = function () {
  * Check untagged archives, using the matching API endpoint.
  */
 Batch.checkUntagged = function () {
-    Server.callAPI("api/archives/untagged", "GET", null, "Error getting untagged archives!",
+    Server.callAPI("api/archives/untagged", "GET", null, "获取未加标签的存档时出错!",
         (data) => {
             // Check untagged archives
             data.forEach((id) => {
@@ -97,11 +97,11 @@ Batch.checkUntagged = function () {
 Batch.startBatchCheck = function () {
     if (Batch.currentOperation === "delete") {
         LRR.showPopUp({
-            text: "Are you sure you want to delete the selected archives?",
+            text: "您确定要删除选定的档案吗?",
             icon: "warning",
             showCancelButton: true,
             focusConfirm: false,
-            confirmButtonText: "Yes, delete it!",
+            confirmButtonText: "是的,删除!",
             reverseButtons: true,
             confirmButtonColor: "#d33",
         }).then((result) => {
@@ -121,7 +121,7 @@ Batch.startBatchCheck = function () {
 Batch.startBatch = function () {
     $(".tag-options").hide();
 
-    $("#log-container").html("Started Batch Operation...\n************\n");
+    $("#log-container").html("开始批量获取标签操作...\n************\n");
     $("#cancel-job").show();
     $("#restart-job").hide();
     $(".job-status").show();
@@ -188,7 +188,7 @@ Batch.startBatch = function () {
         }
 
         if (timeout !== 0) {
-            $("#log-container").append(`Sleeping for ${timeout} seconds.\n`);
+            $("#log-container").append(`休眠 ${timeout} 秒.\n`);
         }
         // Wait timeout and pass next archive
         setTimeout(() => {
@@ -212,32 +212,32 @@ Batch.updateBatchStatus = function (event) {
     const msg = JSON.parse(event.data);
 
     if (msg.success === 0) {
-        $("#log-container").append(`Error while processing ID ${msg.id} (${msg.message})\n\n`);
+        $("#log-container").append(`处理 ID ${msg.id} (${msg.message})时发生插件错误\n\n`);
     } else {
         switch (Batch.currentOperation) {
         case "plugin":
-            $("#log-container").append(`Processed ID ${msg.id} with "${Batch.currentPlugin}" (Added tags: ${msg.tags})\n\n`);
+            $("#log-container").append(`处理 ID ${msg.id}  "${Batch.currentPlugin}" (添加标签: ${msg.tags})\n\n`);
             break;
         case "delete":
-            $("#log-container").append(`Deleted ID ${msg.id} (Filename: ${msg.filename})\n\n`);
+            $("#log-container").append(`删除 ID ${msg.id} (文件名: ${msg.filename})\n\n`);
             break;
         case "tagrules":
-            $("#log-container").append(`Replaced tags for ID ${msg.id} (New tags: ${msg.tags})\n\n`);
+            $("#log-container").append(`修改 ID ${msg.id} (新标签: ${msg.tags})\n\n`);
             break;
         case "addcat":
             // Append the message at the end of this log,
             // as it can contain the warning about the ID already being in the category
-            $("#log-container").append(`Added ID ${msg.id} to category ${msg.category}! ${msg.message} \n\n`);
+            $("#log-container").append(`已添加 ID ${msg.id} 到分类 ${msg.category}! ${msg.message} \n\n`);
             break;
         case "clearnew": {
-            $("#log-container").append(`Cleared new flag for ID ${msg.id}\n\n`);
+            $("#log-container").append(`清除了NEW标志 ID ${msg.id}\n\n`);
             // Remove last character from matching row
             const t = $(`#${msg.id}`).next().text().replace("🆕", "");
             $(`#${msg.id}`).next().text(t);
             break;
         }
         default:
-            $("#log-container").append(`Unknown operation ${Batch.currentOperation} (${msg.message})\n\n`);
+            $("#log-container").append(`未知操作 ${Batch.currentOperation} (${msg.message})\n\n`);
             break;
         }
 
@@ -245,7 +245,7 @@ Batch.updateBatchStatus = function (event) {
         $(`#${msg.id}`)[0].checked = false;
 
         if (msg.title !== undefined && msg.title !== "") {
-            $("#log-container").append(`Changed title to: ${msg.title}\n`);
+            $("#log-container").append(`修改标题为: ${msg.title}\n`);
         }
     }
 
@@ -263,12 +263,12 @@ Batch.updateBatchStatus = function (event) {
  * Handle websocket errors.
  */
 Batch.batchError = function () {
-    $("#log-container").append("************\nError! Terminating session.\n");
+    $("#log-container").append("************\n错误! 终止会话。\n");
     Batch.scrollLogs();
 
     LRR.toast({
-        heading: "An error occured during batch tagging!",
-        text: "Please check application logs.",
+        heading: "在批量添加标签时出错",
+        text: "请检查错误日志.",
         icon: "error",
         hideAfter: false,
     });
@@ -287,17 +287,17 @@ Batch.endBatch = function (event) {
     Batch.scrollLogs();
 
     LRR.toast({
-        heading: "Batch Operation complete!",
+        heading: "批量添加标签完成!",
         icon: status,
     });
 
     // Delete the search cache after a finished session
-    Server.callAPI("api/search/cache", "DELETE", null, "Error while deleting cache! Check Logs.", null);
+    Server.callAPI("api/search/cache", "DELETE", null, "删除缓存时出错! 请检查日志。", null);
 
     $("#cancel-job").hide();
 
     if (Batch.currentOperation === "delete") {
-        $("#log-container").append("Reloading page in 5 seconds to account for deleted archives...\n");
+        $("#log-container").append("已删除该档案,将在 5 秒内重新加载页面...\n");
         setTimeout(() => { window.location.reload(); }, 5000);
     } else {
         $("#restart-job").show();

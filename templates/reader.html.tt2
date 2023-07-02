@@ -60,7 +60,7 @@
 
         <div id="i5">
             <div class="sb">
-                <a href="./?[% ref_query %]" id="return-to-index" title="Done reading? Go back to Archive Index">
+                <a href="./?[% ref_query %]" id="return-to-index" title="看完了吗? 返回档案索引">
                     <i class="fa fa-angle-down fa-3x"></i>
                 </a>
             </div>
@@ -68,9 +68,11 @@
 
         <div id="i7" class="if">
             <i class="fa fa-caret-right fa-lg"></i>
-            <a id="imgLink" style="cursor:pointer;">View full-size image</a>
+            <a id="imgLink" style="cursor:pointer;">查看原图</a>
             <i class="fa fa-caret-right fa-lg"></i>
-            <a href="./random">Switch to another random archive</a>
+            <a href="./random">切换到下一个随机档案</a>
+            <i class="fa fa-caret-right fa-lg"></i>
+			<a href="./">返回资料库</a>
         </div>
 
     </div>
@@ -82,7 +84,7 @@
 
     <div id="overlay-shade"></div>
     <div id="archivePagesOverlay" class="id1 base-overlay page-overlay" style="display:none" loaded="false">
-        <h2 class="ih" style="text-align:center">Archive Overview</h2>
+        <h2 class="ih" style="text-align:center">档案预览</h2>
         <div id="tagContainer" class="caption caption-tags caption-reader">
             <br>
             <div style="margin-bottom:16px;">
@@ -93,25 +95,25 @@
                 [% IF userlogged %]
                 <div style="display:inline-block; vertical-align: middle;">
 
-                    <h2>Admin Options</h2>
+                    <h2>管理员设置</h2>
 
-                    <input class="stdbtn" type='button' id="set-thumbnail" value="Set this Page as Thumbnail"
-                        title="Set the currently opened page as the thumbnail for this archive." />
+                    <input class="stdbtn" type='button' id="set-thumbnail" value="将此页面设置为缩略图"
+                        title="将当前打开的页面设置为此档案的缩略图." />
                     <br>
-                    <input id="regenerate-cache" class='stdbtn' type='button' value='Clean Archive Cache' />
+                    <input id="regenerate-cache" class='stdbtn' type='button' value='清理缓存' />
                     <br>
-                    <input id="edit-archive" class='stdbtn' type='button' value='Edit Archive Metadata' />
+                    <input id="edit-archive" class='stdbtn' type='button' value='编辑元数据' />
 
-                    <h2>Add this archive to a Category</h2>
+                    <h2>将此存档添加到类别</h2>
 
                     <select id="category" class="favtag-btn" style="width:200px; margin-right: 8px">
-                        <option selected value=""> -- No Category -- </option>
+                        <option selected value=""> -- 无分类 -- </option>
                         [% FOREACH categories %]
                         <option value="[% id %]">[% name %]</option>
                         [% END %]
                     </select>
                     <br>
-                    <input value="Add Archive" class="stdbtn" id="add-category" type="button">
+                    <input value="添加该档案到分类" class="stdbtn" id="add-category" type="button">
                 </div>
                 [% END %]
             </div>
@@ -120,13 +122,13 @@
 
         <br><br>
 
-        <h2 class="ih" style="text-align:center">Pages</h2>
+        <h2 class="ih" style="text-align:center">档案总览</h2>
 
         <div id="extract-spinner" style="width: 80%; margin-left: auto; margin-right: auto">
             <p class="loading-spinner">
                 <i id="spinner" class="fa fa-dharmachakra fa-4x fa-spin"></i>
             </p>
-            Working on it...
+            工作中...
         </div>
     </div>
     </div>
@@ -139,23 +141,23 @@
 
     <div id="reader-help" style="display: none;">
         <div class="navigation-help-toast">
-            You can navigate between pages using:
+            您可以使用在页面之间导航:
             <ul>
-                <li>The arrow icons</li>
-                <li>The a/d keys</li>
-                <li>Your keyboard arrows (and the spacebar)</li>
-                <li>Touching the left/right side of the image.</li>
+                <li>箭头图标</li>
+                <li>A/D 键</li>
+                <li>键盘上的箭头(和空格键)</li>
+                <li>点击图像的左侧/右侧.</li>
             </ul>
-            <br>Other keyboard shortcuts:
+            <br>其他键盘快捷键:
             <ul>
-                <li>M: toggle manga mode (right-to-left reading)</li>
-                <li>O: show advanced reader options.</li>
-                <li>P: toggle double page mode</li>
-                <li>Q: bring up the thumbnail index and archive options.</li>
-                <li>R: open a random archive.</li>
-                <li>F: toggle fullscreen mode</li>
+                <li>M: 切换漫画模式(从右到左阅读)</li>
+                <li>O: 显示高级阅读器选项.</li>
+                <li>P: 切换双页模式</li>
+                <li>Q: 调出缩略图索引和存档选项.</li>
+                <li>R: 打开随机存档.</li>
+                <li>F: 切换全屏模式</li>
             </ul>
-            <br>To return to the archive index, touch the arrow pointing down or use Backspace.
+            <br>要返回存档索引,请触摸向下的箭头或使用 Backspace.
         </div>
     </div>
 
@@ -171,72 +173,72 @@
 <!-- -->
 [% BLOCK config %]
 
-<h2 class="ih" style="text-align:center">Reader Options</h2>
+<h2 class="ih" style="text-align:center">阅读器选项</h2>
 
-<h1 class="ih config-panel">Those options save automatically -- Click around and find out!</h1>
+<h1 class="ih config-panel">这些选项会自动保存-单击启用!</h1>
 
 <div id="fit-mode">
-    <h2 class="config-panel"> Fit display to </h2>
-    <input id="fit-container" class="favtag-btn config-btn" type="button" value="Container">
-    <input id="fit-width" class="favtag-btn config-btn" type="button" value="Width">
-    <input id="fit-height" class="favtag-btn config-btn" type="button" value="Height">
+    <h2 class="config-panel"> 缩放显示到 </h2>
+    <input id="fit-container" class="favtag-btn config-btn" type="button" value="自适应">
+    <input id="fit-width" class="favtag-btn config-btn" type="button" value="适应宽度">
+    <input id="fit-height" class="favtag-btn config-btn" type="button" value="适应高度">
 </div>
 
 <div id="container-width">
-    <h2 class="config-panel"> Container Width (in pixels or percentage)</h2>
+    <h2 class="config-panel"> 显示宽度 (像素或百分比)</h2>
     <input id="container-width-input" class="stdinput" style="display:inline; width: 70%;"
-        placeholder="The default value is 1200px, or 90% in Double Page Mode.">
-    <input id="container-width-apply" class="favtag-btn config-btn" type="button" style="display:inline;" value="Apply">
+        placeholder="默认值为1200像素,或在双页模式下缩放为90％大小.">
+    <input id="container-width-apply" class="favtag-btn config-btn" type="button" style="display:inline;" value="应用">
 </div>
 
 <div id="toggle-double-mode">
-    <h2 class="config-panel"> Page Rendering </h2>
-    <input id="single-page" class="favtag-btn config-btn" type="button" value="Single">
-    <input id="double-page" class="favtag-btn config-btn" type="button" value="Double">
+    <h2 class="config-panel"> 页面渲染 </h2>
+    <input id="single-page" class="favtag-btn config-btn" type="button" value="单页">
+    <input id="double-page" class="favtag-btn config-btn" type="button" value="双页">
 </div>
 
 <div id="toggle-manga-mode">
-    <h2 class="config-panel"> Reading Direction </h2>
+    <h2 class="config-panel"> 阅读方向 </h2>
     <span class="config-panel"></span>
-    <input id="normal-mode" class="favtag-btn config-btn" type="button" value="Left to Right">
-    <input id="manga-mode" class="favtag-btn config-btn" type="button" value="Right to Left">
+    <input id="normal-mode" class="favtag-btn config-btn" type="button" value="从左到右">
+    <input id="manga-mode" class="favtag-btn config-btn" type="button" value="从右到左">
 </div>
 
 <div id="preload-images">
-    <h2 class="config-panel"> How many images to preload</h2>
-    <input id="preload-input" class="stdinput" style="display:inline" placeholder="The default is two images.">
-    <input id="preload-apply" class="favtag-btn config-btn" type="button" style="display:inline;" value="Apply">
+    <h2 class="config-panel"> 预加载图片张数</h2>
+    <input id="preload-input" class="stdinput" style="display:inline" placeholder="默认为两张图片.">
+    <input id="preload-apply" class="favtag-btn config-btn" type="button" style="display:inline;" value="应用">
 </div>
 
 <div id="toggle-header">
-    <h2 class="config-panel"> Header </h2>
-    <input id="show-header" class="favtag-btn config-btn" type="button" value="Visible">
-    <input id="hide-header" class="favtag-btn config-btn" type="button" value="Hidden">
+    <h2 class="config-panel"> 标题栏 </h2>
+    <input id="show-header" class="favtag-btn config-btn" type="button" value="显示">
+    <input id="hide-header" class="favtag-btn config-btn" type="button" value="隐藏">
 </div>
 
 <div id="toggle-overlay">
-    <h2 class="config-panel"> Show Archive Overlay by default </h2>
-    <span class="config-panel">This will show the overlay with thumbnails every time you open a new Reader page.
+    <h2 class="config-panel"> 默认显示预览 </h2>
+    <span class="config-panel">这将在您每次打开新的阅读器页面时显示带有缩略图的叠加层.
     </span>
-    <input id="show-overlay" class="favtag-btn config-btn" type="button" value="Enabled">
-    <input id="hide-overlay" class="favtag-btn config-btn" type="button" value="Disabled">
+    <input id="show-overlay" class="favtag-btn config-btn" type="button" value="启用">
+    <input id="hide-overlay" class="favtag-btn config-btn" type="button" value="停用">
 </div>
 
 
 <div id="toggle-progress">
-    <h2 class="config-panel"> Progression Tracking </h2>
-    <span class="config-panel">Disabling tracking will restart reading from page one every time you reopen the reader.
+    <h2 class="config-panel"> 进度追踪 </h2>
+    <span class="config-panel">每次您重新打开阅读器时,禁用跟踪都会从第一页重新开始阅读.
     </span>
-    <input id="track-progress" class="favtag-btn config-btn" type="button" value="Enabled">
-    <input id="untrack-progress" class="favtag-btn config-btn" type="button" value="Disabled">
+    <input id="track-progress" class="favtag-btn config-btn" type="button" value="启用">
+    <input id="untrack-progress" class="favtag-btn config-btn" type="button" value="禁用">
 </div>
 
 <div id="toggle-infinite-scroll">
-    <h2 class="config-panel"> Infinite Scrolling </h2>
-    <span class="config-panel">Display all images in a vertical view in the same page.
+    <h2 class="config-panel"> 无限滚动 </h2>
+    <span class="config-panel">在同一页面中以垂直视图显示所有图像。
     </span>
-    <input id="infinite-scroll-on" class="favtag-btn config-btn" type="button" value="Enabled">
-    <input id="infinite-scroll-off" class="favtag-btn config-btn" type="button" value="Disabled">
+    <input id="infinite-scroll-on" class="favtag-btn config-btn" type="button" value="启用">
+    <input id="infinite-scroll-off" class="favtag-btn config-btn" type="button" value="禁用">
 </div>
 
 [% END %]
@@ -258,14 +260,14 @@
 <!-- -->
 [% BLOCK pagesel %]
 <div class="absolute-options absolute-left">
-    <a class="fa fa-cog fa-2x" id="toggle-settings-overlay" href="#" title="Reader Settings"></a>
-    <a class="fa fa-question-circle fa-2x" id="toggle-help" href="#" title="Help"></a>
+    <a class="fa fa-cog fa-2x" id="toggle-settings-overlay" href="#" title="阅读设置"></a>
+    <a class="fa fa-question-circle fa-2x" id="toggle-help" href="#" title="帮助"></a>
 </div>
 
 <div class="absolute-options absolute-right">
-    <a class="fa fa-arrow-right fa-2x reading-direction" href="#" title="Reading Direction"></a>
-    <a class="fa fa-th fa-2x" id="toggle-archive-overlay" href="#" title="Archive Overview"></a>
-    <a class="fa fa-compress fa-2x" id="toggle-full-screen" href="#" title="FullScreen"></a>
+    <a class="fa fa-arrow-right fa-2x reading-direction" href="#" title="阅读方向"></a>
+    <a class="fa fa-th fa-2x" id="toggle-archive-overlay" href="#" title="档案预览"></a>
+    <a class="fa fa-compress fa-2x" id="toggle-full-screen" href="#" title="全屏模式"></a>
 </div>
 [% END %]
 <!-- -->

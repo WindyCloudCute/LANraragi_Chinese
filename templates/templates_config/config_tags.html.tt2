@@ -1,27 +1,27 @@
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Thumbnail Directory </h2>
+        <h2 class="ih"> 缩略图文件夹 </h2>
     </td>
     <td class="config-td">
         <input class="stdinput" style="width:100%" maxlength="255" size="20" value="[% thumbdir %]" name="thumbdir"
-            type="text" [% IF forcedthumbdir %] disabled title="This option is enforced by an environment variable." [%
+            type="text" [% IF forcedthumbdir %] disabled title="此选项由环境变量强制执行." [%
             END %]>
-        <br> Directory where the archive thumbnails will be located. It will be created if it doesn't exist.
-        <br>Make sure the OS user running LANraragi has read/write access to this directory. <br>
+        <br> 存档缩略图将位于相应的目录,如果不存在它将被自动创建.
+        <br>确保运行LANraragi的用户对该目录具有读/写访问权限. <br>
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Use high-quality thumbnails for pages </h2>
+        <h2 class="ih"> 为页面使用高质量的缩略图 </h2>
     </td>
     <td class="config-td">
         [% IF hqthumbpages %]
         <input id="hqthumbpages" name="hqthumbpages" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="hqthumbpages" name="hqthumbpages" class="fa" type="checkbox"> [% END %]
         <label for="hqthumbpages">
-            <br>LANraragi generates lower-quality thumbnails for archive pages for performance reasons.
-            <br>If this option is checked, it will instead generate page thumbnails at the same quality as cover
+            <br>出于性能原因,LANraragi 为存档页面生成质量较低的缩略图.
+            <br>如果选中此选项,它将生成与封面质量相同的页面缩略图
             thumbnails.
         </label>
     </td>
@@ -29,19 +29,19 @@
 
 <tr>
     <td class="option-td">
-        <input id="genthumb-button" class='stdbtn' type='button' value='Generate Missing Thumbnails' />
+        <input id="genthumb-button" class='stdbtn' type='button' value='生成缺少的缩略图' />
     </td>
     <td class="config-td">
-        Generate Thumbnails for all archives that don't have one yet.
+        为所有尚未创建缩略图的档案生成缩略图.
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <input id="forcethumb-button" class='stdbtn' type='button' value='Regenerate all Thumbnails' />
+        <input id="forcethumb-button" class='stdbtn' type='button' value='重新生成所有缩略图' />
     </td>
     <td class="config-td">
-        Regenerate all thumbnails. This might take a while!
+        重建缩略图中,这可能需要一段时间!
     </td>
 </tr>
 
@@ -49,29 +49,29 @@
 
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Add Timestamp Tag </h2>
+        <h2 class="ih"> 添加时间戳 </h2>
     </td>
     <td class="config-td">
         [% IF usedateadded %]
         <input id="usedateadded" name="usedateadded" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="usedateadded" name="usedateadded" class="fa" type="checkbox"> [% END %]
         <label for="usedateadded">
-            <br>If enabled, LANraragi will add the UNIX timestamp of the current time as a tag under the
-            "date_added" namespace to newly added archives.
+            <br>如果启用,LANraragi 会将当前时间的 UNIX 时间戳作为标签添加到
+            新添加的档案的"date_added"命名空间.
         </label>
     </td>
 </tr>
 
 <tr class="datemodified">
     <td class="option-td">
-        <h2 class="ih"> Use "Last modified" Time </h2>
+        <h2 class="ih"> 使用"上次修改时间" </h2>
     </td>
     <td class="config-td">
         [% IF usedatemodified %]
         <input id="usedatemodified" name="usedatemodified" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="usedatemodified" name="usedatemodified" class="fa" type="checkbox"> [% END %]
         <label for="usedatemodified">
-            <br>Enabling this will use file modified time instead of current time when setting "date_added" timestamps.
+            <br>启用此功能将使用文件修改时间配置"date_added"时间戳时而不是当前时间.
         </label>
     </td>
 </tr>
@@ -80,19 +80,19 @@
 
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Tag Rules </h2>
+        <h2 class="ih"> 标签规则 </h2>
     </td>
     <td class="config-td">
         <input id="tagruleson" name="tagruleson" class="fa" type="checkbox" [% IF tagruleson %]checked[% END %]>
         <br>
         <textarea class="stdinput" size="20" style='width:100%; height:196px' name="tagrules">[% tagrules %]</textarea>
-        <br>When tagging archives using Plugins, the rules specified here will be applied to the tags before saving them
-        to the database.
-        <br>Split rules with linebreaks.
-        <br><b>-tag | tag</b> : removes the tag (like a blacklist)
-        <br><b>-namespace:*</b> : removes all tags within this namespace
-        <br><b>~namespace</b> : strips the namespace from the tags
-        <br><b>tag -> new-tag</b> : replaces one tag
-        <br><b>namespace:* -> new-namespace:*</b> : replaces the namespace with the new one
+        <br>使用插件标记档案时,此处指定的规则将在保存之前应用于标记档案
+        到数据库.
+        <br>使用换行符拆分规则.
+        <br><b>-tag | tag</b> : 删除标签(如黑名单)
+        <br><b>-namespace:*</b> : 删除此命名空间内的所有标签
+        <br><b>~namespace</b> : 从标签中去除命名空间
+        <br><b>tag -> new-tag</b> : 替换一个标签
+        <br><b>namespace:* -> new-namespace:*</b> : 用新命名空间替换旧的命名空间
     </td>
 </tr>

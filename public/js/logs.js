@@ -28,7 +28,7 @@ Logs.showLog = function (type) {
             $("#log-container").scrollTop($("#log-container").prop("scrollHeight"));
             Logs.lastType = type;
         })
-        .catch((error) => LRR.showErrorToast("Error getting logs from server", error));
+        .catch((error) => LRR.showErrorToast("从服务器获取日志时出错", error));
 };
 
 Logs.refreshLog = function () {

@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>[% title %] - Categories </title>
+    <title>[% title %] - 分类 </title>
 
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -33,55 +33,55 @@
 <body>
 
     <div class='ido' style='text-align:center'>
-        <h2 class='ih' style='text-align:center'>Categories</h2>
+        <h2 class='ih' style='text-align:center'>分类</h2>
         <br><br>
         <div style='margin-left:auto; margin-right:auto;'>
             <div style='text-align:left; font-size: 9pt; width:400px !important ' class='left-column'>
 
-                Categories appear at the top of your window when browsing the Library.<br>
-                There are two distinct kinds:
+                浏览“资源库”时,分类显示在窗口的顶部。<br>
+                有两种不同的分类:
 
                 <ul>
                     <li><i class="fas fa-2x fa-folder-open" style="margin-left: -30px; width:30px"></i>
-                        Static Categories are arbitrary collections of
-                        Archives, where you can add as many items as you want.
+                        静态类别是档案的任意集合,
+                        您可以在其中添加任意数量的项。
                     </li>
                     <li><i class="fas fa-2x fa-bolt" style="margin-left: -25px; width:25px"></i>
-                        Dynamic Categories contain all archives matching a given predicate, and
-                        automatically update alongside your library.
+                        动态类别包含与给定词匹配的所有档案, 将
+                        自动与您的资料库一起更新。
                     </li>
                 </ul>
 
-                You can create new categories here or edit existing ones. </br></br>
+                您可以在此处创建新分类或编辑现有分类。 </br></br>
 
                 <div style="text-align:center">
-                    <input id='new-static' type='button' value='New Static Category' class='stdbtn'>
-                    <input id='new-dynamic' type='button' value='New Dynamic Category' class='stdbtn'>
+                    <input id='new-static' type='button' value='新的静态分类' class='stdbtn'>
+                    <input id='new-dynamic' type='button' value='新的动态分类' class='stdbtn'>
                 </div> <br>
 
-                Select a category in the combobox below to edit its name, the archives it contains, or its predicate.
-                <br> <b>All your modifications are saved automatically.</b> <br></br>
+                在下面的组合框中选择一个类别,以编辑其名称,包含在存档或给定关键词中
+                <br> <b>您所有的修改都会自动保存。</b> <br></br>
 
                 <table>
                     <tbody>
                         <tr>
                             <td>
-                                <h2>Category:</h2>
+                                <h2>分类:</h2>
                             </td>
                             <td>
                                 <select id="category" class="favtag-btn" style="font-size:20px; height:30px">
-                                    <option disabled selected value> -- No Category -- </option>
+                                    <option disabled selected value> -- 无分类 -- </option>
                                 </select>
                             </td>
                         </tr>
                         <tr class="tag-options">
-                            <td style="text-align: right;">Name:</td>
+                            <td style="text-align: right;">名称:</td>
                             <td>
                                 <input id="catname" value="" />
                             </td>
                         </tr>
                         <tr id="predicatefield" class="tag-options">
-                            <td style="text-align: right;">Predicate:</td>
+                            <td style="text-align: right;">关键词:</td>
                             <td>
                                 <input id="catsearch" value="" />
                                 <i id="predicate-help" style="cursor:pointer" class="fas fa-question-circle"></i>
@@ -91,12 +91,12 @@
                             <td></td>
                             <td>
                                 <input id="pinned" name="pinned" class="fa" type="checkbox">
-                                <label for="pinned">Pin this Category</label>
+                                <label for="pinned">加密该分类</label>
                             </td>
                         </tr>
                         <tr class="tag-options">
                             <td></td>
-                            <td><input id="delete" type='button' value='Delete Category' class='stdbtn'>
+                            <td><input id="delete" type='button' value='删除分类' class='stdbtn'>
                             </td>
                         </tr>
                         <tr class="tag-options">
@@ -115,8 +115,8 @@
                 <div id="dynamicplaceholder"
                     style="align-content: center;top: 150px; position: relative; margin-left: auto; margin-right: auto; width: 90%;">
                     <i class="fas fa-8x fa-air-freshener"></i><br><br>
-                    <h2>If you select a Static Category, your archives will appear here so you can add/remove them from
-                        the category.</h2>
+                    <h2>如果选择静态类别,则归档将显示在此处,因此您可以从分类中添加/删除
+                        它们。</h2>
                 </div>
 
                 <ul id="archivelist" class='checklist' style="display:none">
@@ -126,7 +126,7 @@
             <br><br>
         </div>
 
-        <input id='return' class='stdbtn' type='button' value='Return to Library' />
+        <input id='return' class='stdbtn' type='button' value='回到资料库' />
 
     </div>
     [% INCLUDE footer %]

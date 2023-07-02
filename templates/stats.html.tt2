@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-	<title>[% title %] - Library Statistics</title>
+	<title>[% title %] - 资料库统计</title>
 
 	<meta name="viewport" content="width=device-width" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -35,7 +35,7 @@
 <body>
 
 	<div class='ido' style='text-align:center'>
-		<h2 class="ih" style="text-align:center">Library Statistics</h2>
+		<h2 class="ih" style="text-align:center">资料库统计</h2>
 		<br>
 		<br>
 
@@ -44,23 +44,23 @@
 			<h1 class="ih">
 				<i class="fa fa-book fa-2x" aria-hidden="true"></i> <span style="font-size: 20px"> [% archivecount %]
 				</span>
-				Archives on record
+				个档案文件
 				<br><br>
 				<i class="fa fa-tags fa-2x" aria-hidden="true"></i> <span style="font-size: 20px" id="tagcount">
 					<i id="spinner" class="fa fa-virus fa-spin"></i> </span>
-				Different
-				tags existing
+				个不同
+				的标签
 				<br><br>
 				<i class="fa fa-folder-open fa-2x" aria-hidden="true"></i> <span style="font-size: 20px"> [% arcsize %]
 					GB </span>
-				in content folder
+				空间占用
 				<br><br>
 				<i class="fa fa-book-reader fa-2x" aria-hidden="true"></i> <span style="font-size: 20px"> [% pagestat %]
 				</span>
-				pages read
+				页已读
 				<br><br><br>
 
-				Tag Cloud <br>
+				标签云 <br>
 			</h1>
 
 		</div>
@@ -71,7 +71,7 @@
 			<p class="loading-spinner">
 				<i id="spinner" class="fa fa-dharmachakra fa-4x fa-spin"></i>
 			</p>
-			Asking the great powers that be for your tag statistics...
+			探索标签统计信息的强大功能...
 		</div>
 
 		<div id="tagCloud" style="width: 80%; height: 500px; margin-left: auto; margin-right: auto">
@@ -81,19 +81,20 @@
 			style="display: none; width:80%; margin-left: auto; margin-right: auto">
 			<li class="option-flyout">
 				<div class="collapsible-title caret-right">
-					<i class="fa fa-chart-bar" aria-hidden="true"></i> Detailed Stats
+					<i class="fa fa-chart-bar" aria-hidden="true"></i> 详细统计
 				</div>
 				<div class="collapsible-body">
 					<div id="tagList"
 						style="max-width: 80vw; display: flex; height:calc(2048px - 25vw); flex-direction: column; flex-wrap:wrap; align-items:flex-start; overflow:auto">
 					</div><br>
-					(These statistics only show tags that appear at least twice in your database.)
+					(这些统计信息仅显示在您的数据库中至少出现两次的标签.)
 				</div>
 			</li>
 		</ul>
 
 		<br>
-		<input id="goback" type="button" value="Return to Library" class="stdbtn">
+		<br>
+		<input id="goback" type="button" value="返回资料库" class="stdbtn">
 
 	</div>
 	[% INCLUDE footer %]

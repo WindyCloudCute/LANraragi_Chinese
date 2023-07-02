@@ -8,7 +8,7 @@ ARG UPGRADE_PACKAGES="false"
 ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8
 
 # Install needed packages and setup non-root user. Use a separate RUN statement to add your own dependencies.
-ARG USERNAME=koyomi
+ARG USERNAME=root
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 RUN export DEBIAN_FRONTEND=noninteractive \
@@ -25,9 +25,9 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 
 # Just re-grab cpanfile/install.pl/package.json from the online repo as codespaces' build context is super fucked and I don't get it at all
 # Dropping copies of the files in the .devcontainer folder should also work, but I cba to duplicate my build files for this and symlinks aint working I hate computers
-RUN wget -P /tools https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/cpanfile \
-    && wget -P /tools https://raw.githubusercontent.com/Difegue/LANraragi/dev/tools/install.pl \
-    && wget https://raw.githubusercontent.com/Difegue/LANraragi/dev/package.json
+RUN wget -P /tools https://raw.githubusercontent.com/WindyCloudCute/LANraragi_Chinese/dev/tools/cpanfile \
+    && wget -P /tools https://raw.githubusercontent.com/WindyCloudCute/LANraragi_Chinese/dev/tools/install.pl \
+    && wget https://raw.githubusercontent.com/WindyCloudCute/LANraragi_Chinese/dev/package.json
 
 RUN npm run lanraragi-installer install-full
 

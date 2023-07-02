@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-	<title>[% title %] - Settings</title>
+	<title>[% title %] - 设置</title>
 
 	<meta name="viewport" content="width=device-width" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -35,21 +35,24 @@
 <body>
 
 	<div class="ido">
-		<h2 class="ih" style="text-align:center">Admin Settings</h2>
+		<h2 class="ih" style="text-align:center">管理员设置</h2>
 		<br>
 		<div class="left-column">
 
 			<img class="logo-container" src="./img/logo.png">
 			<br>
 			<h1 style="margin-bottom: 2px">LANraragi</h1>
-			Version [% version %], "[% vername %]"
+			版本 [% version %], "[% vername %]"
 			<br>
-			<h2>Select a category to show the matching settings.</h2>
+			汉化：<a href="http://yuanfangblog.xyz"> 昭君 </a>
+			<br>
+			汉化：<a href="https://bs.windycloud.cn/t/lanraragi-cn"> WindyMadman </a>
+			<h2>选择一个分类以显示相关设置。</h2>
 			<br />
-			<input id='save' class='stdbtn' type='button' value='Save Settings' /><br />
-			<input id='plugin-config' class='stdbtn' type='button' value='Plugin Configuration' />
-			<input id='backup' class='stdbtn' type='button' value='Database Backup/Restore' />
-			<input id='return' class='stdbtn' type='button' value='Return to Library' />
+			<input id='save' class='stdbtn' type='button' value='保存配置' /><br />
+			<input id='plugin-config' class='stdbtn' type='button' value='插件配置' />
+			<input id='backup' class='stdbtn' type='button' value='数据库备份/恢复' />
+			<input id='return' class='stdbtn' type='button' value='返回资料库' />
 
 		</div>
 		<form class="right-column" name="editConfigForm" id="editConfigForm" enctype="multipart/form-data" method="post"
@@ -58,7 +61,7 @@
 			<ul class="collapsible extensible with-right-caret">
 				<li class="option-flyout">
 					<div class="collapsible-title caret-right">
-						<i class="fa fa-cubes" aria-hidden="true"></i> Global Settings
+						<i class="fa fa-cubes" aria-hidden="true"></i> 全局设置
 					</div>
 					<div class="collapsible-body">
 						<table style="margin:auto; font-size:9pt;">
@@ -70,7 +73,7 @@
 				</li>
 				<li class="option-flyout">
 					<div class="collapsible-title caret-right">
-						<i class="fa fa-paint-brush" aria-hidden="true"></i> Theme
+						<i class="fa fa-paint-brush" aria-hidden="true"></i> 主题
 					</div>
 					<div class="collapsible-body">
 						<table style="margin:auto; font-size:9pt;">
@@ -82,7 +85,7 @@
 				</li>
 				<li class="option-flyout">
 					<div class="collapsible-title caret-right">
-						<i class="fa fa-shield-alt" aria-hidden="true"></i> Security
+						<i class="fa fa-shield-alt" aria-hidden="true"></i> 安全
 					</div>
 					<div class="collapsible-body">
 						<table style="margin:auto; font-size:9pt;">
@@ -94,7 +97,7 @@
 				</li>
 				<li class="option-flyout">
 					<div class="collapsible-title caret-right">
-						<i class="fa fa-file-archive" aria-hidden="true"></i> Archive Files
+						<i class="fa fa-file-archive" aria-hidden="true"></i> 档案文件
 					</div>
 					<div class="collapsible-body">
 						<table style="margin:auto; font-size:9pt;">
@@ -106,7 +109,7 @@
 				</li>
 				<li class="option-flyout">
 					<div class="collapsible-title caret-right">
-						<i class="fa fa-tags" aria-hidden="true"></i> Tags and Thumbnails
+						<i class="fa fa-tags" aria-hidden="true"></i> 标签和缩略图
 					</div>
 					<div class="collapsible-body">
 						<table style="margin:auto; font-size:9pt;">
@@ -118,7 +121,7 @@
 				</li>
 				<li class="option-flyout">
 					<div class="collapsible-title caret-right">
-						<i class="fa fa-satellite" aria-hidden="true"></i> Background Workers
+						<i class="fa fa-satellite" aria-hidden="true"></i> 后台进程
 					</div>
 					<div class="collapsible-body">
 						<table style="margin:auto; font-size:9pt;">
