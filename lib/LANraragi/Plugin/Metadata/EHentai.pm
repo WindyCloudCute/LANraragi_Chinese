@@ -44,7 +44,7 @@ sub plugin_info {
 
         ],
         oneshot_arg => "E-H Gallery URL (Will attach tags matching this exact gallery to your archive)",
-        cooldown    => 4
+        cooldown    => 15
     );
 
 }
@@ -100,7 +100,7 @@ sub get_tags {
         $logger->info("未找到匹配的 EH 画廊！");
         return ( error => "未找到匹配的 EH 画廊！" );
     } else {
-        $logger->debug("EH API Tokens are $gID / $gToken");
+        $logger->debug("EH API 令牌是 $gID / $gToken");
     }
 
     my ( $ehtags, $ehtitle ) = &get_tags_from_EH( $ua, $gID, $gToken, $jpntitle, $additionaltags );
@@ -237,6 +237,10 @@ sub search_gallery {
         return ( "", "因页面加载过多而暂时被 EH 禁止。" );
     }
 
+    if ( index( $res->body, "Temporarily banned from EH for excessive pageloads" ) != -1 ) {
+        return ( "", "因页面加载过多而暂时被 EH 禁止。" );
+    }
+
     return ( $res->dom, undef );
 }
 
@@ -276,7 +280,7 @@ sub get_tags_from_EH {
     $ehtitle = html_unescape($ehtitle);
 
     my $ehtags = join( ', ', @tags );
-    $logger->info("Sending the following tags to LRR: $ehtags");
+    $logger->info("将以下标签发送到LRR: $ehtags");
 
     return ( $ehtags, $ehtitle );
 }
@@ -298,7 +302,7 @@ sub get_json_from_EH {
     )->result;
 
     my $textrep = $rep->body;
-    $logger->debug("E-H API returned this JSON: $textrep");
+    $logger->debug("E-H API 返回的JSON数据: $textrep");
 
     my $jsonresponse = $rep->json;
     if ( exists $jsonresponse->{"error"} ) {
