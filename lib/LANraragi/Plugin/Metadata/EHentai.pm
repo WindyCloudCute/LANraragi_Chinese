@@ -97,8 +97,8 @@ sub get_tags {
             return ( error => $gToken );
         }
 
-        $logger->info("No matching EH Gallery Found!");
-        return ( error => "No matching EH Gallery Found!" );
+        $logger->info("未找到匹配的 EH 画廊！");
+        return ( error => "未找到匹配的 EH 画廊！" );
     } else {
         $logger->debug("EH API Tokens are $gID / $gToken");
     }
@@ -130,12 +130,12 @@ sub lookup_gallery {
     #Thumbnail reverse image search
     if ( $thumbhash ne "" && $usethumbs ) {
 
-        $logger->info("Reverse Image Search Enabled, trying now.");
+        $logger->info("反向图像搜索已启用，正在尝试。");
 
         #search with image SHA hash
         $URL = $domain . "?f_shash=" . $thumbhash . "&fs_similar=on&fs_covers=on";
 
-        $logger->debug("Using URL $URL (archive thumbnail hash)");
+        $logger->debug("使用 URL $URL（存档缩略图哈希）");
 
         my ( $gId, $gToken ) = &ehentai_parse( $URL, $ua );
 
@@ -149,7 +149,7 @@ sub lookup_gallery {
     if ( $search_gid && $title_gid ) {
         $URL = $domain . "?f_search=" . uri_escape_utf8("gid:$title_gid");
 
-        $logger->debug("Found gID: $title_gid, Using URL $URL (gID from archive title)");
+        $logger->debug("找到 gID：$title_gid，使用 URL $URL（来自存档标题的 gID）");
 
         my ( $gId, $gToken ) = &ehentai_parse( $URL, $ua );
 
@@ -182,7 +182,7 @@ sub lookup_gallery {
         $URL = $URL . "&f_sh=on";
     }
 
-    $logger->debug("Using URL $URL (archive title)");
+    $logger->debug("使用 URL $URL（存档标题）");
     return &ehentai_parse( $URL, $ua );
 }
 
@@ -218,7 +218,7 @@ sub ehentai_parse() {
 
     if ( index( $dom->to_string, "You are opening" ) != -1 ) {
         my $rand = 15 + int( rand( 51 - 15 ) );
-        $logger->info("Sleeping for $rand seconds due to EH excessive requests warning");
+        $logger->info("由于 EH 过多请求警告而休眠 $rand 秒");
         sleep($rand);
     }
 
@@ -234,7 +234,7 @@ sub search_gallery {
     my $res = $ua->max_redirects(5)->get($url)->result;
 
     if ( index( $res->body, "Your IP address has been" ) != -1 ) {
-        return ( "", "Temporarily banned from EH for excessive pageloads." );
+        return ( "", "因页面加载过多而暂时被 EH 禁止。" );
     }
 
     return ( $res->dom, undef );
