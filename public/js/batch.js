@@ -212,11 +212,11 @@ Batch.updateBatchStatus = function (event) {
     const msg = JSON.parse(event.data);
 
     if (msg.success === 0) {
-        $("#log-container").append(`处理 ID ${msg.id} (${msg.message})时发生插件错误\n\n`);
+        $("#log-container").append(`处理存档时插件发生错误ID: ${msg.id} (${msg.message})\n\n`);
     } else {
         switch (Batch.currentOperation) {
         case "plugin":
-            $("#log-container").append(`处理 ID ${msg.id}  "${Batch.currentPlugin}" (添加标签: ${msg.tags})\n\n`);
+            $("#log-container").append(`[${Batch.currentPlugin}]处理完成ID: ${msg.id} \n添加标签:(${msg.tags})\n\n`);
             break;
         case "delete":
             $("#log-container").append(`删除 ID ${msg.id} (文件名: ${msg.filename})\n\n`);
