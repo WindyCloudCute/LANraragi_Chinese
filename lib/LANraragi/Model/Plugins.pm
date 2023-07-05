@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use feature 'fc';
-use utf8;
+
 use Redis;
 use Encode;
 use Mojo::JSON qw(decode_json encode_json);

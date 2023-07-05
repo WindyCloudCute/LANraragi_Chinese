@@ -3,7 +3,7 @@ package LANraragi::Model::Stats;
 use strict;
 use warnings;
 
-use utf8;
+
 use Redis;
 use File::Find;
 use Mojo::JSON qw(encode_json);

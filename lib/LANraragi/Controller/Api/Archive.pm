@@ -6,6 +6,7 @@ use Encode;
 use Storable;
 use Mojo::JSON qw(decode_json);
 use Scalar::Util qw(looks_like_number);
+use LANraragi::Utils::Database qw(redis_decode);
 
 use LANraragi::Utils::Generic qw(render_api_response);
 use LANraragi::Utils::Database qw(get_archive_json set_isnew);
@@ -152,7 +153,7 @@ sub delete_archive {
         json => {
             operation => "delete_archive",
             id        => $id,
-            filename  => $delStatus,
+            filename  => redis_decode($delStatus),
             success   => $delStatus eq "0" ? 0 : 1
         }
     );

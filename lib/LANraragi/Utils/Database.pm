@@ -6,7 +6,7 @@ use warnings;
 
 use feature qw(signatures);
 no warnings 'experimental::signatures';
-use utf8;
+
 use Digest::SHA qw(sha256_hex);
 use Mojo::JSON qw(decode_json);
 use Encode;

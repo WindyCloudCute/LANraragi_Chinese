@@ -2,7 +2,7 @@ package LANraragi::Utils::Minion;
 
 use strict;
 use warnings;
-
+use utf8;
 use Encode;
 use Mojo::UserAgent;
 use Parallel::Loops;
@@ -126,8 +126,8 @@ sub add_tasks {
             utf8::downgrade( $file, 1 )
               or die "Bullshit! File path could not be converted back to a byte sequence!"
               ;    # This error happening would not make any sense at all so it deserves the EYE reference
-
-            $logger->info("正在处理上传的文件 $file...");
+            my $file_decode = redis_decode($file);
+            $logger->info("正在处理上传的文件 $file_decode...");
 
             # Since we already have a file, this goes straight to handle_incoming_file.
             my ( $status, $id, $title, $message ) = LANraragi::Model::Upload::handle_incoming_file( $file, $catid, "" );

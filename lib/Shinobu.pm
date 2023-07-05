@@ -7,10 +7,9 @@ package Shinobu;
 #    Tracking all files in the content folder and making sure they're sync'ed with the database
 #    Automatically cleaning the temporary folder when it reaches a certain size
 #
-
 use strict;
 use warnings;
-
+use utf8;
 use feature qw(say signatures);
 no warnings 'experimental::signatures';
 
