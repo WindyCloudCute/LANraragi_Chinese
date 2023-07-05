@@ -1,5 +1,5 @@
 package LANraragi::Plugin::Download::Koushoku;
-
+use utf8;
 use strict;
 use warnings;
 no warnings 'uninitialized';
