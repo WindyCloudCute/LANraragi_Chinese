@@ -27,7 +27,7 @@ sub plugin_info {
             { type => "bool", desc => "保存存档标题" },
             { type => "bool", desc => "添加以下标签（如果可用）：下载URL，Gallery ID，类别，时间戳" },
             { type => "bool", desc => "将没有名称空间的标签添加到“另一个：”名称空间，反映了E-H的命名空间的行为" },
-            { type => "string", desc => "将自定义的“源：”标签添加到您的存档中。示例：chaika。如果空白，不会添加标签" }
+            { type => "string", desc => "将自定义的“source：”标签添加到您的存档中。示例：chaika。如果空白，不会添加标签" }
         ],
         oneshot_arg => "Chaika Gallery或存档URL（将在您的档案中附加匹配标签）"
     );
