@@ -14,7 +14,7 @@ Backup.initializeAll = function () {
         done(e, data) {
             $("#processing").attr("style", "display:none");
 
-            if (data.result.success === 1) $("#result").html("Backup restored!");
+            if (data.result.success === 1) $("#result").html("备份备份恢复完成！请检查恢复的数据是否正确。");
             else $("#result").html(data.result.error);
         },
 

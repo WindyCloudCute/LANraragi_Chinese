@@ -46,11 +46,13 @@ Reader.initializeAll = function () {
     $(document).on("click.delete-archive", "#delete-archive", () => {
         LRR.closeOverlay();
         LRR.showPopUp({
-            text: "Are you sure you want to delete this archive?",
+            text: "删除后存档将会从服务器里彻底删除!",
             icon: "warning",
             showCancelButton: true,
             focusConfirm: false,
-            confirmButtonText: "Yes, delete it!",
+            confirmButtonText: "是的我要删除!",
+            cancelButtonText: "取消",
+            cancelButtonText: "取消",
             reverseButtons: true,
             confirmButtonColor: "#d33",
         }).then((result) => {

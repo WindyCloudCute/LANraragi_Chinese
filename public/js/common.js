@@ -293,7 +293,7 @@ LRR.showPopUp = function (c) {
     }
 
     if (c.icon === "warning" && !c.title) {
-        c.title = "This is a destructive operation!";
+        c.title = "[警告] 这是一个永久性的操作\n您确定要删除此存档吗？";
     }
     return window.Swal.fire(c);
 };

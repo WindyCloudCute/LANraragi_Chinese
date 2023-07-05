@@ -102,6 +102,7 @@ Batch.startBatchCheck = function () {
             showCancelButton: true,
             focusConfirm: false,
             confirmButtonText: "是的，删除!",
+            cancelButtonText: "取消",
             reverseButtons: true,
             confirmButtonColor: "#d33",
         }).then((result) => {
@@ -212,7 +213,7 @@ Batch.updateBatchStatus = function (event) {
     const msg = JSON.parse(event.data);
 
     if (msg.success === 0) {
-        $("#log-container").append(`处理存档时插件发生错误ID: ${msg.id} (${msg.message})\n\n`);
+        $("#log-container").append(`处理存档时插件发生错误: ${msg.message}\nID: ${msg.id} \n\n`);
     } else {
         switch (Batch.currentOperation) {
         case "plugin":

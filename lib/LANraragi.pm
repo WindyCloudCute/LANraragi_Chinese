@@ -2,8 +2,8 @@ package LANraragi;
 
 use local::lib;
 
-use open ':std', ':encoding(UTF-8)';
 
+use utf8;
 use Mojo::Base 'Mojolicious';
 use Mojo::File;
 use Mojo::JSON qw(decode_json encode_json);
@@ -138,7 +138,7 @@ sub startup {
     shutdown_from_pid( get_temp . "/minion.pid" );
 
     my $miniondb = $self->LRR_CONF->get_redisad . "/" . $self->LRR_CONF->get_miniondb;
-    say "Minion将使用位于 $miniondb 的Redis数据库";
+    $self->LRR_LOGGER->info("Minion将使用位于 $miniondb 的Redis数据库");
     $self->plugin( 'Minion' => { Redis => "redis://$miniondb" } );
     $self->LRR_LOGGER->info("成功连接到Minion数据库。");
     $self->minion->missing_after(5);    # Clean up older workers after 5 seconds of unavailability
@@ -180,7 +180,7 @@ sub shutdown_from_pid {
         my $oldproc = ${ retrieve($file) };
         my $pid     = $oldproc->pid;
 
-        say "Killing process $pid from $file";
+        say "[LANraragi] [info] 杀死进程$pid <= $file。";
         $oldproc->kill();
         unlink($file);
     }
