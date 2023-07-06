@@ -18,7 +18,7 @@ require "$cwd/tests/mocks.pl";
 
 use_ok('LANraragi::Plugin::Metadata::ComicInfo');
 
-note("00 - [れむ] 夜伽妻 [DL版]");
+#note("00 - [れむ] 夜伽妻 [DL版]");
 {
     my ( $fh, $filename ) = tempfile();
     cp( $SAMPLES . "/comicinfo/00_sample.xml", $fh );
@@ -44,7 +44,7 @@ note("00 - [れむ] 夜伽妻 [DL版]");
     is( $returned_tags,  $expected_tags, "correct tags" );
 }
 
-note("01 - 夜伽妻");
+#note("01 - 夜伽妻");
 {
     my ( $fh, $filename ) = tempfile();
     cp( $SAMPLES . "/comicinfo/01_sample.xml", $fh );
@@ -70,7 +70,7 @@ note("01 - 夜伽妻");
     is( $returned_tags,  $expected_tags, "correct tags" );
 }
 
-note("02 - よつばと！ 第01巻");
+#note("02 - よつばと！ 第01巻");
 {
     my ( $fh, $filename ) = tempfile();
     cp( $SAMPLES . "/comicinfo/02_sample.xml", $fh );
