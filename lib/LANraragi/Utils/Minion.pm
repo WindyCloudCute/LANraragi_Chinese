@@ -72,8 +72,10 @@ sub add_tasks {
                     sub {
                         foreach my $id (@$_) {
 
+                            my $use_jxl = LANraragi::Model::Config->get_jxlthumbpages;
+                            my $format = $use_jxl ? 'jxl' : 'jpg';
                             my $subfolder = substr( $id, 0, 2 );
-                            my $thumbname = "$thumbdir/$subfolder/$id.jpg";
+                            my $thumbname = "$thumbdir/$subfolder/$id.$format";
 
                             unless ( $force == 0 && -e $thumbname ) {
                                 eval {
@@ -126,8 +128,8 @@ sub add_tasks {
             utf8::downgrade( $file, 1 )
               or die "Bullshit! File path could not be converted back to a byte sequence!"
               ;    # This error happening would not make any sense at all so it deserves the EYE reference
-            my $file_decode = redis_decode($file);
-            $logger->info("正在处理上传的文件 $file_decode...");
+
+            $logger->info("正在处理上传的文件 $file...");
 
             # Since we already have a file, this goes straight to handle_incoming_file.
             my ( $status, $id, $title, $message ) = LANraragi::Model::Upload::handle_incoming_file( $file, $catid, "" );
@@ -156,7 +158,7 @@ sub add_tasks {
             my $og_url = $url;
             trim_url($og_url);
 
-            # 如果已记录URL，请流产下载
+            # If the URL is already recorded, abort the download
             my $recorded_id = LANraragi::Model::Stats::is_url_recorded($og_url);
             if ($recorded_id) {
                 $job->finish(
