@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Cwd 'abs_path';
-
+use open ':std', ':encoding(UTF-8)';
 use Mojo::Base -strict;
 use Mojo::Server::Morbo;
 use Mojo::Server::Prefork;

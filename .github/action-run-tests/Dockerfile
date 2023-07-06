@@ -1,8 +1,8 @@
-FROM difegue/lanraragi:nightly
+FROM windycloud/lanraragi_cn:dev
 # Use the base LRR container to have a prepared test environment
 
 LABEL "name"="lrr-test"
-LABEL "maintainer"="Difegue <sugoi@cock.li>"
+LABEL "maintainer"="windycloud <fengzi_re@qq.com>"
 LABEL "version"="0.0.1"
 
 LABEL "com.github.actions.name"="LANraragi Test Suite"

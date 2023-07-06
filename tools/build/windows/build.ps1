@@ -9,7 +9,7 @@ echo "Version is $version"
 $env:LRR_VERSION_NUM=$version
 
 # Use Docker image
-mv .\package\package.tar .\tools\build\windows\Karen\External\package.tar 
+Move-Item .\package.tar .\tools\build\windows\Karen\External\package.tar 
 
 # Use Karen master
 cd .\tools\build\windows\Karen

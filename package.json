@@ -18,14 +18,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Difegue/LANraragi.git"
+        "url": "git+https://github.com/WindyCloudCute/LANraragi_Chinese"
     },
     "author": "dfug",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/Difegue/LANraragi/issues"
+        "url": "https://github.com/WindyCloudCute/LANraragi_Chinese/issues"
     },
-    "homepage": "https://github.com/Difegue/LANraragi#readme",
+    "homepage": "https://github.com/WindyCloudCute/LANraragi_Chinesei#readme",
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.2.1",
         "@jcubic/tagger": "^0.4.2",

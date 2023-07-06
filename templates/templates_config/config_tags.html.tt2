@@ -29,6 +29,21 @@
 
 <tr>
     <td class="option-td">
+        <h2 class="ih"> Use JPEG XL for thumbnails </h2>
+    </td>
+    <td class="config-td">
+        [% IF jxlthumbpages %]
+        <input id="jxlthumbpages" name="jxlthumbpages" class="fa" type="checkbox" checked> [% ELSE %]
+        <input id="jxlthumbpages" name="jxlthumbpages" class="fa" type="checkbox"> [% END %]
+        <label for="jxlthumbpages">
+            <br>Lanraragi出于兼容和性能原因生成JPEG缩略图。
+            <br>如果检查了此选项，则将使用JPEG XL生成缩略图。
+        </label>
+    </td>
+</tr>
+
+<tr>
+    <td class="option-td">
         <input id="genthumb-button" class='stdbtn' type='button' value='生成缺少的缩略图' />
     </td>
     <td class="config-td">
