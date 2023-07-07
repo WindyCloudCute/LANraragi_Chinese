@@ -29,6 +29,8 @@ jobs:
         echo "${DOCKER_PASSWORD}" | docker login -u ${DOCKER_USERNAME} --password-stdin
     - name: 构建/推送 LANraragi for Docker 每日构建
       run: |
+        git submodule init
+        git submodule update
         docker buildx build \
           --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64 \
           --output "type=image,push=true" \
@@ -44,6 +46,8 @@ jobs:
     - uses: actions/checkout@main
     - name: Docker 构建和导出
       run: |
+        git submodule init
+        git submodule update
         docker build -t windycloud/lanraragi_cn:dev -f ./tools/build/docker/Dockerfile --build-arg INSTALL_PARAMETER=-w .
         docker create --name rootfs windycloud/lanraragi_cn:dev 
         docker export --output=package.tar rootfs

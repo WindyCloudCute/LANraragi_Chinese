@@ -11,6 +11,8 @@ jobs:
     - uses: actions/checkout@main
     - name: Docker 构建和导出
       run: |
+        git submodule init
+        git submodule update
         docker build -t windycloud/lanraragi_cn -f ./tools/build/docker/Dockerfile-legacy .
         docker create --name rootfs windycloud/lanraragi_cn
         docker export --output=package.tar rootfs
@@ -93,6 +95,8 @@ jobs:
         echo "${DOCKER_PASSWORD}" | docker login -u ${DOCKER_USERNAME} --password-stdin
     - name: 构建/推送最新的 Docker 镜像和带有版本号的标签
       run: |
+        git submodule init
+        git submodule update
         TAG=${GITHUB_REF:10:10}
         docker buildx build \
           --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64 \
