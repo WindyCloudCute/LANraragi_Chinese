@@ -2,7 +2,7 @@ package LANraragi::Model::Opds;
 
 use strict;
 use warnings;
-use utf8;
+
 
 use Redis;
 use POSIX qw(strftime);

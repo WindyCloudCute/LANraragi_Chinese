@@ -20,7 +20,7 @@ sub plugin_info {
         description =>
           "通过重新使用浏览器中的 cookie 绕过Cloudflare的js。 CF cookie 和用户代理必须来自同一个网络浏览器.",
         parameters => [
-              { type => "string", desc => "浏览器 UserAgent 字符串(可以在 http://useragentstring.com/ 找到您的浏览器)" },
+              { type => "string", desc => "浏览器 UserAgent 字符串（可以在 http://useragentstring.com/ 找到您的浏览器）" },
 			{ type => "string", desc => "域名nhentai.net的csrftoken cookie" },
 			{ type => "string", desc => "域名nhentai.net的cf_clearance cookie" }
         ]

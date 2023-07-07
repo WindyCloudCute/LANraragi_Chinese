@@ -2,7 +2,7 @@ package LANraragi::Model::Search;
 
 use strict;
 use warnings;
-use utf8;
+
 
 use List::Util qw(min);
 use Redis;
@@ -19,7 +19,7 @@ use LANraragi::Model::Category;
 # do_search (filter, category_id, page, key, order, newonly, untaggedonly)
 # Performs a search on the database.
 sub do_search {
-
+    
     my ( $filter, $category_id, $start, $sortkey, $sortorder, $newonly, $untaggedonly ) = @_;
 
     my $redis = LANraragi::Model::Config->get_redis_search;
@@ -40,7 +40,7 @@ sub do_search {
     my ( $cachehit, @filtered ) = check_cache( $cachekey, $cachekey_inv );
 
     unless ($cachehit) {
-        $logger->debug("没有可用的缓存,进行完整的DB解析。");
+        $logger->debug("没有可用的缓存，进行完整的DB解析。");
         @filtered = search_uncached( $category_id, $filter, $sortkey, $sortorder, $newonly, $untaggedonly );
 
         # Cache this query in the search database
@@ -183,7 +183,7 @@ sub search_uncached {
 
                 # Get the list of IDs for this tag
                 @ids = $redis->smembers("INDEX_$tag");
-                $logger->debug( "找到了 $tag 的索引,包含 " . scalar @ids . "个 ID" );
+                $logger->debug( "找到了 $tag 的索引，包含 " . scalar @ids . "个 ID" );
             } else {
 
                 # Get index keys that match this tag.
@@ -195,7 +195,7 @@ sub search_uncached {
                 # Get the list of IDs for each key
                 foreach my $key (@keys) {
                     my @keyids = $redis->smembers($key);
-                    $logger->trace( "找到了 $tag 的索引 $key,包含了 " . scalar @ids . " 个 ID" );
+                    $logger->trace( "找到了 $tag 的索引 $key，包含了 " . scalar @ids . " 个 ID" );
                     push @ids, @keyids;
                 }
             }
@@ -226,7 +226,7 @@ sub search_uncached {
             if ( scalar @ids == 0 && !$isneg ) {
 
                 # No more results, we can end search here
-                $logger->trace("该标记没有结果,正在停止搜索。");
+                $logger->trace("该标记没有结果，正在停止搜索。");
                 @filtered = ();
                 last;
             } else {

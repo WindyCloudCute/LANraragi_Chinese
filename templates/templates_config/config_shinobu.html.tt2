@@ -10,7 +10,7 @@
                 style="display:inline; color:rgb(207, 37, 37)">👹
                 异常! </h2></span>
         (PID: <span id="pid"></span>)
-        <br>该进程负责监视您的内容目录,并在
+        <br>该进程负责监视您的内容目录，并在
         新档案出现时
         自动进行处理。 <br>
     </td>
@@ -21,7 +21,7 @@
         <input id="restart-button" class='stdbtn' type='button' value='重启后台文件监视进程' />
     </td>
     <td class="config-td">
-        如果进程已死或无响应,您可以通过单击此按钮来重新启动它。
+        如果进程已死或无响应，您可以通过单击此按钮来重新启动它。
     </td>
 </tr>
 
@@ -30,7 +30,7 @@
         <input id='open-minion' class='stdbtn' type='button' value='打开Minion控制台' />
     </td>
     <td class="config-td">
-        Minion Worker 处理的备用任务太长,无法在Web的请求/响应生命周期内
+        Minion Worker 处理的备用任务太长，无法在Web的请求/响应生命周期内
         执行。<br>
         控制台显示当前正在运行和已结束的任务。
     </td>

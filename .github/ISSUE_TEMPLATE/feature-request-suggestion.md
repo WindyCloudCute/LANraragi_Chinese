@@ -9,7 +9,7 @@ assignees: ''
 
 <!-- hol up senpai have you checked out the GH Discussions first ? 
 Your issue/idea might've already been reported by someone else! 🐱‍👤
-https://github.com/Difegue/LANraragi/discussions
+https://github.com/WindyCloudCute/LANraragi_Chinese/discussions
 ->  
 
 **Please describe your suggestion, and the problem it'd solve.**

@@ -1,6 +1,7 @@
 # DOCKER-VERSION 0.3.4
-FROM        alpine:3.16
-LABEL       git="https://github.com/Difegue/LANraragi"
+FROM        alpine:3.18
+LABEL       git="https://github.com/WindyCloudCute/LANraragi_Chinese"
+ARG INSTALL_PARAMETER
 
 ENV S6_KEEP_ENV 1
 

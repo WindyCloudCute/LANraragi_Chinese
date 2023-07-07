@@ -2,11 +2,12 @@
 
 use strict;
 use warnings;
-use utf8;
+
 use open ':std', ':encoding(UTF-8)';
 use Cwd;
 use Config;
-
+use utf8;
+use File::Copy;
 use feature qw(say);
 use File::Path qw(make_path);
 
@@ -74,7 +75,7 @@ unless ( @ARGV > 0 ) {
     say("* install-back : 安装/更新 Perl 依赖项。");
     say("* install-full : 安装/更新所有依赖项。");
     say("");
-    say("如果是第一次安装依赖,请使用 install-full。");
+    say("如果是第一次安装依赖，请使用 install-full。");
     exit;
 }
 
@@ -141,7 +142,7 @@ if ( $back || $full ) {
     say("\r\n安装 Perl 模块......    这可能需要一些时间。\r\n");
 
     if ( $Config{"osname"} ne "darwin" ) {
-        say("正在为非 macOS 系统安装 Linux::Inotify2...(如果软件包已经存在,这将不会执行任何操作)");
+        say("正在为非 macOS 系统安装 Linux::Inotify2...（如果软件包已经存在，这将不会执行任何操作）");
 
         install_package( "Linux::Inotify2", $cpanopt );
     }
@@ -187,6 +188,14 @@ if ( $front || $full ) {
 
 }
 
+#install Customize Plugin ETagCN
+cp_customize_plugin("/customize/ETagCN/ETagCN.pm","/lib/LANraragi/Plugin/Metadata/ETagCN.pm","ETagCN");
+
+#install Customize Plugin ETagConverter
+cp_customize_plugin("/customize/ETagConverter/ETagConverter.pm","/lib/LANraragi/Plugin/Scripts/ETagConverter.pm","ETagConverter");
+
+
+
 #Done!
 say("\r\n一切就绪!您可以通过输入以下命令来启动 LANraragi: \r\n");
 say("   ╭─────────────────────────────────────╮");
@@ -225,6 +234,18 @@ sub install_package {
         say("$package 没有安装!正在尝试使用 cpanm 安装 $cpanopt");
         system("cpanm $package $cpanopt");
     } else {
-        say("$package 包已安装,继续...");
+        say("$package 包已安装，继续...");
     }
+}
+
+sub cp_customize_plugin {
+
+    my ( $plugin_file, $plugin_path ,$plugin_name) = @_;
+    $plugin_file = getcwd . $plugin_file;
+    $plugin_path = getcwd . $plugin_path;
+
+    say("\r\n安装插件: $plugin_name \r\n");
+    say("\r\n正在复制 $plugin_file \r\n to $plugin_path");
+    copy($plugin_file,$plugin_path) or die "将 $plugin_file 复制到 $plugin_path 失败\n";
+
 }

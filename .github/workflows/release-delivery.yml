@@ -1,36 +1,36 @@
 on: 
   release:
     types: [published]
-name: New Version Release
+name: 新版本发布
 jobs:
 
   exportDockerRootFS:
-    name: Build and export Docker rootfs for Windows build
+    name: 构建和导出Windows构建的Docker rootfs
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Docker Build and export
+    - uses: actions/checkout@main
+    - name: Docker 构建和导出
       run: |
         docker build -t windycloud/lanraragi_cn -f ./tools/build/docker/Dockerfile-legacy .
-        docker create --name rootfs windycloud/lanraragi_cn 
+        docker create --name rootfs windycloud/lanraragi_cn
         docker export --output=package.tar rootfs
-    - name: Upload rootfs
-      uses: actions/upload-artifact@v1
+    - name: 上传 rootfs
+      uses: actions/upload-artifact@main
       with:
         name: package
         path: package.tar 
         
   buildReleaseWSL:
-    name: Build Windows Installer
+    name: 构建Windows安装程序
     needs: exportDockerRootFS
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Download package
-      uses: actions/download-artifact@v1
+    - uses: actions/checkout@main
+    - name: 下载包
+      uses: actions/download-artifact@main
       with:
         name: package
-    - name: Build MSI Installer
+    - name: 构建MSI安装程序
       shell: powershell
       run: |
         [array]$installPath = &"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -property installationpath
@@ -43,21 +43,22 @@ jobs:
         git submodule update
         choco install nuget.commandline
         ./tools/build/windows/build.ps1
-    - name: Upload Installer
-      uses: actions/upload-artifact@v1
+    - name: 上传安装程序
+      uses: actions/upload-artifact@main
       with:
         name: wsl
         path: ./tools/build/windows/Karen/Setup/bin/LANraragi.msi
+
   uploadWSLRelease:
-    name: Add Windows Installer to release
+    name: 添加Windows安装程序以发布
     needs: buildReleaseWSL
     runs-on: ubuntu-latest
     steps:
-    - name: Download package
-      uses: actions/download-artifact@v1
+    - name: 下载包
+      uses: actions/download-artifact@main
       with:
         name: wsl
-    - name: Upload Installer to release
+    - name: 上传安装程序以发布
       uses: JasonEtco/upload-to-release@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -70,27 +71,27 @@ jobs:
         args: 'Windows Installer built and available on the Release page! <:logo:821516019179978772>🪟'
 
   buildLatestDocker:
-    name: Build Latest Docker image
+    name: 构建最新的Docker图像
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-    - uses: actions/cache@v3
+    - uses: actions/checkout@main
+    - name: 设置 QEMU
+      uses: docker/setup-qemu-action@master
+    - name: 设置 Docker Buildx
+      uses: docker/setup-buildx-action@master
+    - uses: actions/cache@main
       with: 
         path: /tmp/buildxcache
         key: ${{ runner.os }}-docker-buildx-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-docker-buildx-
-    - name: Docker Login
+    - name: Docker登录
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: |
         echo "${DOCKER_PASSWORD}" | docker login -u ${DOCKER_USERNAME} --password-stdin
-    - name: Build/Push Latest Docker image and tag with Release number
+    - name: 构建/推送最新的 Docker 镜像和带有版本号的标签
       run: |
         TAG=${GITHUB_REF:10:10}
         docker buildx build \
@@ -108,19 +109,19 @@ jobs:
         args: 'Docker image built and available on Docker Hub! 🐳'
 
   discordNotifications:
-    name: Send out some notifications
+    name: 发布一些通知
     runs-on: ubuntu-latest
     env:
       DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
     steps:
-    - name: Extract version number from GITHUB_REF
+    - name: 从 GITHUB_REF 中提取版本号
       run: echo "RELEASE_VERSION=${GITHUB_REF:10}" >> $GITHUB_ENV
     - uses: Ilshidur/action-discord@master
       with:
         args: 'LANraragi {{ RELEASE_VERSION }} is now available! @everyone'
     - uses: Ilshidur/action-discord@master
       with:
-        args: 'https://github.com/windycloud/lanraragi_cn/releases/tag/{{ RELEASE_VERSION }}'
+        args: 'https://github.com/WindyCloudCute/LANraragi_Chinese/releases/tag/{{ RELEASE_VERSION }}'
     - uses: Ilshidur/action-discord@master
       with:
         args: 'Docker image and Windows installer are building... Please wait warmly. ☕'

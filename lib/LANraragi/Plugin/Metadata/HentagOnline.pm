@@ -25,12 +25,12 @@ sub plugin_info {
         namespace   => "hentagonlineplugin",
         author      => "siliconfeces",
         version     => "0.1",
-        description => "Searches hentag.com for tags matching your archive",
+        description => "在 hentag.com 中搜索与您的档案相匹配的tag",
         parameters  => [
-            { type => "bool", desc => "Save archive title" },
+            { type => "bool", desc => "保存存档标题" },
             {   type => "string",
                 desc =>
-                  "Comma-separated list of languages to consider. First language = most preferred. Default is \"english, japanese\""
+                  "要考虑的以逗号分隔的语言列表。 第一语言 = 最优先。 默认为“英语、日语”"
             }
         ],
         oneshot_arg => "Hentag.com vault URL (Will attach matching tags to your archive)",

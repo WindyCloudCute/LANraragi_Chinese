@@ -88,7 +88,7 @@ Index.initializeAll = function () {
 
         LRR.toast({
             heading: `欢迎使用 LANraragi ${Index.serverVersion}!`,
-            text: "如果要对存档执行高级操作,请记住只需右键单击其名称。 祝您阅读愉快!",
+            text: "如果要对存档执行高级操作，请记住只需右键单击其名称。 祝您阅读愉快!",
             icon: "info",
             hideAfter: 13000,
         });
@@ -222,7 +222,7 @@ Index.toggleCategory = function (button) {
 Index.promptCustomColumn = function (column) {
     LRR.showPopUp({
         title: "输入要在此列中显示的标签的命名空间",
-        text: "输入不带冒号的完整命名空间, 例如 \"artist\".\n如果您有多个具有相同命名空间的标签,则该列中只会显示最后一个.",
+        text: "输入不带冒号的完整命名空间, 例如 \"artist\".\n如果您有多个具有相同命名空间的标签，则该列中只会显示最后一个.",
         input: "text",
         inputValue: localStorage.getItem(`customColumn${column}`),
         inputPlaceholder: "标签名称空间",
@@ -510,7 +510,8 @@ Index.handleContextMenu = function (option, id) {
             icon: "warning",
             showCancelButton: true,
             focusConfirm: false,
-            confirmButtonText: "是的,删除!",
+            confirmButtonText: "是的，删除!",
+            cancelButtonText: "取消",
             reverseButtons: true,
             confirmButtonColor: "#d33",
         }).then((result) => {
@@ -640,7 +641,7 @@ Index.migrateProgress = function () {
     if (localProgressKeys.length > 0) {
         LRR.toast({
             heading: "您的阅读进度现已保存在服务器上!",
-            text: "您似乎有一些本地进度未上传 -- 我们正在为您将其迁移到服务器,请耐心等待。 ☕",
+            text: "您似乎有一些本地进度未上传 -- 我们正在为您将其迁移到服务器，请耐心等待。 ☕",
             icon: "info",
             hideAfter: 23000,
         });

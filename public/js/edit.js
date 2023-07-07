@@ -75,7 +75,7 @@ Edit.showHelp = function () {
     LRR.toast({
         toastId: "pluginHelp",
         heading: "关于插件",
-        text: "您可以使用插件自动获取此存档的元数据。 <br/> 只需从下拉菜单中选择一个插件即可点击! <br/> 一些插件可能会提供可选的参数供您指定。如果是这样,将提供一个文本框来输入所述参数。",
+        text: "您可以使用插件自动获取此存档的元数据。 <br/> 只需从下拉菜单中选择一个插件即可点击! <br/> 一些插件可能会提供可选的参数供您指定。如果是这样，将提供一个文本框来输入所述参数。",
         icon: "info",
         hideAfter: 33000,
     });
@@ -129,7 +129,8 @@ Edit.deleteArchive = function () {
         icon: "warning",
         showCancelButton: true,
         focusConfirm: false,
-        confirmButtonText: "是的,删除它!",
+        confirmButtonText: "是的，删除它!",
+        cancelButtonText: "取消",
         reverseButtons: true,
         confirmButtonColor: "#d33",
     }).then((result) => {

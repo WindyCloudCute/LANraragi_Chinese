@@ -1,18 +1,18 @@
 on: [push, pull_request]
-name: "Continuous Integration \U0001F44C\U0001F440"
+name: "持续集成 \U0001F44C\U0001F440"
 jobs:
   testSuite:
-    name: Run Test Suite and Perl Critic
+    name: 运行测试套件和 Perl Critic
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Test Docker Build
+    - uses: actions/checkout@main
+    - name: 测试 Docker 构建
       run: |
-        docker build -t difegue/lanraragi -f ./tools/build/docker/Dockerfile .
-    - name: LANraragi Test Suite
+        docker build -t windycloud/lanraragi_cn -f ./tools/build/docker/Dockerfile .
+    - name: LANraragi测试套件
       uses: ./.github/action-run-tests
     - name: Perl Critic
-      uses: Difegue/action-perlcritic@master
+      uses: WindyCloudCute/action-perlcritic@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:

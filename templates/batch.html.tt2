@@ -36,7 +36,7 @@
 		<h2 class='ih' style='text-align:center'>批量操作</h2>
 
 		您可以在此处通过一项操作在多个档案中使用插件.<br><br>
-		选择您的插件,检查要使用的存档,然后滚动! <br>
+		选择您的插件，检查要使用的存档，然后滚动! <br>
 		没有标签的档案已被预先检查.<br><br>
 
 		<div style='margin-left:auto; margin-right:auto;'>
@@ -88,7 +88,7 @@
 									</h3>
 									<i class="fas fa-exclamation-triangle"></i> 某些外部服务可能会暂时
 									Ban
-									掉你的设备, 如果您频繁调用插件! <br>
+									掉你的设备， 如果您频繁调用插件! <br>
 									确保在使用此插件的档案间隔设置合适的 <b>超时时间</b> 如果
 									您要使用的插件存在相关问题. <br><br>
 

@@ -18,12 +18,12 @@ sub plugin_info {
         author    => "Difegue",
         version   => "2.3",
         description =>
-          "处理E-H登录。 如果您有一个可以访问 fjorded 内容或 exhentai 的帐户,则在此处添加凭据将使更多档案可用于解析.",
+          "处理E-H登录。 如果您有一个可以访问 fjorded 内容或 exhentai 的帐户，则在此处添加凭据将使更多档案可用于解析.",
         parameters => [
             { type => "int",    desc => "ipb_member_id cookie" },
             { type => "string", desc => "ipb_pass_hash cookie" },
-            { type => "string", desc => "star cookie (可选,如果存在,您可以在没有 exhentai 的情况下查看 fjorded 内容)" },
-            { type => "string", desc => "igneous cookie(可选,如果有的话,您可以在没有欧洲和美国IP的情况下查看Newentai)" }
+            { type => "string", desc => "star cookie (可选，如果存在，您可以在没有 exhentai 的情况下查看 fjorded 内容)" },
+            { type => "string", desc => "igneous cookie（可选，如果有的话，您可以在没有欧洲和美国IP的情况下查看Newentai）" }
         ]
     );
 
@@ -135,7 +135,7 @@ sub get_user_agent {
             )
         );
     } else {
-        $logger->info("未提供 Cookie,返回空白 UserAgent。");
+        $logger->info("未提供 Cookie，返回空白 UserAgent。");
     }
 
     return $ua;

@@ -16,7 +16,7 @@ sub plugin_info {
         author    => "Nodja",
         version   => "0.1",
         description =>
-          "处理fakku登录。cookie的有效期只有 7 天,所以不要忘记更新它.",
+          "处理fakku登录。cookie的有效期只有 7 天，所以不要忘记更新它.",
         parameters => [
             { type => "string", desc => "fakku_sid cookie value" }
         ]

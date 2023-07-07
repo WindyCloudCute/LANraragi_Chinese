@@ -2,7 +2,7 @@ package LANraragi::Utils::Minion;
 
 use strict;
 use warnings;
-
+use utf8;
 use Encode;
 use Mojo::UserAgent;
 use Parallel::Loops;
@@ -30,8 +30,8 @@ sub add_tasks {
             # Non-cover thumbnails are rendered in low quality by default.
             my $use_hq = $page eq 0 || LANraragi::Model::Config->get_hqthumbpages;
             my $thumbname = extract_thumbnail( $thumbdir, $id, $page, $use_hq );
-            $job->finish($thumbname);
-        }
+                $job->finish($thumbname);
+            }
     );
 
     $minion->add_task(
@@ -185,7 +185,7 @@ sub add_tasks {
                 $url = $plugin_result->{download_url};
                 $logger->info("插件将 URL 转换为 $url");
             } else {
-                $logger->debug("找不到下载器,尝试直接下载 URL.");
+                $logger->debug("找不到下载器，尝试直接下载 URL.");
             }
 
             # Download the URL

@@ -3,12 +3,13 @@
 use strict;
 use warnings;
 use Cwd 'abs_path';
-use utf8;
+use open ':std', ':encoding(UTF-8)';
 use Mojo::Base -strict;
 use Mojo::Server::Morbo;
 use Mojo::Server::Prefork;
 use Mojo::Util qw(extract_usage getopt);
 use File::Path qw(make_path);
+use utf8;
 
 getopt
   'm|morbo'      => \my $morbo,

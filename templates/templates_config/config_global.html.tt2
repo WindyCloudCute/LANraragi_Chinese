@@ -16,7 +16,7 @@
     <td class="config-td">
         <input id="motd" class="stdinput" style="width:100%" maxlength="255" size="20" value="[% motd %]" name="motd"
             type="text">
-        <br>每日的座右铭,出现在主资料库的顶部。
+        <br>每日的座右铭，出现在主资料库的顶部。
     </td>
 </tr>
 
@@ -40,8 +40,8 @@
         <input id="enableresize" name="enableresize" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="enableresize" name="enableresize" class="fa" type="checkbox"> [% END %]
         <label for="enableresize">
-            <br> 如果启用,超过一定大小的页面将在查看时调整大小以节省带宽。
-            <br> <i class="fas fa-exclamation-triangle" style="color:red"></i> 如果在较大图像上启用并使用此选项,
+            <br> 如果启用，超过一定大小的页面将在查看时调整大小以节省带宽。
+            <br> <i class="fas fa-exclamation-triangle" style="color:red"></i> 如果在较大图像上启用并使用此选项，
             则可能会消耗大量内存! 请谨慎使用。
         </label>
     </td>
@@ -54,7 +54,7 @@
     <td class="config-td">
         <input id="sizethreshold" class="stdinput" type="number" style="width:100%" maxlength="255" size="20"
             value="[% sizethreshold %]" name="sizethreshold">
-        <br>(以 KBs.) 调整大小之前,图像可以达到的最大尺寸。
+        <br>(以 KBs.) 调整大小之前，图像可以达到的最大尺寸。
     </td>
 </tr>
 
@@ -78,9 +78,9 @@
         <input id="localprogress" name="localprogress" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="localprogress" name="localprogress" class="fa" type="checkbox"> [% END %]
         <label for="localprogress">
-            <br>启用此选项将保存浏览器上的阅读进度到本地,而不是
+            <br>启用此选项将保存浏览器上的阅读进度到本地，而不是
             服务器. <br />
-            如果您与多个用户共用 LANraragi 服务器,请考虑切换此选项!
+            如果您与多个用户共用 LANraragi 服务器，请考虑切换此选项!
         </label>
     </td>
 </tr>

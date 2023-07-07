@@ -60,7 +60,7 @@
 
         <div id="i5">
             <div class="sb">
-                <a href="./?[% ref_query %]" id="return-to-index" title="看完了吗? 返回档案索引">
+                <a href="./?[% ref_query %]" id="return-to-index" title="看完了吗？ 返回档案索引">
                     <i class="fa fa-angle-down fa-3x"></i>
                 </a>
             </div>
@@ -145,19 +145,19 @@
             <ul>
                 <li>箭头图标</li>
                 <li>A/D 键</li>
-                <li>键盘上的箭头(和空格键)</li>
+                <li>键盘上的箭头（和空格键）</li>
                 <li>点击图像的左侧/右侧.</li>
             </ul>
             <br>其他键盘快捷键:
             <ul>
-                <li>M: 切换漫画模式(从右到左阅读)</li>
+                <li>M: 切换漫画模式（从右到左阅读）</li>
                 <li>O: 显示高级阅读器选项.</li>
                 <li>P: 切换双页模式</li>
                 <li>Q: 调出缩略图索引和存档选项.</li>
                 <li>R: 打开随机存档.</li>
                 <li>F: 切换全屏模式</li>
             </ul>
-            <br>要返回存档索引,请触摸向下的箭头或使用 Backspace.
+            <br>要返回存档索引，请触摸向下的箭头或使用 Backspace.
         </div>
     </div>
 
@@ -187,7 +187,7 @@
 <div id="container-width">
     <h2 class="config-panel"> 显示宽度 (像素或百分比)</h2>
     <input id="container-width-input" class="stdinput" style="display:inline; width: 70%;"
-        placeholder="默认值为1200像素,或在双页模式下缩放为90％大小.">
+        placeholder="默认值为1200像素，或在双页模式下缩放为90％大小.">
     <input id="container-width-apply" class="favtag-btn config-btn" type="button" style="display:inline;" value="应用">
 </div>
 
@@ -227,7 +227,7 @@
 
 <div id="toggle-progress">
     <h2 class="config-panel"> 进度追踪 </h2>
-    <span class="config-panel">每次您重新打开阅读器时,禁用跟踪都会从第一页重新开始阅读.
+    <span class="config-panel">每次您重新打开阅读器时，禁用跟踪都会从第一页重新开始阅读.
     </span>
     <input id="track-progress" class="favtag-btn config-btn" type="button" value="启用">
     <input id="untrack-progress" class="favtag-btn config-btn" type="button" value="禁用">

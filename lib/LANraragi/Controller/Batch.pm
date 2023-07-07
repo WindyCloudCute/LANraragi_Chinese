@@ -177,7 +177,7 @@ sub socket {
 
         # If the client doesn't respond, halt processing
         finish => sub {
-            $logger->info('客户端断开连接,停止剩余操作');
+            $logger->info('客户端断开连接，停止剩余操作');
             $cancelled = 1;
             $redis->quit();
         }

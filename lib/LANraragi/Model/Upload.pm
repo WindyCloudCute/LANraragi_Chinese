@@ -128,7 +128,7 @@ sub handle_incoming_file {
     $logger->debug("在新上传的文件 $id 上运行自动插件...");
 
     my ( $succ, $fail, $addedtags, $newtitle ) = LANraragi::Model::Plugins::exec_enabled_plugins_on_file($id);
-    my $successmsg = "$succ 插件使用成功,$fail 插件失败,$addedtags 标签已添加。 ";
+    my $successmsg = "$succ 插件使用成功，$fail 插件失败，$addedtags 标签已添加。 ";
 
     if ( $newtitle ne "" ) {
         $name = $newtitle;

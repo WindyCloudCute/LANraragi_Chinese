@@ -38,12 +38,12 @@
         <div style='margin-left:auto; margin-right:auto;'>
             <div style='text-align:left; font-size: 9pt; width:400px !important ' class='left-column'>
 
-                浏览“资源库”时,分类显示在窗口的顶部。<br>
+                浏览“资源库”时，分类显示在窗口的顶部。<br>
                 有两种不同的分类:
 
                 <ul>
                     <li><i class="fas fa-2x fa-folder-open" style="margin-left: -30px; width:30px"></i>
-                        静态类别是档案的任意集合,
+                        静态类别是档案的任意集合，
                         您可以在其中添加任意数量的项。
                     </li>
                     <li><i class="fas fa-2x fa-bolt" style="margin-left: -25px; width:25px"></i>
@@ -59,7 +59,7 @@
                     <input id='new-dynamic' type='button' value='新的动态分类' class='stdbtn'>
                 </div> <br>
 
-                在下面的组合框中选择一个类别,以编辑其名称,包含在存档或给定关键词中
+                在下面的组合框中选择一个类别，以编辑其名称，包含在存档或给定关键词中
                 <br> <b>您所有的修改都会自动保存。</b> <br></br>
 
                 <table>
@@ -115,7 +115,7 @@
                 <div id="dynamicplaceholder"
                     style="align-content: center;top: 150px; position: relative; margin-left: auto; margin-right: auto; width: 90%;">
                     <i class="fas fa-8x fa-air-freshener"></i><br><br>
-                    <h2>如果选择静态类别,则归档将显示在此处,因此您可以从分类中添加/删除
+                    <h2>如果选择静态类别，则归档将显示在此处，因此您可以从分类中添加/删除
                         它们。</h2>
                 </div>
 

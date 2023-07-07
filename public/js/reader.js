@@ -343,7 +343,7 @@ Reader.checkFiletypeSupport = function (extension) {
         localStorage.rarWarningShown = true;
         LRR.toast({
             heading: "这个存档似乎是 RAR 格式!",
-            text: "RAR 档案在 LANraragi 中可能无法正常工作,具体取决于它们的制作方式。 如果您在阅读时遇到错误,请考虑将您的存档转换为 zip。",
+            text: "RAR 档案在 LANraragi 中可能无法正常工作，具体取决于它们的制作方式。 如果您在阅读时遇到错误，请考虑将您的存档转换为 zip。",
             icon: "warning",
             hideAfter: 23000,
         });
@@ -351,7 +351,7 @@ Reader.checkFiletypeSupport = function (extension) {
         localStorage.epubWarningShown = true;
         LRR.toast({
             heading: "LANraragi对EPUB的支持很基础",
-            text: "EPUB 图书将仅在网络阅读器中显示图像。 如果您需要文本支持,请考虑将 LANraragi 与 <a href='https://sugoi.gitbook.io/lanraragi/advanced-usage/external-readers#generic-opds-readers'>OPDS阅读器搭配使用.</a>",
+            text: "EPUB 图书将仅在网络阅读器中显示图像。 如果您需要文本支持，请考虑将 LANraragi 与 <a href='https://sugoi.gitbook.io/lanraragi/advanced-usage/external-readers#generic-opds-readers'>OPDS阅读器搭配使用.</a>",
             icon: "warning",
             hideAfter: 20000,
             closeOnClick: false,

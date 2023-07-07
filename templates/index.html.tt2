@@ -116,8 +116,7 @@
 							<div id="carousel-empty"
 								style="height: 344px; display: flex; justify-content: center; align-items: center; flex-direction: column;">
 								<i class="fa fa-4x fa-sad-cry"></i>
-								<span style="margin-top: 12px;">No
-									results here.</span>
+								<span style="margin-top: 12px;">什 么 都 没 有<br>╮(╯▽╰)╭</span>
 							</div>
 						</div>
 					</div>
@@ -134,7 +133,7 @@
 						title="排列顺序"></a>
 
 					<input id="thumbnail-crop" class="fa table-option" type="checkbox"
-						title="如果启用,不适合常规A4页面的缩略图将被裁剪为仅显示左边部分.">
+						title="如果启用，不适合常规A4页面的缩略图将被裁剪为仅显示左边部分.">
 					<label for="thumbnail-crop" style="vertical-align: middle; padding-top:6px">缩略图裁切</label>
 				</div>
 				<div style="margin-left:auto">跳转到:
@@ -174,11 +173,11 @@
 
 			<div id="json-error" style="display:none">
 				<h1 style="color: red">
-					<i class="fas fa-bomb"></i> 我确定数据库已经崩溃,除此之外啥也不清楚
+					<i class="fas fa-bomb"></i> 我确定数据库已经崩溃，除此之外啥也不清楚
 					伙计
 					<i class="fas fa-bomb"></i>
 				</h1>
-				<h2>数据库缓存已损坏,因此LANraragi无法显示您的存档列表。</h2>
+				<h2>数据库缓存已损坏，因此LANraragi无法显示您的存档列表。</h2>
 			</div>
 
 		</div>
@@ -194,7 +193,7 @@
 			[% IF usingdefpass %]
 			//If the json has the "default password" flag, flash a friendly notification inviting the user to change his password
 			LRR.toast({
-				heading: '你\'正在使用默认密码\',这样真的非常危险!!!!',
+				heading: '你\'正在使用默认密码\'，这样真的非常危险!!!!',
 				text: ' 使用默认密码 "kamimamita" <a href="login">点此登录</a><br>马上去 <a href="config">修改它</a>!<br/>当然你也可以把密码禁用掉! <br/>但是所有人都可以修改服务器的设置项?',
 				icon: 'warning',
                 hideAfter: 25000,

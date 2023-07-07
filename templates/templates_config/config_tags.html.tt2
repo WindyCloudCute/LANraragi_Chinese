@@ -20,9 +20,8 @@
         <input id="hqthumbpages" name="hqthumbpages" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="hqthumbpages" name="hqthumbpages" class="fa" type="checkbox"> [% END %]
         <label for="hqthumbpages">
-            <br>出于性能原因,LANraragi 为存档页面生成质量较低的缩略图.
-            <br>如果选中此选项,它将生成与封面质量相同的页面缩略图
-            thumbnails.
+            <br>LANraragi因为性能和存储原因在生成存档页面的缩略图时,生成的质量是比较低的。
+            <br>如果启用此选项，将会生成与封面质量相同的页面缩略图。
         </label>
     </td>
 </tr>
@@ -41,7 +40,7 @@
         <input id="forcethumb-button" class='stdbtn' type='button' value='重新生成所有缩略图' />
     </td>
     <td class="config-td">
-        重建缩略图中,这可能需要一段时间!
+        重建缩略图中，这可能需要一段时间!
     </td>
 </tr>
 
@@ -56,7 +55,7 @@
         <input id="usedateadded" name="usedateadded" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="usedateadded" name="usedateadded" class="fa" type="checkbox"> [% END %]
         <label for="usedateadded">
-            <br>如果启用,LANraragi 会将当前时间的 UNIX 时间戳作为标签添加到
+            <br>如果启用，LANraragi 会将当前时间的 UNIX 时间戳作为标签添加到
             新添加的档案的"date_added"命名空间.
         </label>
     </td>
@@ -86,10 +85,10 @@
         <input id="tagruleson" name="tagruleson" class="fa" type="checkbox" [% IF tagruleson %]checked[% END %]>
         <br>
         <textarea class="stdinput" size="20" style='width:100%; height:196px' name="tagrules">[% tagrules %]</textarea>
-        <br>使用插件标记档案时,此处指定的规则将在保存之前应用于标记档案
+        <br>使用插件标记档案时，此处指定的规则将在保存之前应用于标记档案
         到数据库.
         <br>使用换行符拆分规则.
-        <br><b>-tag | tag</b> : 删除标签(如黑名单)
+        <br><b>-tag | tag</b> : 删除标签（如黑名单）
         <br><b>-namespace:*</b> : 删除此命名空间内的所有标签
         <br><b>~namespace</b> : 从标签中去除命名空间
         <br><b>tag -> new-tag</b> : 替换一个标签

@@ -161,17 +161,18 @@ Server.clearAllNewFlags = function () {
 
 Server.dropDatabase = function () {
     LRR.showPopUp({
-        title: "这是一个(非常)破坏性的操作! ",
+        title: "这是一个（非常）破坏性的操作! ",
         text: "您确定要擦除数据库吗?",
         icon: "warning",
         showCancelButton: true,
         focusConfirm: false,
-        confirmButtonText: "是的,这样做!",
+        confirmButtonText: "是的，这样做!",
+        cancelButtonText: "取消",
         reverseButtons: true,
         confirmButtonColor: "#d33",
     }).then((result) => {
         if (result.isConfirmed) {
-            Server.callAPI("/api/database/drop", "POST", "再见! 重定向...", "重置数据库时出错? 请检查日志.",
+            Server.callAPI("/api/database/drop", "POST", "再见! 重定向...", "重置数据库时出错？ 请检查日志.",
                 () => {
                     setTimeout(() => { document.location.href = "./"; }, 1500);
                 },
@@ -191,8 +192,8 @@ Server.cleanDatabase = function () {
 
             if (data.unlinked > 0) {
                 LRR.toast({
-                    heading: `${data.unlinked} 其他条目已从数据库中取消链接,将在下次清理时删除!`,
-                    text: "如果某些文件从存档索引中消失,请立即进行备份.",
+                    heading: `${data.unlinked} 其他条目已从数据库中取消链接，将在下次清理时删除!`,
+                    text: "如果某些文件从存档索引中消失，请立即进行备份.",
                     icon: "warning",
                     hideAfter: 16000,
                 });
@@ -268,7 +269,7 @@ Server.deleteArchive = function (arcId, callback) {
                 $("#goback").show();
             } else {
                 LRR.toast({
-                    heading: "存档已成功删除,重定向 ...",
+                    heading: "存档已成功删除，重定向 ...",
                     text: `File name : ${data.filename}`,
                     icon: "success",
                     hideAfter: 7000,

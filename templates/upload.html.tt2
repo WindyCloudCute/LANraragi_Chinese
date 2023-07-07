@@ -52,7 +52,7 @@
 
 				<h1 class='ih'>本地计算机</h1>
 
-				您可以将文件拖放到此窗口中,或单击上载按钮。
+				您可以将文件拖放到此窗口中，或单击上载按钮。
 				<br><br>
 
 				<span class='stdbtn fileinput-button' style="height:50px;">
@@ -65,9 +65,9 @@
 				<h1 class='ih'>来自网络</h1>
 
 				您可以从此处将远程URL中的文件直接下载到LANraragi中。<br>
-				即使关闭此窗口,下载作业也将继续进行!<br><br>
+				即使关闭此窗口，下载作业也将继续进行!<br><br>
 
-				输入您的URL(用换行符分隔),然后单击下载按钮。 <br>
+				输入您的URL（用换行符分隔），然后单击下载按钮。 <br>
 				如果一个 <a href="/config/plugins">下载插件</a> 适用于该链接, 将会被自动
 				使用。<br><br>
 

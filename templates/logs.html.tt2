@@ -32,16 +32,16 @@
 
 		<br>
 		您可以在此处检查LANraragi日志以进行调试。<br>
-		默认情况下,此视图仅显示每个日志文件的最后100行,最后一行显示最新行。 <br><br>
+		默认情况下，此视图仅显示每个日志文件的最后100行，最后一行显示最新行。 <br><br>
 		<ul>
 			<li>常规日志与主应用程序有关。 </li>
 			<li>Shinobu日志对应于后台监视进程。</li>
 			<li>插件日志仅针对元数据插件。 </li>
-			<li>除非您正在运行“调试模式”,否则Mojolicious日志不会告诉您太多信息。 </li>
-			<li>如果您从源代码运行,则Redis日志将无法在此处使用!。 </li>
+			<li>除非您正在运行“调试模式”，否则Mojolicious日志不会告诉您太多信息。 </li>
+			<li>如果您从源代码运行，则Redis日志将无法在此处使用!。 </li>
 		</ul>
 		<br>历代汉化：昭君。访问<a href="http://yuanfangblog.xyz"> 我的博客 </a>和<a href="https://space.bilibili.com/6976331"> Bilibili空间 </a>获取更多信息和教程<br>
-		<br>接手汉化：WindyMadman。访问<a href="https://bs.windycloud.cn/t/lanraragi-cn"> 我的论坛 </a>获取一站式的教程和服务<br>
+		<br>接手汉化：WindyMadman。访问<a href="https://bs.windycloud.cn"> 我的论坛 </a>获取一站式的教程和服务<br>
 		<br>点击下载 <a href="https://f-droid.org/packages/com.utazukin.ichaival"> 安卓客户端汉化版 </a>、<a href="https://github.com/Doraemoe/DuReader/releases"> IOS客户端 </a>、<a href="https://www.microsoft.com/zh-cn/p/lrreader/9mz6bwwvswjh"> Windows客户端 .</a><br>
 		<br><br>
 

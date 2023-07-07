@@ -36,9 +36,9 @@ sub plugin_info {
         # Custom arguments:
         parameters => [
             {   type => 'bool',
-                desc => '如果可用,请保存原始日文标题,而不是英文或 ' . '罗马化标题'
+                desc => '如果可用，请保存原始日文标题，而不是英文或 ' . '罗马化标题'
             },
-            { type => 'bool', desc => '保存额外的时间戳(发布时间)和上传者元数据' },
+            { type => 'bool', desc => '保存额外的时间戳（发布时间）和上传者元数据' },
             { type => 'bool', desc => '使用 ExHentai 链接作为源而不是 E-Hentai 链接' }
         ],
         oneshot_arg => '输入有效的 EH 库 URL 以将此 EH 库中的元数据复制到此 LANraragi 存档',

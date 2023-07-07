@@ -27,24 +27,24 @@ sub plugin_info {
         author     => "Difegue and others",
         version    => "2.5.1",
         description =>
-          "搜索 g.e-hentai 以查找与您的存档匹配的标签. <br/><i class='fa fa-exclamation-circle'></i> 此插件将使用存档的 source: tag (如果存在)",
+          "搜索 g.e-hentai 以查找与您的存档匹配的标签. <br/><i class='fa fa-exclamation-circle'></i> 此插件将使用存档的 source: tag （如果存在）",
         icon =>
           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI\nWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4wYBFg0JvyFIYgAAAB1pVFh0Q29tbWVudAAAAAAAQ3Jl\nYXRlZCB3aXRoIEdJTVBkLmUHAAAEo0lEQVQ4y02UPWhT7RvGf8/5yMkxMU2NKaYIFtKAHxWloYNU\ncRDeQTsUFPwAFwUHByu4ODq4Oghdiri8UIrooCC0Lx01ONSKfYOioi1WpWmaxtTm5PTkfNzv0H/D\n/9oeePjdPNd13Y8aHR2VR48eEUURpmmiaRqmaXbOAK7r4vs+IsLk5CSTk5P4vo9hGIgIsViMra0t\nCoUCRi6XY8+ePVSrVTRN61yybZuXL1/y7t078vk8mUyGvXv3cuLECWZnZ1lbW6PdbpNIJHAcB8uy\nePr0KYZlWTSbTRKJBLquo5TCMAwmJia4f/8+Sini8Ti1Wo0oikin09i2TbPZJJPJUK/XefDgAefO\nnWNlZQVD0zSUUvi+TxAE6LqOrut8/fqVTCaDbdvkcjk0TSOdTrOysoLrujiOw+bmJmEYMjAwQLVa\nJZVKYXR1ddFut/F9H9M0MU0T3/dZXV3FdV36+/vp7u7m6NGj7Nq1i0qlwuLiIqVSib6+Pubn5wGw\nbZtYLIaxMymVSuH7PpZlEUURSina7TZBEOD7Pp8/fyYMQ3zfZ25ujv3795NOp3n48CE9PT3ouk4Q\nBBi/fv3Ctm0cx6Grq4utrS26u7sREQzDIIoifv78SU9PD5VKhTAMGRoaYnV1leHhYa5evUoQBIRh\niIigiQhRFKHrOs1mE9u2iaKIkydPYhgGAKZp8v79e+LxOPl8Htd1uXbtGrdv3yYMQ3ZyAODFixeb\nrVZLvn//Lq7rSqVSkfX1dREROXz4sBw/flyUUjI6OipXrlyRQ4cOSbPZlCiKxHVdCcNQHMcRz/PE\ndV0BGL53756sra1JrVaT9fV1cRxHRESGhoakr69PUqmUvHr1SsrlsuzI931ptVriuq78+fNHPM+T\nVqslhoikjh075p09e9ba6aKu6/T39zM4OMjS0hIzMzM0Gg12794N0LEIwPd9YrEYrusShiEK4Nmz\nZ41yudyVy+XI5/MMDAyQzWap1+tks1lEhIWFBQqFArZto5QiCAJc1+14t7m5STweRwOo1WoSBAEj\nIyMUi0WSySQiQiqV6lRoYWGhY3673e7sfRAEiAjZbBbHcbaBb9++5cCBA2SzWZLJJLZt43kesViM\nHX379g1d1wnDsNNVEQEgCAIajQZ3797dBi4tLWGaJq7rYpompVKJmZkZ2u12B3j58mWUUmiahoiw\nsbFBEASdD2VsbIwnT55gACil+PHjB7Ozs0xPT/P7929u3ryJZVmEYUgYhhQKBZRSiAie52EYBkop\nLMvi8ePHTE1NUSwWt0OZn5/3hoeHzRs3bqhcLseXL1+YmJjowGzbRtO07RT/F8jO09+8ecP58+dJ\nJBKcPn0abW5uThWLRevOnTv/Li4u8vr1a3p7e9E0jXg8zsePHymVSnz69Kmzr7quY9s2U1NTXLp0\nCc/zOHLkCPv27UPxf6rX63+NjIz8IyKMj48zPT3NwYMHGRwcpLe3FwARodVqcf36dS5evMj4+DhB\nEHDmzBkymQz6DqxSqZDNZr8tLy//DYzdunWL5eVlqtUqHz58IJVKkUwmaTQalMtlLly4gIjw/Plz\nTp06RT6fZ2Njg/8AqMV7tO07rnsAAAAASUVORK5CYII=",
         parameters => [
-            { type => "string", desc => "在搜索中强制使用语言(由于 EH 限制,日语无法使用)" },
+            { type => "string", desc => "在搜索中强制使用语言（由于 EH 限制，日语无法使用）" },
             { type => "bool",   desc => "保存档案名称" },
-            { type => "bool",   desc => "首先使用缩略图获取(否则使用标题)" },
-            { type => "bool",   desc => "使用标题的GID搜索(返回标题)" },
-            { type => "bool",   desc => "使用 ExHentai(可以在没有星形 cookie 的情况下搜索fjorded内容)" },
+            { type => "bool",   desc => "首先使用缩略图获取（否则使用标题）" },
+            { type => "bool",   desc => "使用标题的GID搜索（返回标题）" },
+            { type => "bool",   desc => "使用 ExHentai（可以在没有星形 cookie 的情况下搜索fjorded内容）" },
             {   type => "bool",
-                desc => "如果可用,请保存原始标题,而不是英文或罗马拼音标题"
+                desc => "如果可用，请保存原始标题，而不是英文或罗马拼音标题"
             },
-            { type => "bool", desc => "获取额外的时间戳(发布时间)和上传者元数据" },
+            { type => "bool", desc => "获取额外的时间戳（发布时间）和上传者元数据" },
             { type => "bool", desc => "搜索已删除的图库" },
 
         ],
         oneshot_arg => "E-H Gallery URL (Will attach tags matching this exact gallery to your archive)",
-        cooldown    => 4
+        cooldown    => 15
     );
 
 }
@@ -97,10 +97,10 @@ sub get_tags {
             return ( error => $gToken );
         }
 
-        $logger->info("No matching EH Gallery Found!");
-        return ( error => "No matching EH Gallery Found!" );
+        $logger->info("未找到匹配的 EH 画廊!");
+        return ( error => "未找到匹配的 EH 画廊!" );
     } else {
-        $logger->debug("EH API Tokens are $gID / $gToken");
+        $logger->debug("EH API 令牌是 $gID / $gToken");
     }
 
     my ( $ehtags, $ehtitle ) = &get_tags_from_EH( $ua, $gID, $gToken, $jpntitle, $additionaltags );
@@ -130,7 +130,7 @@ sub lookup_gallery {
     #Thumbnail reverse image search
     if ( $thumbhash ne "" && $usethumbs ) {
 
-        $logger->info("Reverse Image Search Enabled, trying now.");
+        $logger->info("反向图像搜索已启用，正在尝试。");
 
         #search with image SHA hash
         $URL =
@@ -139,7 +139,7 @@ sub lookup_gallery {
           . $thumbhash
           . "&fs_similar=on&fs_covers=on";
 
-        $logger->debug("Using URL $URL (archive thumbnail hash)");
+        $logger->debug("使用 URL $URL（存档缩略图哈希）");
 
         my ( $gId, $gToken ) = &ehentai_parse( $URL, $ua );
 
@@ -156,7 +156,7 @@ sub lookup_gallery {
         . "?f_search="
         . uri_escape_utf8("gid:$title_gid");
 
-        $logger->debug("Found gID: $title_gid, Using URL $URL (gID from archive title)");
+        $logger->debug("找到 gID：$title_gid，使用 URL $URL（来自存档标题的 gID）");
 
         my ( $gId, $gToken ) = &ehentai_parse( $URL, $ua );
 
@@ -177,7 +177,7 @@ sub lookup_gallery {
     # Add artist tag from the OG tags if it exists
     if ( $tags =~ /.*artist:\s?([^,]*),*.*/gi ) {
         $URL        = $URL . "+" . uri_escape_utf8("artist:$1");
-        $has_artist = 1;
+            $has_artist = 1;
     }
 
     # Add the language override, if it's defined.
@@ -190,7 +190,7 @@ sub lookup_gallery {
         $URL = $URL . "&f_sh=on";
     }
 
-    $logger->debug("Using URL $URL (archive title)");
+    $logger->debug("使用 URL $URL（存档标题）");
     return &ehentai_parse( $URL, $ua );
 }
 
@@ -226,7 +226,7 @@ sub ehentai_parse() {
 
     if ( index( $dom->to_string, "You are opening" ) != -1 ) {
         my $rand = 15 + int( rand( 51 - 15 ) );
-        $logger->info("Sleeping for $rand seconds due to EH excessive requests warning");
+        $logger->info("由于 EH 过多请求警告而休眠 $rand 秒");
         sleep($rand);
     }
 
@@ -242,7 +242,11 @@ sub search_gallery {
     my $res = $ua->max_redirects(5)->get($url)->result;
 
     if ( index( $res->body, "Your IP address has been" ) != -1 ) {
-        return ( "", "Temporarily banned from EH for excessive pageloads." );
+        return ( "", "因页面加载过多而暂时被 EH 禁止。" );
+    }
+
+    if ( index( $res->body, "Temporarily banned from EH for excessive pageloads" ) != -1 ) {
+        return ( "", "因页面加载过多而暂时被 EH 禁止。" );
     }
 
     return ( $res->dom, undef );
@@ -284,7 +288,7 @@ sub get_tags_from_EH {
     $ehtitle = html_unescape($ehtitle);
 
     my $ehtags = join( ', ', @tags );
-    $logger->info("Sending the following tags to LRR: $ehtags");
+    $logger->info("将以下标签发送到LRR: $ehtags");
 
     return ( $ehtags, $ehtitle );
 }
@@ -306,7 +310,7 @@ sub get_json_from_EH {
     )->result;
 
     my $textrep = $rep->body;
-    $logger->debug("E-H API returned this JSON: $textrep");
+    $logger->debug("E-H API 返回的JSON数据: $textrep");
 
     my $jsonresponse = $rep->json;
     if ( exists $jsonresponse->{"error"} ) {

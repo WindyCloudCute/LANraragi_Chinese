@@ -2,15 +2,15 @@ require "language/node"
 
 class Lanraragi < Formula
   desc "Web application for archival and reading of manga/doujinshi"
-  homepage "https://github.com/Difegue/LANraragi"
-  # url "https://github.com/Difegue/LANraragi/archive/v.0.7.6.tar.gz"
+  homepage "https://github.com/WindyCloudCute/LANraragi_Chinese"
+  # url "https://github.com/WindyCloudCute/LANraragi_Chinese/archive/v.0.7.6.tar.gz"
   # sha256 "2c498cc6a18b9fbb77c52ca41ba329c503aa5d4ec648075c3ebb72bfa7102099"
-  url "https://github.com/Difegue/LANraragi.git",
+  url "https://github.com/WindyCloudCute/LANraragi_Chinese.git",
       revision: "COMMIT_HASH"
   version "0.1994-dev"
   license "MIT"
   revision 1
-  head "https://github.com/Difegue/LANraragi.git"
+  head "https://github.com/WindyCloudCute/LANraragi_Chinese.git"
 
   depends_on "nettle" => :build
   depends_on "pkg-config" => :build
@@ -122,6 +122,6 @@ class Lanraragi < Formula
     EOS
     # Execute through npm to avoid starting a redis-server
     return_value = OS.mac? ? 61 : 111
-    assert_match output, shell_output("npm start --prefix #{libexec}", return_value)
+    assert_match output, shell_output("npm test --prefix #{libexec}", return_value)
   end
 end

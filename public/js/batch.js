@@ -101,7 +101,8 @@ Batch.startBatchCheck = function () {
             icon: "warning",
             showCancelButton: true,
             focusConfirm: false,
-            confirmButtonText: "是的,删除!",
+            confirmButtonText: "是的，删除!",
+            cancelButtonText: "取消",
             reverseButtons: true,
             confirmButtonColor: "#d33",
         }).then((result) => {
@@ -212,11 +213,11 @@ Batch.updateBatchStatus = function (event) {
     const msg = JSON.parse(event.data);
 
     if (msg.success === 0) {
-        $("#log-container").append(`处理 ID ${msg.id} (${msg.message})时发生插件错误\n\n`);
+        $("#log-container").append(`处理存档时插件发生错误: ${msg.message}\nID: ${msg.id} \n\n`);
     } else {
         switch (Batch.currentOperation) {
         case "plugin":
-            $("#log-container").append(`处理 ID ${msg.id}  "${Batch.currentPlugin}" (添加标签: ${msg.tags})\n\n`);
+            $("#log-container").append(`[${Batch.currentPlugin}]处理完成ID: ${msg.id} \n添加标签:(${msg.tags})\n\n`);
             break;
         case "delete":
             $("#log-container").append(`删除 ID ${msg.id} (文件名: ${msg.filename})\n\n`);
@@ -297,7 +298,7 @@ Batch.endBatch = function (event) {
     $("#cancel-job").hide();
 
     if (Batch.currentOperation === "delete") {
-        $("#log-container").append("已删除该档案,将在 5 秒内重新加载页面...\n");
+        $("#log-container").append("已删除该档案，将在 5 秒内重新加载页面...\n");
         setTimeout(() => { window.location.reload(); }, 5000);
     } else {
         $("#restart-job").show();

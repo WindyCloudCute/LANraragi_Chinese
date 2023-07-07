@@ -2,8 +2,8 @@ package LANraragi;
 
 use local::lib;
 
-use open ':std', ':encoding(UTF-8)';
 
+use utf8;
 use Mojo::Base 'Mojolicious';
 use Mojo::File;
 use Mojo::JSON qw(decode_json encode_json);
@@ -188,7 +188,7 @@ sub shutdown_from_pid {
         my $oldproc = ${ retrieve($file) };
         my $pid     = $oldproc->pid;
 
-        say "Killing process $pid from $file";
+        say "[LANraragi] [info] 杀死进程$pid <= $file。";
         $oldproc->kill();
         unlink($file);
     }

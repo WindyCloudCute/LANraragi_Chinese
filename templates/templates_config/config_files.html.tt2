@@ -6,7 +6,7 @@
         <input class="stdinput" style="width:100%" maxlength="255" size="20" value="[% dirname %]" name="dirname"
             type="text" [% IF forceddirname %] disabled title="此选项由环境变量强制执行。" [%
             END %]>
-        <br> 档案将被放置的目录,如果不存在,将被自动创建.
+        <br> 档案将被放置的目录，如果不存在，将被自动创建.
         <br>确保运行 LANraragi 的系统的用户对该目录具有读取权限. <br>
     </td>
 </tr>
@@ -20,7 +20,7 @@
         <input id="enablecryptofs" name="enablecryptofs" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="enablecryptofs" name="enablecryptofs" class="fa" type="checkbox"> [% END %]
         <label for="enablecryptofs">
-            <br>如果启用,LANraragi 会将存档文件名截断为 143 字节,这是 eCryptFS 接受的最大值.
+            <br>如果启用，LANraragi 会将存档文件名截断为 143 字节，这是 eCryptFS 接受的最大值.
         </label>
     </td>
 </tr>
@@ -32,8 +32,8 @@
         <input id="rescan-button" class='stdbtn' type='button' value='重新扫描存档目录' />
     </td>
     <td class="config-td">
-        单击此按钮以触发存档目录的重新扫描,以防丢失文件, <br>
-        或一些数据,例如总页数. <br>
+        单击此按钮以触发存档目录的重新扫描，以防丢失文件， <br>
+        或一些数据，例如总页数. <br>
         <br>
     </td>
 </tr>
@@ -45,8 +45,8 @@
     <td class="config-td">
         <input class="stdinput" style="width:100%" maxlength="255" size="20" value="[% tempmaxsize %]"
             name="tempmaxsize" type="text">
-        <br>以MB为单位。 临时文件夹包含最近打开的档案,以便于后续读取。 <br>
-        当它超过此指定大小时,将自动清空。
+        <br>以MB为单位。 临时文件夹包含最近打开的档案，以便于后续读取。 <br>
+        当它超过此指定大小时，将自动清空。
     </td>
 </tr>
 
@@ -69,7 +69,7 @@
     </td>
     <td class="config-td">
         存档索引中最后一次执行的搜索将被缓存以加快加载速度。 <br>
-        如果上述缓存出了问题,您可以通过单击此按钮将其重置。 <br> 
+        如果上述缓存出了问题，您可以通过单击此按钮将其重置。 <br> 
         <br>
     </td>
 </tr>
@@ -81,8 +81,8 @@
         <input id='clear-new-tags' class='stdbtn' type='button' value='清理“NEW”标签' />
     </td>
     <td class="config-td">
-        在您打开新归档文件之前,它们会在索引中标记为“NEW”。<br>
-        如果要清除这些标志,请单击此按钮。 <br>
+        在您打开新归档文件之前，它们会在索引中标记为“NEW”。<br>
+        如果要清除这些标志，请单击此按钮。 <br>
         <br>
     </td>
 </tr>
@@ -96,8 +96,8 @@
         <input id="replacedupe" name="replacedupe" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="replacedupe" name="replacedupe" class="fa" type="checkbox"> [% END %]
         <label for="replacedupe">
-            <br>如果启用了,当通过Web Uploader或下载系统上载的新档案(具有相同名称)时,Lanraragi将覆盖旧档案。
-            <br> <i class="fas fa-exclamation-triangle" style="color:red"></i> 旧文件更换时,这将删除元数据!谨慎使用。
+            <br>如果启用了，当通过Web Uploader或下载系统上载的新档案（具有相同名称）时，Lanraragi将覆盖旧档案。
+            <br> <i class="fas fa-exclamation-triangle" style="color:red"></i> 旧文件更换时，这将删除元数据!谨慎使用。
         </label>
     </td>
 </tr>

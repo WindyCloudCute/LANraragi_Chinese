@@ -4,66 +4,66 @@ on:
     - dev
     - test-builds
     - actions-testing
-name: Continuous Delivery 
+name: 持续交付
 jobs:
   buildNightlyDocker:
-    name: Build and Push Docker Image
+    name: 构建并提交Docker镜像
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-    - uses: actions/cache@v3
+    - uses: actions/checkout@main
+    - name: 设置 QEMU
+      uses: docker/setup-qemu-action@master
+    - name: 设置 Docker Buildx
+      uses: docker/setup-buildx-action@master
+    - uses: actions/cache@main
       with: 
         path: /tmp/buildxcache
         key: ${{ runner.os }}-docker-buildx-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-docker-buildx-
-    - name: Docker Login
+    - name: Docker 登录
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: |
         echo "${DOCKER_PASSWORD}" | docker login -u ${DOCKER_USERNAME} --password-stdin
-    - name: Build/Push Nightly Docker
+    - name: 构建/推送 LANraragi for Docker 每日构建
       run: |
         docker buildx build \
           --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64 \
           --output "type=image,push=true" \
-          --tag windycloud/lanraragi_cn:nightly \
+          --tag windycloud/lanraragi_cn:dev \
           --cache-from "type=local,src=/tmp/buildxcache" \
           --cache-to "type=local,dest=/tmp/buildxcache" \
           --file ./tools/build/docker/Dockerfile .
 
   exportDockerRootFS:
-    name: Build and export Docker rootfs for Windows build
+    name: 为 Windows 构建构建并导出 Docker rootfs
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Docker Build and export
+    - uses: actions/checkout@main
+    - name: Docker 构建和导出
       run: |
-        docker build -t windycloud/lanraragi_cn -f ./tools/build/docker/Dockerfile-legacy .
-        docker create --name rootfs windycloud/lanraragi_cn
+        docker build -t windycloud/lanraragi_cn:dev -f ./tools/build/docker/Dockerfile --build-arg INSTALL_PARAMETER=-w .
+        docker create --name rootfs windycloud/lanraragi_cn:dev 
         docker export --output=package.tar rootfs
-    - name: Upload rootfs
-      uses: actions/upload-artifact@v1
+    - name: 上传 rootfs
+      uses: actions/upload-artifact@main
       with:
         name: package
         path: package.tar 
 
   buildNightlyWSL:
-    name: Build Nightly Windows Package
+    name: 构建 Windows 包
     needs: exportDockerRootFS
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Download package
-      uses: actions/download-artifact@v1
+    - uses: actions/checkout@main
+    - name: 下载包
+      uses: actions/download-artifact@main
       with:
         name: package
-    - name: Build MSI Installer
+    - name: 构建MSI安装程序
       shell: powershell
       run: |
         [array]$installPath = &"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -property installationpath
@@ -76,8 +76,8 @@ jobs:
         git submodule update
         choco install nuget.commandline
         ./tools/build/windows/build.ps1
-    - name: Upload Installer
-      uses: actions/upload-artifact@v1
+    - name: 上传安装程序
+      uses: actions/upload-artifact@main
       with:
         name: LANraragi.msi
         path: ./tools/build/windows/Karen/Setup/bin/LANraragi.msi
