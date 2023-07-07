@@ -65,6 +65,8 @@ COPY --chown=root:root /lrr.conf lrr.conf
 COPY --chown=root:root /tools/build/docker/redis.conf tools/build/docker/
 COPY /tools/build/docker/wsl.conf /etc/wsl.conf
 COPY --chown=root:root /jquery.dataTables.min.js /root/lanraragi/public/js/vendor/jquery.dataTables.min.js
+COPY --chown=root:root /customize/ETagCN/ETagCN.pm /root/lanraragi/lib/LANraragi/Plugin/Metadata/ETagCN.pm
+COPY --chown=root:root /customize/ETagConverter/ETagConverter.pm /root/lanraragi/lib/LANraragi/Plugin/Scripts/ETagConverter.pm
 #Copy s6-overlay 3.x services
 #Uses a system-d like definition that can't be use in 2.x
 COPY /tools/build/docker/s6/s6-rc.d/ /etc/s6-overlay/s6-rc.d/
