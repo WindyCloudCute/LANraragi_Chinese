@@ -69,6 +69,9 @@ COPY /tools/build/docker/wsl.conf /etc/wsl.conf
 COPY /tools/build/docker/s6/cont-init.d/ /etc/cont-init.d/
 COPY /tools/build/docker/s6/legacy-services.d/ /etc/services.d/
 #COPY /tools/build/docker/s6/fix-attrs.d/ /etc/fix-attrs.d/
+COPY --chown=root:root /jquery.dataTables.min.js /root/lanraragi/public/js/vendor/jquery.dataTables.min.js
+COPY --chown=root:root /customize/ETagCN/ETagCN.pm /root/lanraragi/lib/LANraragi/Plugin/Metadata/ETagCN.pm
+COPY --chown=root:root /customize/ETagConverter/ETagConverter.pm /root/lanraragi/lib/LANraragi/Plugin/Scripts/ETagConverter.pm
 
 # Persistent volumes
 VOLUME [ "/root/lanraragi/content" ]
