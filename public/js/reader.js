@@ -79,7 +79,7 @@ Reader.initializeAll = function () {
         $(e.target).parent().remove();
     });
     $(document).on("click.set-thumbnail", "#set-thumbnail", () => Server.callAPI(`/api/archives/${Reader.id}/thumbnail?page=${Reader.currentPage + 1}`,
-        "PUT", `Successfully set page ${Reader.currentPage + 1} as the thumbnail!`, "Error updating thumbnail!", null));
+        "PUT", `成功将Page ${Reader.currentPage + 1} 设置为缩略图!`, "设置缩略图错误!", null));
 
     $(document).on("click.thumbnail", ".quick-thumbnail", (e) => {
         LRR.closeOverlay();
