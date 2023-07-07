@@ -11,3 +11,5 @@ Dockerfile.*
 .DS_Store
 config.log
 autobackup.json
+lib/LANraragi/Plugin/Scripts/ETagConverter.pm
+lib/LANraragi/Plugin/Metadata/ETagCN.pm

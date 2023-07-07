@@ -7,6 +7,7 @@ use open ':std', ':encoding(UTF-8)';
 use Cwd;
 use Config;
 use utf8;
+use File::Copy;
 use feature qw(say);
 use File::Path qw(make_path);
 
@@ -187,6 +188,14 @@ if ( $front || $full ) {
 
 }
 
+#install Customize Plugin ETagCN
+cp_customize_plugin("/customize/ETagCN/ETagCN.pm","/lib/LANraragi/Plugin/Metadata/ETagCN.pm","ETagCN");
+
+#install Customize Plugin ETagConverter
+cp_customize_plugin("/customize/ETagConverter/ETagConverter.pm","/lib/LANraragi/Plugin/Scripts/ETagConverter.pm","ETagConverter");
+
+
+
 #Done!
 say("\r\n一切就绪！您可以通过输入以下命令来启动 LANraragi: \r\n");
 say("   ╭─────────────────────────────────────╮");
@@ -227,4 +236,16 @@ sub install_package {
     } else {
         say("$package 包已安装，继续...");
     }
+}
+
+sub cp_customize_plugin {
+
+    my ( $plugin_file, $plugin_path ,$plugin_name) = @_;
+    $plugin_file = getcwd . $plugin_file;
+    $plugin_path = getcwd . $plugin_path;
+
+    say("\r\n安装插件: $plugin_name \r\n");
+    say("\r\n正在复制 $plugin_file \r\n to $plugin_path");
+    copy($plugin_file,$plugin_path) or die "将 $plugin_file 复制到 $plugin_path 失败\n";
+
 }
