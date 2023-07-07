@@ -20,24 +20,25 @@
         <input id="hqthumbpages" name="hqthumbpages" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="hqthumbpages" name="hqthumbpages" class="fa" type="checkbox"> [% END %]
         <label for="hqthumbpages">
-            <br>出于性能原因，LANraragi 为存档页面生成质量较低的缩略图.
-            <br>如果选中此选项，它将生成与封面质量相同的页面缩略图
-            thumbnails.
+            <br>LANraragi因为性能和存储原因在生成存档页面的缩略图时,生成的质量是比较低的。
+            <br>如果启用此选项，将会生成与封面质量相同的页面缩略图。
         </label>
     </td>
 </tr>
 
 <tr>
     <td class="option-td">
-        <h2 class="ih"> Use JPEG XL for thumbnails </h2>
+        <h2 class="ih"> 使用JPEG XL格式生成缩略图 </h2>
     </td>
     <td class="config-td">
         [% IF jxlthumbpages %]
         <input id="jxlthumbpages" name="jxlthumbpages" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="jxlthumbpages" name="jxlthumbpages" class="fa" type="checkbox"> [% END %]
         <label for="jxlthumbpages">
-            <br>Lanraragi出于兼容和性能原因生成JPEG缩略图。
-            <br>如果检查了此选项，则将使用JPEG XL生成缩略图。
+            <br>LANraragi因为兼容和性能原因默认生成的是JPEG格式的缩略图。
+            <br>如果启用了此选项，那么将会使用JPEG XL格式生成缩略图。
+            <br>警告: JPEG XL格式在大部分的浏览器和客户端中都暂未拥有完整的支持,
+            <br>如果启用可能会导致缩略图无法显示!
         </label>
     </td>
 </tr>
