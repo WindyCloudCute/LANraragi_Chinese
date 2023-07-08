@@ -3,7 +3,7 @@ package LANraragi::Utils::Database;
 use strict;
 use warnings;
 use utf8;
-
+use open ':std', ':encoding(UTF-8)';
 use feature qw(signatures);
 no warnings 'experimental::signatures';
 
