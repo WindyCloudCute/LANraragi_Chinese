@@ -3,7 +3,7 @@ package LANraragi::Model::Search;
 use strict;
 use warnings;
 
-
+use utf8;
 use List::Util qw(min);
 use Redis;
 use Storable qw/ nfreeze thaw /;

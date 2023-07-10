@@ -70,7 +70,7 @@ sub run_script {
         );
     }
 
-    return ( error => "URL not found in database.", total => 0 );
+    return ( error => "在数据库中找不到URL。", total => 0 );
 }
 
 1;
