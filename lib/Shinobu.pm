@@ -68,12 +68,13 @@ sub initialize_from_new_process {
     update_filemap();
     $logger->info("初始扫描完成！ 将观监视器添加到内容文件夹以监视进一步的文件变动。");
 
-    # Add watcher to content directory
+    # 将观察器添加到内容目录
     my $contentwatcher = File::ChangeNotify->instantiate_watcher(
         directories     => [$userdir],
         filter          => qr/\.(?:zip|rar|7z|tar|tar\.gz|lzma|xz|cbz|cbr|cb7|cbt|pdf|epub)$/i,
         follow_symlinks => 1,
         exclude         => [ 'thumb', '.' ],                                                      #excluded subdirs
+        depth       => 5,        #扫描档案目录时扫描的最大目录深度
     );
 
     my $class = ref($contentwatcher);
@@ -112,15 +113,15 @@ sub update_filemap {
     my $dirname = LANraragi::Model::Config->get_userdir;
     my @files;
 
-    # Get all files in content directory and subdirectories.
+    # 在内容目录和子目录中获取所有文件。
     find(
         {   wanted => sub {
-                return if -d $_;    #Directories are excluded on the spot
+                return if -d $_;    #目录当场被排除在外
                 return unless is_archive($_);
-                push @files, $_;    #Push files to array
+                push @files, $_;    #将文件推入数组
             },
-            no_chdir    => 1,
-            follow_fast => 1
+            no_chdir    => 5,
+            follow_fast => 1        #扫描档案目录时扫描的最大目录深度
         },
         $dirname
     );
