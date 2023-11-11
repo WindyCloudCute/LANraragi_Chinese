@@ -2,7 +2,7 @@ package LANraragi::Model::Category;
 
 use strict;
 use warnings;
-
+use utf8;
 
 use Redis;
 use Mojo::JSON qw(decode_json encode_json);

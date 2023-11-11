@@ -2,7 +2,7 @@ package LANraragi::Model::Opds;
 
 use strict;
 use warnings;
-
+use utf8;
 
 use Redis;
 use POSIX qw(strftime);
@@ -49,17 +49,31 @@ sub generate_opds_catalog {
     @list = sort { lc( $a->{title} ) cmp lc( $b->{title} ) } @list;
     @cats = sort { lc( $a->{name} ) cmp lc( $b->{name} ) } @cats;
 
-    return $mojo->render_to_string(
+    if($mojo->LRR_CONF->get_motd == "欢迎来到 LANraragi!"){
+        return $mojo->render_to_string(
         template      => "opds",
         arclist       => \@list,
         catlist       => \@cats,
         nocat         => $cat_id eq "",
         title         => $mojo->LRR_CONF->get_htmltitle,
-        motd          => $mojo->LRR_CONF->get_motd,
+        motd          => "Welcome to this Library running LANraragi!",
         version       => $mojo->LRR_VERSION,
         api_key_query => $api_key ? "?key=" . $api_key : "",
         api_key_and   => $api_key ? "&amp;key=" . $api_key : ""
     );
+    }else{
+        return $mojo->render_to_string(
+            template      => "opds",
+            arclist       => \@list,
+            catlist       => \@cats,
+            nocat         => $cat_id eq "",
+            title         => $mojo->LRR_CONF->get_htmltitle,
+            motd          => $mojo->LRR_CONF->get_motd,
+            version       => $mojo->LRR_VERSION,
+            api_key_query => $api_key ? "?key=" . $api_key : "",
+            api_key_and   => $api_key ? "&amp;key=" . $api_key : ""
+        );
+    }
 }
 
 sub generate_opds_item {

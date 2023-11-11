@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-
+use utf8;
 use Data::Dumper;
 
 use Cwd qw( getcwd );
@@ -9,7 +9,7 @@ use Mojo::File;
 
 use Test::More;
 use Test::Deep;
-use utf8;
+
 my $cwd     = getcwd();
 my $SAMPLES = "$cwd/tests/samples";
 require "$cwd/tests/mocks.pl";

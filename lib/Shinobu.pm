@@ -7,6 +7,7 @@ package Shinobu;
 #    Tracking all files in the content folder and making sure they're sync'ed with the database
 #    Automatically cleaning the temporary folder when it reaches a certain size
 #
+
 use strict;
 use warnings;
 use utf8;
@@ -258,6 +259,11 @@ sub add_to_filemap ( $redis_cfg, $file ) {
                 $redis_arc->hset( $id, " 所属名字: ", redis_encode($name) );
                 $redis_arc->wait_all_responses;
                 invalidate_cache();
+            }
+
+            unless ( LANraragi::Utils::Database::get_arcsize( $redis_arc, $id ) ) {
+                $logger->debug("arcsize is not set for $id, storing now!");
+                LANraragi::Utils::Database::add_arcsize( $redis_arc, $id );
             }
 
             # Set pagecount in case it's not already there

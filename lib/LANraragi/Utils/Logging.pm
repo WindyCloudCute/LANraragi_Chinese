@@ -2,7 +2,6 @@ package LANraragi::Utils::Logging;
 
 use strict;
 use warnings;
-
 use utf8;
 use open ':std', ':encoding(UTF-8)';
 use feature 'say';

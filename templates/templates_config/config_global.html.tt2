@@ -65,7 +65,7 @@
     <td class="config-td">
         <input id="readerquality" class="stdinput" type="number" min="0" max="100" style="width:100%" maxlength="255"
             size="20" value="[% readerquality %]" name="readerquality">
-        <br> 调整大小后的图像的质量。 低质量 = 小容量图片。 (0-100)
+        <br> 调整大小后的图像的质量。 低质量 = 图片占用空间少。 (0-100)
     </td>
 </tr>
 

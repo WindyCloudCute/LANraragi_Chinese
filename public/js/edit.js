@@ -106,7 +106,7 @@ Edit.saveMetadata = function () {
     formData.append("title", $("#title").val());
 
     return fetch(`api/archives/${id}/metadata`, { method: "PUT", body: formData })
-        .then((response) => (response.ok ? response.json() : { success: 0, error: "反应不好" }))
+        .then((response) => (response.ok ? response.json() : { success: 0, error: "响应不正确" }))
         .then((data) => {
             if (data.success) {
                 LRR.toast({

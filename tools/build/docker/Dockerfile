@@ -35,7 +35,9 @@ ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8 \
     # Enable automatic http proxy detection for mojo
     MOJO_PROXY=1 \
     # Allow Mojo to automatically pick up the X-Forwarded-For and X-Forwarded-Proto headers
-    MOJO_REVERSE_PROXY=1
+    MOJO_REVERSE_PROXY=1 \
+    # Attempt to fix file permissions automatically
+    LRR_AUTOFIX_PERMISSIONS=1
 
 # RUN \
 #   if [ $(getent group ${LRR_GID}) ]; then \
@@ -51,6 +53,7 @@ WORKDIR /root/lanraragi
 #This allows for Docker cache to preserve cpan dependencies
 COPY --chown=root:root /tools/cpanfile /tools/install.pl /tools/build/docker/install-everything.sh tools/
 COPY --chown=root:root /package.json package.json
+COPY --chown=root:root /package-lock.json package-lock.json
 
 # Run the install script as root
 RUN sh ./tools/install-everything.sh $INSTALL_PARAMETER

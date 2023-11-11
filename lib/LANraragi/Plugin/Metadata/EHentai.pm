@@ -20,12 +20,12 @@ sub plugin_info {
 
     return (
         #Standard metadata
-        name       => "E-Hentai",
-        type       => "metadata",
-        namespace  => "ehplugin",
-        login_from => "ehlogin",
-        author     => "Difegue and others",
-        version    => "2.5.1",
+        name        => "E-Hentai",
+        type        => "metadata",
+        namespace   => "ehplugin",
+        login_from  => "ehlogin",
+        author      => "Difegue and others",
+        version     => "2.5.2",
         description =>
           "搜索 g.e-hentai 以查找与您的存档匹配的标签. <br/><i class='fa fa-exclamation-circle'></i> 此插件将使用存档的 source: tag （如果存在）",
         icon =>
@@ -35,7 +35,6 @@ sub plugin_info {
             { type => "bool",   desc => "保存档案名称" },
             { type => "bool",   desc => "首先使用缩略图获取（否则使用标题）" },
             { type => "bool",   desc => "使用标题的GID搜索（返回标题）" },
-            { type => "bool",   desc => "使用 ExHentai（可以在没有星形 cookie 的情况下搜索fjorded内容）" },
             {   type => "bool",
                 desc => "如果可用，请保存原始标题，而不是英文或罗马拼音标题"
             },
@@ -44,7 +43,7 @@ sub plugin_info {
 
         ],
         oneshot_arg => "E-H Gallery URL (Will attach tags matching this exact gallery to your archive)",
-        cooldown    => 15
+        cooldown    => 4
     );
 
 }
@@ -53,9 +52,9 @@ sub plugin_info {
 sub get_tags {
 
     shift;
-    my $lrr_info = shift;                     # Global info hash
+    my $lrr_info = shift;                                                                               # Global info hash
     my $ua       = $lrr_info->{user_agent};
-    my ( $lang, $savetitle, $usethumbs, $search_gid, $enablepanda, $jpntitle, $additionaltags, $expunged ) = @_; # Plugin parameters
+    my ( $lang, $usethumbs, $search_gid, $enablepanda, $jpntitle, $additionaltags, $expunged ) = @_;    # Plugin parameters
 
     # Use the logger to output status - they'll be passed to a specialized logfile and written to STDOUT.
     my $logger = get_plugin_logger();
@@ -110,7 +109,7 @@ sub get_tags {
     if ( $hashdata{tags} ne "" ) {
 
         if ( !$hasSrc ) { $hashdata{tags} .= ", source:" . ( split( '://', $domain ) )[1] . "/g/$gID/$gToken"; }
-        if ($savetitle) { $hashdata{title} = $ehtitle; }
+        $hashdata{title} = $ehtitle;
     }
 
     #Return a hash containing the new metadata - it will be integrated in LRR.

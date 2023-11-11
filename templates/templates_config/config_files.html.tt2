@@ -20,7 +20,7 @@
         <input id="enablecryptofs" name="enablecryptofs" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="enablecryptofs" name="enablecryptofs" class="fa" type="checkbox"> [% END %]
         <label for="enablecryptofs">
-            <br>如果启用，LANraragi 会将存档文件名截断为 143 字节，这是 eCryptFS 接受的最大值.
+            <br>如果启用，LANraragi 会将存档文件名截断至 143 字节，这是 eCryptFS 接受的最大值.
         </label>
     </td>
 </tr>

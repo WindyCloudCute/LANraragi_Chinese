@@ -2,6 +2,7 @@ package LANraragi;
 
 use local::lib;
 
+use open ':std', ':encoding(UTF-8)';
 
 use utf8;
 use Mojo::Base 'Mojolicious';
@@ -11,9 +12,9 @@ use Storable;
 use Sys::Hostname;
 use Config;
 
-use LANraragi::Utils::Generic qw(start_shinobu start_minion);
-use LANraragi::Utils::Logging qw(get_logger get_logdir);
-use LANraragi::Utils::Plugins qw(get_plugins);
+use LANraragi::Utils::Generic    qw(start_shinobu start_minion);
+use LANraragi::Utils::Logging    qw(get_logger get_logdir);
+use LANraragi::Utils::Plugins    qw(get_plugins);
 use LANraragi::Utils::TempFolder qw(get_temp);
 use LANraragi::Utils::Routing;
 use LANraragi::Utils::Minion;
@@ -36,8 +37,19 @@ sub startup {
     my $vername = $packagejson->{version_name};
     my $descstr = $packagejson->{description};
 
-    # Use the hostname and osname for a sorta-unique set of secrets.
-    $self->secrets( [ hostname(), $Config{"osname"}, 'oshino' ] );
+    my $secret          = "";
+    my $secretfile_path = $ENV{LRR_DATA_DIRECTORY} ? $ENV{LRR_DATA_DIRECTORY} . "/oshino" : "oshino";
+    if ( -e $secretfile_path ) {
+        $secret = Mojo::File->new($secretfile_path)->slurp;
+    } else {
+
+        # Generate a random string as the secret and store it in a file
+        $secret .= sprintf( "%x", rand 16 ) for 1 .. 8;
+        Mojo::File->new($secretfile_path)->spew($secret);
+    }
+
+    # Use the hostname alongside the random secret
+    $self->secrets( [ $secret . hostname() ] );
     $self->plugin('RenderFile');
 
     # Set Template::Toolkit as default renderer so we can use the LRR templates
@@ -137,10 +149,15 @@ sub startup {
     # Enable Minion capabilities in the app
     shutdown_from_pid( get_temp . "/minion.pid" );
 
-    my $miniondb = $self->LRR_CONF->get_redisad . "/" . $self->LRR_CONF->get_miniondb;
-    $self->LRR_LOGGER->info("Minion将使用位于 $miniondb 的Redis数据库");
-    $self->plugin( 'Minion' => { Redis => "redis://$miniondb" } );
-    $self->LRR_LOGGER->info("成功连接到Minion数据库。");
+    my $miniondb      = $self->LRR_CONF->get_redisad . "/" . $self->LRR_CONF->get_miniondb;
+    my $redispassword = $self->LRR_CONF->get_redispassword;
+
+    # If the password is non-empty, add the required delimiters
+    if ($redispassword) { $redispassword = "x:" . $redispassword . "@"; }
+
+    say "Minion will use the Redis database at $miniondb";
+    $self->plugin( 'Minion' => { Redis => "redis://$redispassword$miniondb" } );
+    $self->LRR_LOGGER->info("Successfully connected to Minion database.");
     $self->minion->missing_after(5);    # Clean up older workers after 5 seconds of unavailability
 
     LANraragi::Utils::Minion::add_tasks( $self->minion );
@@ -193,7 +210,7 @@ sub add_sigint_handler {
         shutdown_from_pid( get_temp . "/minion.pid" );
 
         \&$old_int;    # Calling the old handler to cleanly exit the server
-      }
+    }
 }
 
 sub migrate_old_settings {

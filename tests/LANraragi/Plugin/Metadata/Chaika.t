@@ -1,12 +1,12 @@
 use strict;
 use warnings;
-
+use utf8;
 use Data::Dumper;
 
 use Cwd qw( getcwd );
 use Mojo::JSON qw(decode_json encode_json);
 use Mojo::File;
-use utf8;
+
 use Test::More;
 use Test::Deep;
 

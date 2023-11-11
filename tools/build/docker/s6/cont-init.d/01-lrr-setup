@@ -2,6 +2,7 @@
 
 USER_ID=${LRR_UID}
 GROUP_ID=${LRR_GID}
+FIX_PERMS=${LRR_AUTOFIX_PERMISSIONS:-1}
 
 echo "Starting LANraragi with UID/GID : $USER_ID/$GROUP_ID"
 
@@ -9,10 +10,7 @@ echo "Starting LANraragi with UID/GID : $USER_ID/$GROUP_ID"
 #This solves permission problems on the content folder if the Docker user sets the same uid as the owner of the folder.
 usermod -o -u $USER_ID root
 groupmod -o -g $GROUP_ID root
-
-#Ensure LRR folder is writable
 chown root /root/lanraragi
-chmod u+rwx /root/lanraragi
 
 #Crash with an error if content folder doesn't exist
 if [ ! -d "/root/lanraragi/content" ]; then
@@ -24,10 +22,19 @@ fi
 chown -R root /root/lanraragi/database
 chmod -R u+rwx /root/lanraragi/database
 
+if [ "$FIX_PERMS" -eq 1 ]; then
+  echo "Fixing permissions, hold on!"
 #Ensure thumbnail folder is writable
 chown -R root /root/lanraragi/content/thumb
 find /root/lanraragi/content/thumb -type f -exec chmod u+rw  {} \;
 find /root/lanraragi/content/thumb -type d -exec chmod u+rwx {} \;
+
+  # Ensure the rest of the content folder is at least readable
+  find /root/lanraragi/content -name thumb -prune -o -type f -exec chmod u+r  {} \;
+  find /root/lanraragi/content -name thumb -prune -o -type d -exec chmod u+rx {} \;
+else
+    echo "Not touching permissions"
+fi
 
 #Ensure log folder is writable
 mkdir /root/lanraragi/log

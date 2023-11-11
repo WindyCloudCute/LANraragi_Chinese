@@ -52,7 +52,6 @@ Reader.initializeAll = function () {
             focusConfirm: false,
             confirmButtonText: "是的我要删除!",
             cancelButtonText: "取消",
-            cancelButtonText: "取消",
             reverseButtons: true,
             confirmButtonColor: "#d33",
         }).then((result) => {
@@ -275,7 +274,6 @@ Reader.initInfiniteScrollView = function () {
     Reader.pages.slice(1).forEach((source) => {
         const img = new Image();
         img.id = `page-${Reader.pages.indexOf(source)}`;
-        img.loading = "lazy";
         img.height = 800;
         img.width = 600;
         img.src = source;

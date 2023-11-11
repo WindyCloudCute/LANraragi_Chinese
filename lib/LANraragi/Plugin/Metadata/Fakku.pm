@@ -13,25 +13,25 @@ use utf8;
 #You can also use the LRR Internal API when fitting.
 use LANraragi::Model::Plugins;
 use LANraragi::Utils::Logging qw(get_plugin_logger);
-use LANraragi::Utils::Generic qw(remove_spaces remove_newlines);
+use LANraragi::Utils::String  qw(trim trim_CRLF);
 
 #Meta-information about your plugin.
 sub plugin_info {
 
     return (
         #Standard metadata
-        name       => "FAKKU",
-        type       => "metadata",
-        namespace  => "fakkumetadata",
-        login_from => "fakkulogin",
-        author     => "Difegue, Nodja",
-        version    => "0.8",
+        name        => "FAKKU",
+        type        => "metadata",
+        namespace   => "fakkumetadata",
+        login_from  => "fakkulogin",
+        author      => "Difegue, Nodja",
+        version     => "0.9",
         description =>
           "在 FAKKU 中搜索与您的档案匹配的标签。 如果您有帐户，请不要忘记在登录插件中输入匹配的 cookie 才能访问有争议的内容。 <br/><br/>  
            <i class='fa fa-exclamation-circle'></i> <b>此插件可以并且将根据您搜索的内容返回无效结果！!</b> <br/>FAKKU 搜索 API 不是很精确，我建议您尽可能使用 Chaika.moe 插件.",
         icon =>
           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAACZSURBVDhPlY+xDYQwDEWvZgRGYA22Y4frqJDSZhFugiuuo4cqPGT0iTjAYL3C+fGzktc3hEcsQvJq6HtjE2Jdv4viH4a4pWnL8q4A6g+ET9P8YhS2/kqwIZXWnwqChDxPfCFfD76wOzJ2IOR/0DSwnuRKYAKUW3gq2OsJTYM0jr7QVRVwlabJEaw3ARYBcmFXeomxphIeEMIMmh3lOLQR+QQAAAAASUVORK5CYII=",
-        parameters  => [ { type => "bool", desc => "保存档案名称" } ],
+        parameters  => [],
         oneshot_arg => "FAKKU 图库 URL（将与此确切图库匹配的标签附加到您的档案中）"
     );
 
@@ -43,8 +43,6 @@ sub get_tags {
     shift;
     my $lrr_info = shift;                     # Global info hash
     my $ua       = $lrr_info->{user_agent};
-
-    my ($savetitle) = @_;                     # Plugin parameters
 
     my $logger = get_plugin_logger();
 
@@ -79,8 +77,7 @@ sub get_tags {
     $logger->info("Sending the following tags to LRR: $newtags");
 
     #Return a hash containing the new metadata - it will be integrated in LRR.
-    if ( $savetitle && $newtags ne "" ) { return ( tags => $newtags, title => $newtitle ); }
-    else                                { return ( tags => $newtags ); }
+    return ( tags => $newtags, title => $newtitle );
 }
 
 ######
@@ -179,7 +176,7 @@ sub get_tags_from_fakku {
     my $metadata_parent = $tags_parent->parent->parent;
 
     my $title = $metadata_parent->at('h1')->text;
-    remove_spaces($title);
+    $title = trim($title);
     $logger->debug("Parsed title: $title");
 
     my @tags = ();
@@ -201,8 +198,8 @@ sub get_tags_from_fakku {
           ? $row[1]->at('a')->text
           : $row[1]->text;
 
-        remove_spaces($value);
-        remove_newlines($value);
+        $value = trim($value);
+        $value = trim_CRLF($value);
 
         $logger->debug("Parsed row: $namespace");
         $logger->debug("Matching tag: $value");
@@ -223,8 +220,8 @@ sub get_tags_from_fakku {
     foreach my $link (@tag_links) {
         my $tag = $link->text;
 
-        remove_spaces($tag);
-        remove_newlines($tag);
+        $tag = trim($tag);
+        $tag = trim_CRLF($tag);
         unless ( $tag eq "+" || $tag eq "" ) {
             push( @tags, lc $tag );
         }

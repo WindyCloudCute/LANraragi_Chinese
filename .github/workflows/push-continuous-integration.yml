@@ -5,7 +5,7 @@ jobs:
     name: 运行测试套件和 Perl Critic
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@main
+    - uses: actions/checkout@master
     - name: 测试 Docker 构建
       run: |
         git submodule init

@@ -9,7 +9,8 @@ use Redis;
 use Storable qw/ nfreeze thaw /;
 use Sort::Naturally;
 
-use LANraragi::Utils::Generic qw(split_workload_by_cpu remove_spaces);
+use LANraragi::Utils::Generic qw(split_workload_by_cpu);
+use LANraragi::Utils::String qw(trim);
 use LANraragi::Utils::Database qw(redis_decode redis_encode);
 use LANraragi::Utils::Logging qw(get_logger);
 
@@ -19,10 +20,10 @@ use LANraragi::Model::Category;
 # do_search (filter, category_id, page, key, order, newonly, untaggedonly)
 # Performs a search on the database.
 sub do_search {
-    
+
     my ( $filter, $category_id, $start, $sortkey, $sortorder, $newonly, $untaggedonly ) = @_;
 
-    my $redis = LANraragi::Model::Config->get_redis_search;
+    my $redis  = LANraragi::Model::Config->get_redis_search;
     my $logger = get_logger( "Search Engine", "lanraragi" );
 
     unless ( $redis->exists("LAST_JOB_TIME") ) {
@@ -36,7 +37,6 @@ sub do_search {
     # Look in searchcache first
     my $sortorder_inv = $sortorder ? 0 : 1;
     my $cachekey      = redis_encode("$category_id-$filter-$sortkey-$sortorder-$newonly-$untaggedonly");
-    #print $cachekey . "\n";
     my $cachekey_inv  = redis_encode("$category_id-$filter-$sortkey-$sortorder_inv-$newonly-$untaggedonly");
     my ( $cachehit, @filtered ) = check_cache( $cachekey, $cachekey_inv );
 
@@ -65,7 +65,7 @@ sub do_search {
 sub check_cache {
 
     my ( $cachekey, $cachekey_inv ) = @_;
-    my $redis = LANraragi::Model::Config->get_redis_search;
+    my $redis  = LANraragi::Model::Config->get_redis_search;
     my $logger = get_logger( "Search Cache", "lanraragi" );
 
     my @filtered = ();
@@ -191,7 +191,7 @@ sub search_uncached {
                 # If the tag has a namespace, We don't add a wildcard at the start of the tag to keep it intact.
                 # Otherwise, we add a wildcard at the start to match all namespaces.
                 my $indexkey = $tag =~ /:/ ? "INDEX_$tag*" : "INDEX_*$tag*";
-                my @keys = $redis->keys($indexkey);
+                my @keys     = $redis->keys($indexkey);
 
                 # Get the list of IDs for each key
                 foreach my $key (@keys) {
@@ -203,7 +203,7 @@ sub search_uncached {
 
             # Append fuzzy title search
             my $namesearch = $isexact ? "$tag\x00*" : "*$tag*";
-            my $scan = -1;
+            my $scan       = -1;
             while ( $scan != 0 ) {
 
                 # First iteration
@@ -226,14 +226,14 @@ sub search_uncached {
 
             if ( scalar @ids == 0 && !$isneg ) {
 
-                # 没有更多的结果，我们可以在这里结束搜索
+                # No more results, we can end search here
                 $logger->trace("该标记没有结果，正在停止搜索。");
                 @filtered = ();
                 last;
             } else {
                 $logger->trace( "找到此标记的 " . scalar @ids . " 个结果." );
 
-                # 将新列表与以前的列表相交
+                # Intersect the new list with the previous ones
                 @filtered = intersect_arrays( \@ids, \@filtered, $isneg );
             }
         }
@@ -374,7 +374,7 @@ sub compute_search_filter {
         # Escape already present regex characters
         $logger->debug("预转义标签: $tag");
 
-        remove_spaces($tag);
+        $tag = trim($tag);
 
         # Escape characters according to redis zscan rules
         $tag =~ s/([\[\]\^\\])/\\$1/g;
@@ -406,10 +406,10 @@ sub sort_results {
    # (If no tag, defaults to "zzzz")
     my %tmpfilter = map { $_ => ( $redis->hget( $_, "tags" ) =~ m/.*${re}:(.*)(\,.*|$)/ ) ? $1 : "zzzz" } @filtered;
 
-    my @sorted = map { $_->[0] }    # Map back to only having the ID
-      sort { ncmp( $a->[1], $b->[1] ) }    # Sort by the tag
-      map { [ $_, lc( $tmpfilter{$_} ) ] } # Map to an array containing the ID and the lowercased tag
-      keys %tmpfilter;                     # List of IDs
+    my @sorted = map { $_->[0] }                         # Map back to only having the ID
+      sort           { ncmp( $a->[1], $b->[1] ) }        # Sort by the tag
+      map            { [ $_, lc( $tmpfilter{$_} ) ] }    # Map to an array containing the ID and the lowercased tag
+      keys %tmpfilter;                                   # List of IDs
 
     if ($sortorder) {
         @sorted = reverse @sorted;
