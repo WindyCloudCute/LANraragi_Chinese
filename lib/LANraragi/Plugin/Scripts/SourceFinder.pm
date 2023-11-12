@@ -7,7 +7,7 @@ use utf8;
 use Mojo::UserAgent;
 use LANraragi::Utils::Logging qw(get_plugin_logger);
 use LANraragi::Model::Stats;
-use LANraragi::Utils::Generic qw(trim_url);
+use LANraragi::Utils::String qw(trim_url);
 
 #Meta-information about your plugin.
 sub plugin_info {
@@ -70,7 +70,7 @@ sub run_script {
         );
     }
 
-    return ( error => "URL not found in database.", total => 0 );
+    return ( error => "在数据库中找不到URL。", total => 0 );
 }
 
 1;

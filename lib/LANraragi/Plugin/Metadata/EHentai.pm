@@ -20,12 +20,12 @@ sub plugin_info {
 
     return (
         #Standard metadata
-        name       => "E-Hentai",
-        type       => "metadata",
-        namespace  => "ehplugin",
-        login_from => "ehlogin",
-        author     => "Difegue and others",
-        version    => "2.5.1",
+        name        => "E-Hentai",
+        type        => "metadata",
+        namespace   => "ehplugin",
+        login_from  => "ehlogin",
+        author      => "Difegue and others",
+        version     => "2.5.2",
         description =>
           "搜索 g.e-hentai 以查找与您的存档匹配的标签. <br/><i class='fa fa-exclamation-circle'></i> 此插件将使用存档的 source: tag （如果存在）",
         icon =>
@@ -35,7 +35,6 @@ sub plugin_info {
             { type => "bool",   desc => "保存档案名称" },
             { type => "bool",   desc => "首先使用缩略图获取（否则使用标题）" },
             { type => "bool",   desc => "使用标题的GID搜索（返回标题）" },
-            { type => "bool",   desc => "使用 ExHentai（可以在没有星形 cookie 的情况下搜索fjorded内容）" },
             {   type => "bool",
                 desc => "如果可用，请保存原始标题，而不是英文或罗马拼音标题"
             },
@@ -53,9 +52,9 @@ sub plugin_info {
 sub get_tags {
 
     shift;
-    my $lrr_info = shift;                     # Global info hash
+    my $lrr_info = shift;                                                                               # Global info hash
     my $ua       = $lrr_info->{user_agent};
-    my ( $lang, $savetitle, $usethumbs, $search_gid, $enablepanda, $jpntitle, $additionaltags, $expunged ) = @_;    # Plugin parameters
+    my ( $lang, $usethumbs, $search_gid, $enablepanda, $jpntitle, $additionaltags, $expunged ) = @_;    # Plugin parameters
 
     # Use the logger to output status - they'll be passed to a specialized logfile and written to STDOUT.
     my $logger = get_plugin_logger();
@@ -97,8 +96,8 @@ sub get_tags {
             return ( error => $gToken );
         }
 
-        $logger->info("未找到匹配的 EH 画廊!");
-        return ( error => "未找到匹配的 EH 画廊!" );
+        $logger->info("未找到匹配的 EH 画廊！");
+        return ( error => "未找到匹配的 EH 画廊！" );
     } else {
         $logger->debug("EH API 令牌是 $gID / $gToken");
     }
@@ -110,7 +109,7 @@ sub get_tags {
     if ( $hashdata{tags} ne "" ) {
 
         if ( !$hasSrc ) { $hashdata{tags} .= ", source:" . ( split( '://', $domain ) )[1] . "/g/$gID/$gToken"; }
-        if ($savetitle) { $hashdata{title} = $ehtitle; }
+        $hashdata{title} = $ehtitle;
     }
 
     #Return a hash containing the new metadata - it will be integrated in LRR.
@@ -133,11 +132,7 @@ sub lookup_gallery {
         $logger->info("反向图像搜索已启用，正在尝试。");
 
         #search with image SHA hash
-        $URL =
-            $domain
-          . "?f_shash="
-          . $thumbhash
-          . "&fs_similar=on&fs_covers=on";
+        $URL = $domain . "?f_shash=" . $thumbhash . "&fs_similar=on&fs_covers=on";
 
         $logger->debug("使用 URL $URL（存档缩略图哈希）");
 
@@ -149,12 +144,9 @@ sub lookup_gallery {
     }
 
     # Search using gID if present in title name
-    my ( $title_gid ) = $title =~ /\[([0-9]+)\]/g;
+    my ($title_gid) = $title =~ /\[([0-9]+)\]/g;
     if ( $search_gid && $title_gid ) {
-        $URL =
-        $domain
-        . "?f_search="
-        . uri_escape_utf8("gid:$title_gid");
+        $URL = $domain . "?f_search=" . uri_escape_utf8("gid:$title_gid");
 
         $logger->debug("找到 gID：$title_gid，使用 URL $URL（来自存档标题的 gID）");
 
@@ -166,18 +158,17 @@ sub lookup_gallery {
     }
 
     # Regular text search (advanced options: Disable default filters for: Language, Uploader, Tags)
-    $URL =
-        $domain
-      . "?advsearch=1&f_sfu=on&f_sft=on&f_sfl=on"
-      . "&f_search="
-      . uri_escape_utf8( qw(") . $title . qw(") );
+    $URL = $domain . "?advsearch=1&f_sfu=on&f_sft=on&f_sfl=on" . "&f_search=" . uri_escape_utf8( qw(") . $title . qw(") );
 
     my $has_artist = 0;
 
-    # Add artist tag from the OG tags if it exists
+    # Add artist tag from the OG tags if it exists (and only contains ASCII characters)
     if ( $tags =~ /.*artist:\s?([^,]*),*.*/gi ) {
-        $URL        = $URL . "+" . uri_escape_utf8("artist:$1");
+        my $artist = $1;
+        if ( $artist =~ /^[\x00-\x7F]*$/ ) {
+            $URL        = $URL . "+" . uri_escape_utf8("artist:$artist");
             $has_artist = 1;
+        }
     }
 
     # Add the language override, if it's defined.
@@ -186,7 +177,7 @@ sub lookup_gallery {
     }
 
     # Search expunged galleries if the option is enabled.
-    if ( $expunged ) {
+    if ($expunged) {
         $URL = $URL . "&f_sh=on";
     }
 

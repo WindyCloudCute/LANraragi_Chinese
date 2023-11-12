@@ -42,6 +42,33 @@ Server.callAPI = function (endpoint, method, successMessage, errorMessage, succe
         .catch((error) => LRR.showErrorToast(errorMessage, error));
 };
 
+Server.callAPIBody = function (endpoint, method, body, successMessage, errorMessage, successCallback) {
+    return fetch(endpoint, { method, body })
+        .then((response) => (response.ok ? response.json() : { success: 0, error: "响应不正确" }))
+        .then((data) => {
+            if (Object.prototype.hasOwnProperty.call(data, "success") && !data.success) {
+                throw new Error(data.error);
+            } else {
+                let message = successMessage;
+                if ("successMessage" in data && data.successMessage !== null) {
+                    message = data.successMessage;
+                }
+                if (message !== null) {
+                    LRR.toast({
+                        heading: message,
+                        icon: "success",
+                        hideAfter: 7000,
+                    });
+                }
+
+                if (successCallback !== null) return successCallback(data);
+
+                return null;
+            }
+        })
+        .catch((error) => LRR.showErrorToast(errorMessage, error));
+};
+
 /**
  * Check the status of a Minion job until it's completed.
  * @param {*} jobId Job ID to check
@@ -144,7 +171,7 @@ Server.triggerScript = function (namespace) {
 };
 
 Server.cleanTemporaryFolder = function () {
-    Server.callAPI("/api/tempfolder", "DELETE", "临时文件夹已清理!", "清理临时文件夹时出错 :",
+    Server.callAPI("/api/tempfolder", "DELETE", "临时文件夹已清理！", "清理临时文件夹时出错 :",
         (data) => {
             $("#tempsize").html(data.newsize);
         },
@@ -152,11 +179,11 @@ Server.cleanTemporaryFolder = function () {
 };
 
 Server.invalidateCache = function () {
-    Server.callAPI("/api/search/cache", "DELETE", "丢弃搜索缓存!", "删除缓存时出错! 请检查日志.", null);
+    Server.callAPI("/api/search/cache", "DELETE", "丢弃搜索缓存!", "删除缓存时出错！ 请检查日志.", null);
 };
 
 Server.clearAllNewFlags = function () {
-    Server.callAPI("/api/database/isnew", "DELETE", "所有档案都不再是新的!", "清理NEW标签时出错! 请检查日志.", null);
+    Server.callAPI("/api/database/isnew", "DELETE", "所有档案都不再是新的！", "清理NEW标签时出错！ 请检查日志.", null);
 };
 
 Server.dropDatabase = function () {
@@ -182,7 +209,7 @@ Server.dropDatabase = function () {
 };
 
 Server.cleanDatabase = function () {
-    Server.callAPI("/api/database/clean", "POST", null, "清理数据库时出错! 请检查日志.",
+    Server.callAPI("/api/database/clean", "POST", null, "清理数据库时出错！ 请检查日志.",
         (data) => {
             LRR.toast({
                 heading: `成功清理数据库并删除 ${data.deleted} 条!`,
@@ -220,7 +247,7 @@ Server.regenerateThumbnails = function (force) {
                     $("#genthumb-button").prop("disabled", false);
                     $("#forcethumb-button").prop("disabled", false);
                     LRR.toast({
-                        heading: "所有缩略图生成! 但遇到以下错误:",
+                        heading: "所有缩略图生成！ 但遇到以下错误:",
                         text: d.result.errors,
                         icon: "success",
                         hideAfter: 15000,
@@ -258,7 +285,7 @@ Server.deleteArchive = function (arcId, callback) {
     fetch(`/api/archives/${arcId}`, { method: "DELETE" })
         .then((response) => (response.ok ? response.json() : { success: 0, error: "响应不正确" }))
         .then((data) => {
-            if (data.success === "0") {
+            if (!data.success) {
                 LRR.toast({
                     heading: "无法删除存档文件. <br> (或许已被删除?)",
                     text: "存档元数据已完整删除. <br> 请在返资源库之前手动删除文件.",

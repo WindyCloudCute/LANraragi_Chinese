@@ -42,7 +42,7 @@
         <label for="enableresize">
             <br> 如果启用，超过一定大小的页面将在查看时调整大小以节省带宽。
             <br> <i class="fas fa-exclamation-triangle" style="color:red"></i> 如果在较大图像上启用并使用此选项，
-            则可能会消耗大量内存! 请谨慎使用。
+            则可能会消耗大量内存！ 请谨慎使用。
         </label>
     </td>
 </tr>
@@ -65,7 +65,7 @@
     <td class="config-td">
         <input id="readerquality" class="stdinput" type="number" min="0" max="100" style="width:100%" maxlength="255"
             size="20" value="[% readerquality %]" name="readerquality">
-        <br> 调整大小后的图像的质量。 低质量 = 小容量图片。 (0-100)
+        <br> 调整大小后的图像的质量。 低质量 = 图片占用空间少。 (0-100)
     </td>
 </tr>
 
@@ -80,7 +80,7 @@
         <label for="localprogress">
             <br>启用此选项将保存浏览器上的阅读进度到本地，而不是
             服务器. <br />
-            如果您与多个用户共用 LANraragi 服务器，请考虑切换此选项!
+            如果您与多个用户共用 LANraragi 服务器，请考虑切换此选项！
         </label>
     </td>
 </tr>

@@ -1,9 +1,9 @@
 [submodule "tools/build/windows/Karen"]
 	path = tools/build/windows/Karen
 	url = https://github.com/WindyCloudCute/Karen
-[submodule "customize/ETagCN"]
-	path = customize/ETagCN
-	url = https://github.com/zhy201810576/ETagCN
 [submodule "customize/ETagConverter"]
 	path = customize/ETagConverter
 	url = https://github.com/zhy201810576/ETagConverter
+[submodule "customize/ETagCN"]
+	path = customize/ETagCN
+	url = https://github.com/zhy201810576/ETagCN

@@ -10,21 +10,23 @@ no warnings 'experimental::signatures';
 use Cwd 'abs_path';
 use Redis;
 use Time::HiRes qw(usleep);
+use File::Path  qw(remove_tree);
 use File::Basename;
 use File::Copy "cp";
 use File::Path qw(make_path);
 
-use LANraragi::Utils::Generic qw(remove_spaces remove_newlines render_api_response);
+use LANraragi::Utils::Generic    qw(render_api_response);
+use LANraragi::Utils::String     qw(trim trim_CRLF);
 use LANraragi::Utils::TempFolder qw(get_temp);
-use LANraragi::Utils::Logging qw(get_logger);
-use LANraragi::Utils::Archive qw(extract_single_file extract_thumbnail);
+use LANraragi::Utils::Logging    qw(get_logger);
+use LANraragi::Utils::Archive    qw(extract_single_file extract_thumbnail);
 use LANraragi::Utils::Database
   qw(redis_encode redis_decode invalidate_cache set_title set_tags get_archive_json get_archive_json_multi);
 
-# get_archive(id)
+# get_title(id)
 #   Returns the title for the archive matching the given id.
 #   Returns undef if the id doesn't exist.
-sub get_title($id) {
+sub get_title ($id) {
 
     my $logger = get_logger( "Archives", "lanraragi" );
     my $redis  = LANraragi::Model::Config->get_redis;
@@ -34,7 +36,7 @@ sub get_title($id) {
         return ();
     }
 
-    return $redis->hget( $id, "title" );
+    return redis_decode( $redis->hget( $id, "title" ) );
 }
 
 # Functions used when dealing with archives.
@@ -57,11 +59,13 @@ sub update_thumbnail {
     $page = 1 unless $page;
 
     my $thumbdir = LANraragi::Model::Config->get_thumbdir;
+    my $use_jxl  = LANraragi::Model::Config->get_jxlthumbpages;
+    my $format   = $use_jxl ? 'jxl' : 'jpg';
 
     # Thumbnails are stored in the content directory, thumb subfolder.
     # Another subfolder with the first two characters of the id is used for FS optimization.
     my $subfolder = substr( $id, 0, 2 );
-    my $thumbname = "$thumbdir/$subfolder/$id.jpg";    # Path to main thumbnail
+    my $thumbname = "$thumbdir/$subfolder/$id.$format";    # Path to main thumbnail
 
     my $newthumb = "";
 
@@ -98,15 +102,23 @@ sub serve_thumbnail {
     my $no_fallback = $self->req->param('no_fallback');
     $no_fallback = ( $no_fallback && $no_fallback eq "true" ) || "0";    # Prevent undef warnings by checking the variable first
 
-    my $thumbdir = LANraragi::Model::Config->get_thumbdir;
+    my $thumbdir        = LANraragi::Model::Config->get_thumbdir;
+    my $use_jxl         = LANraragi::Model::Config->get_jxlthumbpages;
+    my $format          = $use_jxl         ? 'jxl' : 'jpg';
+    my $fallback_format = $format eq 'jxl' ? 'jpg' : 'jxl';
 
     # Thumbnails are stored in the content directory, thumb subfolder.
     # Another subfolder with the first two characters of the id is used for FS optimization.
     my $subfolder = substr( $id, 0, 2 );
-    my $thumbname = "$thumbdir/$subfolder/$id.jpg";
 
-    if ( $page > 0 ) {
-        $thumbname = "$thumbdir/$subfolder/$id/$page.jpg";
+    # Check for the page and set the appropriate thumbnail name and fallback thumbnail name
+    my $thumbbase          = ( $page - 1 > 0 ) ? "$thumbdir/$subfolder/$id/$page" : "$thumbdir/$subfolder/$id";
+    my $thumbname          = "$thumbbase.$format";
+    my $fallback_thumbname = "$thumbbase.$fallback_format";
+
+    # Check if the preferred format thumbnail exists, if not, try the alternate format
+    unless ( -e $thumbname ) {
+        $thumbname = $fallback_thumbname;
     }
 
     # Queue a minion job to generate the thumbnail. Thumbnail jobs have the lowest priority.
@@ -114,7 +126,6 @@ sub serve_thumbnail {
         my $job_id = $self->minion->enqueue( thumbnail_task => [ $thumbdir, $id, $page ] => { priority => 0, attempts => 3 } );
 
         if ($no_fallback) {
-
             $self->render(
                 json => {
                     operation => "serve_thumbnail",
@@ -129,7 +140,6 @@ sub serve_thumbnail {
             $self->render_file( filepath => "./public/img/noThumb.png" );
         }
         return;
-
     } else {
 
         # Simply serve the thumbnail.
@@ -156,8 +166,8 @@ sub serve_page {
         my $timeout   = 0;
         while (1) {
             $logger->debug("Waiting for file to be fully written ($size, previously $last_size)");
-            usleep(10000);    # 10ms
-            $timeout += 10;   # Sanity check in case the file remains at 0 bytes forever
+            usleep(10000);     # 10ms
+            $timeout += 10;    # Sanity check in case the file remains at 0 bytes forever
             $last_size = $size;
             $size      = -s $file;
 
@@ -170,7 +180,7 @@ sub serve_page {
 
         # Extract the file from the parent archive if it doesn't exist
         $logger->debug("Extracting missing file");
-        my $redis = LANraragi::Model::Config->get_redis;
+        my $redis   = LANraragi::Model::Config->get_redis;
         my $archive = $redis->hget( $id, "file" );
         $redis->quit();
 
@@ -243,8 +253,8 @@ sub update_metadata {
     }
 
     # Clean up the user's inputs and encode them.
-    ( remove_spaces($_) )   for ( $title, $tags );
-    ( remove_newlines($_) ) for ( $title, $tags );
+    ( $_ = trim($_) )      for ( $title, $tags );
+    ( $_ = trim_CRLF($_) ) for ( $title, $tags );
 
     if ( defined $title ) {
         set_title( $id, $title );

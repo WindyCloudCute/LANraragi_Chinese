@@ -43,9 +43,42 @@ Reader.initializeAll = function () {
         window.location.href = `./reader?id=${Reader.id}&force_reload`;
     });
     $(document).on("click.edit-metadata", "#edit-archive", () => LRR.openInNewTab(`./edit?id=${Reader.id}`));
-    $(document).on("click.add-category", "#add-category", () => Server.addArchiveToCategory(Reader.id, $("#category").val()));
+    $(document).on("click.delete-archive", "#delete-archive", () => {
+        LRR.closeOverlay();
+        LRR.showPopUp({
+            text: "删除后存档将会从服务器里彻底删除!",
+            icon: "warning",
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText: "是的我要删除!",
+            cancelButtonText: "取消",
+            reverseButtons: true,
+            confirmButtonColor: "#d33",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Server.deleteArchive(Reader.id, () => { document.location.href = "./"; });
+            }
+        });
+    });
+    $(document).on("click.add-category", "#add-category", () => {
+        if ($("#category").val() === "" || $(`#archive-categories a[data-id="${$("#category").val()}"]`).length !== 0) { return; }
+        Server.addArchiveToCategory(Reader.id, $("#category").val());
+
+        const html = `<div class="gt" style="font-size:14px; padding:4px">
+            <a href="/?c=${$("#category").val()}">
+            <span class="label">${$("#category option:selected").text()}</span>
+            <a href="#" class="remove-category" data-id="${$("#category").val()}"
+                style="margin-left:4px; margin-right:2px">×</a>
+        </a>`;
+
+        $("#archive-categories").append(html);
+    });
+    $(document).on("click.remove-category", ".remove-category", (e) => {
+        Server.removeArchiveFromCategory(Reader.id, $(e.target).attr("data-id"));
+        $(e.target).parent().remove();
+    });
     $(document).on("click.set-thumbnail", "#set-thumbnail", () => Server.callAPI(`/api/archives/${Reader.id}/thumbnail?page=${Reader.currentPage + 1}`,
-        "PUT", `Successfully set page ${Reader.currentPage + 1} as the thumbnail!`, "Error updating thumbnail!", null));
+        "PUT", `成功将Page ${Reader.currentPage + 1} 设置为缩略图!`, "设置缩略图错误!", null));
 
     $(document).on("click.thumbnail", ".quick-thumbnail", (e) => {
         LRR.closeOverlay();
@@ -70,7 +103,7 @@ Reader.initializeAll = function () {
     Reader.currentPage = (+params.get("p") || 1) - 1;
 
     // Remove the "new" tag with an api call
-    Server.callAPI(`/api/archives/${Reader.id}/isnew`, "DELETE", null, "清除NEW标签时出错! 请检查日志.", null);
+    Server.callAPI(`/api/archives/${Reader.id}/isnew`, "DELETE", null, "清除NEW标签时出错！ 请检查日志.", null);
 
     // Get basic metadata
     Server.callAPI(`/api/archives/${Reader.id}/metadata`, "GET", null, "获取存档基本信息时出错!",
@@ -84,6 +117,7 @@ Reader.initializeAll = function () {
             }
 
             $("#archive-title").html(title);
+            $("#archive-title-overlay").html(title);
             if (data.pagecount) { $(".max-page").html(data.pagecount); }
             document.title = title;
 
@@ -239,9 +273,10 @@ Reader.initInfiniteScrollView = function () {
 
     Reader.pages.slice(1).forEach((source) => {
         const img = new Image();
-        img.src = source;
         img.id = `page-${Reader.pages.indexOf(source)}`;
-        img.loading = "lazy";
+        img.height = 800;
+        img.width = 600;
+        img.src = source;
         $(img).addClass("reader-image");
         $("#display").append(img);
         observer.observe(img);
@@ -437,7 +472,7 @@ Reader.goToPage = function (page) {
     Reader.showingSinglePage = false;
 
     if (Reader.infiniteScroll) {
-        $("#display img").get(page).scrollIntoView({ behavior: "smooth" });
+        $("#display img").get(Reader.currentPage).scrollIntoView({ behavior: "smooth" });
     } else {
         $("#img_doublepage").attr("src", "");
         $("#display").removeClass("double-mode");

@@ -38,10 +38,8 @@ my @vendor_js = (
 my @vendor_woff = (
     "/\@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2",
     "/\@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2",
-    "/open-sans-fontface/fonts/Regular/OpenSans-Regular.woff",
-    "/open-sans-fontface/fonts/Bold/OpenSans-Bold.woff",
-    "/roboto-fontface/fonts/roboto/Roboto-Regular.woff",
-    "/roboto-fontface/fonts/roboto/Roboto-Bold.woff",
+    "/geist/dist/fonts/geist-sans/Geist-Regular.woff2",
+    "/geist/dist/fonts/geist-sans/Geist-SemiBold.woff2",
     "/inter-ui/Inter (web)/Inter-Regular.woff",
     "/inter-ui/Inter (web)/Inter-Bold.woff",
 );
@@ -197,7 +195,7 @@ cp_customize_plugin("/customize/ETagConverter/ETagConverter.pm","/lib/LANraragi/
 
 
 #Done!
-say("\r\n一切就绪!您可以通过输入以下命令来启动 LANraragi: \r\n");
+say("\r\n一切就绪！您可以通过输入以下命令来启动 LANraragi: \r\n");
 say("   ╭─────────────────────────────────────╮");
 say("   │                                     │");
 say("   │              npm start              │");
@@ -231,7 +229,7 @@ sub install_package {
     ## use critic
 
     if ($@) {
-        say("$package 没有安装!正在尝试使用 cpanm 安装 $cpanopt");
+        say("$package 没有安装！正在尝试使用 cpanm 安装 $cpanopt");
         system("cpanm $package $cpanopt");
     } else {
         say("$package 包已安装，继续...");

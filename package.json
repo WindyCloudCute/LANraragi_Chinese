@@ -1,8 +1,8 @@
 {
     "name": "lanraragi",
-    "version": "0.8.90",
-    "version_name": "心灵肮脏的教训",
-    "description": "我一世英名恐怕要毁在日本文化的影响下了!",
+    "version": "0.9.10",
+    "version_name": "行尸走肉",
+    "description": "我一世英名恐怕要毁在日本文化的影响下了！",
     "scripts": {
         "test": "prove -r -l -v tests/",
         "lanraragi-installer": "perl ./tools/install.pl",
@@ -11,10 +11,10 @@
         "dev-server": "perl ./script/launcher.pl -m -v ./script/lanraragi",
         "dev-server-verbose": "export LRR_DEVSERVER=1 && perl ./script/launcher.pl -m -v ./script/lanraragi",
         "kill-workers": "(kill -15 `cat ./public/temp/shinobu.pid-s6` || true) && (kill -15 `cat ./public/temp/minion.pid-s6` || true) && (pkill -9 -f ./script/lanraragi || true)",
-        "docker-build": "docker build -t windycloud/lanraragi_cn:0.8.90 -f ./tools/build/docker/Dockerfile .",
+        "docker-build": "docker build -t windycloud/lanraragi_cn:dev -f ./tools/build/docker/Dockerfile .",
         "critic": "perlcritic ./lib/* ./script/* ./tools/install.pl",
         "backup-db": "perl ./script/backup",
-        "get-version": "perl -Mojo -E \"my \\$conf = j(f(qw(package.json))->slurp); say %\\$conf{version} .q/ - '/. %\\$conf{version_name} .q/'/ \""
+        "get-version": "perl ./script/get_version"
     },
     "repository": {
         "type": "git",
@@ -25,7 +25,7 @@
     "bugs": {
         "url": "https://github.com/WindyCloudCute/LANraragi_Chinese/issues"
     },
-    "homepage": "https://github.com/WindyCloudCute/LANraragi_Chinese#readme",
+    "homepage": "https://github.com/WindyCloudCute/LANraragi_Chinesei#readme",
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.2.1",
         "@jcubic/tagger": "^0.4.2",
@@ -35,16 +35,15 @@
         "clsx": "^1.1.1",
         "datatables.net": "^1.11.5",
         "fscreen": "^1.2.0",
+        "geist": "^1.0.0",
         "inter-ui": "^3.19.3",
         "jqcloud2": "^2.0.3",
         "jquery": "^3.6.0",
         "jquery-contextmenu": "^2.9.2",
         "marked": "^4.0.14",
-        "open-sans-fontface": "^1.4.0",
         "preact": "^10.7.1",
         "react-toastify": "^9.0.0-rc-2",
-        "roboto-fontface": "^0.8.0",
-        "sweetalert2": "^11.4.10",
+        "sweetalert2": "^11.6.14",
         "swiper": "^8.4.5",
         "tippy.js": "^6.3.7"
     },

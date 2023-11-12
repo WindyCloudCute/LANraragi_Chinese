@@ -16,6 +16,9 @@ my $home = Mojo::Home->new;
 $home->detect;
 
 my $config = Mojolicious::Plugin::Config->register( Mojolicious->new, { file => $home . '/lrr.conf' } );
+if ( $ENV{LRR_REDIS_ADDRESS} ) {
+    $config->{redis_address} = $ENV{LRR_REDIS_ADDRESS};
+}
 
 # Address and port of your redis instance.
 sub get_redisad { return $config->{redis_address} }
@@ -42,8 +45,8 @@ sub get_minion {
     my $miniondb = get_redisad . "/" . get_miniondb;
     my $password = get_redispassword;
 
-    # If the password is non-empty, add the required @
-    if ($password) { $password = $password . "@"; }
+    # If the password is non-empty, add the required delimiters
+    if ($password) { $password = "x:" . $password . "@"; }
 
     return Minion->new( Redis => "redis://$password$miniondb" );
 }
@@ -66,16 +69,13 @@ sub get_redis_internal {
 
     # Default redis server location is localhost:6379.
     # Auto-reconnect on, one attempt every 2ms up to 3 seconds. Die after that.
+    # Auth if password is set
     my $redis = Redis->new(
         server    => &get_redisad,
         debug     => $ENV{LRR_DEVSERVER} ? "1" : "0",
-        reconnect => 3
+        reconnect => 3,
+        &get_redispassword ? (password => &get_redispassword) : ()
     );
-
-    # Auth if password is set
-    if ( &get_redispassword ne "" ) {
-        $redis->auth(&get_redispassword);
-    }
 
     # Switch to specced database
     $redis->select($db);
@@ -165,7 +165,7 @@ sub get_tagrules {
 }
 
 sub get_htmltitle        { return &get_redis_conf( "htmltitle",       "LANraragi" ) }
-sub get_motd             { return &get_redis_conf( "motd",            "Welcome to this Library running LANraragi!" ) }
+sub get_motd             { return &get_redis_conf( "motd",            "欢迎来到 LANraragi!" ) }
 sub get_tempmaxsize      { return &get_redis_conf( "tempmaxsize",     "500" ) }
 sub get_pagesize         { return &get_redis_conf( "pagesize",        "100" ) }
 sub enable_pass          { return &get_redis_conf( "enablepass",      "1" ) }
@@ -182,6 +182,8 @@ sub enable_dateadded     { return &get_redis_conf( "usedateadded",    "1" ) }
 sub use_lastmodified     { return &get_redis_conf( "usedatemodified", "0" ) }
 sub enable_cryptofs      { return &get_redis_conf( "enablecryptofs",  "0" ) }
 sub get_hqthumbpages     { return &get_redis_conf( "hqthumbpages",    "0" ) }
+sub get_jxlthumbpages    { return &get_redis_conf( "jxlthumbpages",   "0" ) }
 sub get_replacedupe      { return &get_redis_conf( "replacedupe",     "0" ) }
+sub can_replacetitles    { return &get_redis_conf( "replacetitles",   "1" ) }
 
 1;

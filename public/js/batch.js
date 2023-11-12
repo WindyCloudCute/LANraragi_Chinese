@@ -28,7 +28,7 @@ Batch.initializeAll = function () {
     // Load all archives, showing a spinner while doing so
     $("#arclist").hide();
 
-    Server.callAPI("/api/archives", "GET", null, "无法加载完整的存档列表! 请重新加载页面.",
+    Server.callAPI("/api/archives", "GET", null, "无法加载完整的存档列表！ 请重新加载页面.",
         (data) => {
             // Parse the archive list and add <li> elements to arclist
             data.forEach((archive) => {
@@ -264,7 +264,7 @@ Batch.updateBatchStatus = function (event) {
  * Handle websocket errors.
  */
 Batch.batchError = function () {
-    $("#log-container").append("************\n错误! 终止会话。\n");
+    $("#log-container").append("************\n错误！ 终止会话。\n");
     Batch.scrollLogs();
 
     LRR.toast({
@@ -293,7 +293,7 @@ Batch.endBatch = function (event) {
     });
 
     // Delete the search cache after a finished session
-    Server.callAPI("api/search/cache", "DELETE", null, "删除缓存时出错! 请检查日志。", null);
+    Server.callAPI("api/search/cache", "DELETE", null, "删除缓存时出错！ 请检查日志。", null);
 
     $("#cancel-job").hide();
 

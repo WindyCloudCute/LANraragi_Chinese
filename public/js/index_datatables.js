@@ -50,7 +50,10 @@ IndexTable.initializeAll = function () {
     IndexTable.dataTable = $(".datatables").DataTable({
         serverSide: true,
         processing: true,
-        ajax: "search",
+        ajax: {
+        url: "search",
+        cache: true,
+        },
         deferRender: true,
         lengthChange: false,
         pageLength: Index.pageSize,
@@ -58,7 +61,7 @@ IndexTable.initializeAll = function () {
         dom: "<\"top\"ip>rt<\"bottom\"p><\"clear\">",
         language: {
             info: "展示 _START_ 到 _END_ 共 _TOTAL_ 作品.",
-            infoEmpty: "<h1><br/><i class=\"fas fa-4x fa-toilet-paper-slash\"></i><br/><br/>当前没有档案! 试试 <a href=\"upload\">上传一些</a>?</h1><br/>",
+            infoEmpty: "<h1><br/><i class=\"fas fa-4x fa-toilet-paper-slash\"></i><br/><br/>当前没有档案！ 试试 <a href=\"upload\">上传一些</a>?</h1><br/>",
             processing: "<div id=\"progress\" class=\"indeterminate\"\"><div class=\"bar-container\"><div class=\"bar\" style=\" width: 80%; \"></div></div></div>",
         },
         preDrawCallback: IndexTable.initializeThumbView, // callbacks for thumbnail view

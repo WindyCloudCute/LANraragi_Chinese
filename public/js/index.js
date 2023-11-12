@@ -88,7 +88,7 @@ Index.initializeAll = function () {
 
         LRR.toast({
             heading: `欢迎使用 LANraragi ${Index.serverVersion}!`,
-            text: "如果要对存档执行高级操作，请记住只需右键单击其名称。 祝您阅读愉快!",
+            text: "如果要对存档执行高级操作，请记住只需右键单击其名称。 祝您阅读愉快！",
             icon: "info",
             hideAfter: 13000,
         });
@@ -265,6 +265,13 @@ Index.updateTableControls = function (currentSort, currentOrder, totalPages, cur
     $("#namespace-sortby").val(currentSort);
     $("#order-sortby")[0].classList.remove("fa-sort-alpha-down", "fa-sort-alpha-up");
     $("#order-sortby")[0].classList.add(currentOrder === "asc" ? "fa-sort-alpha-down" : "fa-sort-alpha-up");
+    if ($("#order-sortby")[0].classList.contains("fa-sort-alpha-down")) {
+        $("#order-sortby").text(" 升序");
+        $("#order-sortby").attr("title", "排列顺序按照选择的排序方式升序排列");
+    } else if ($("#order-sortby")[0].classList.contains("fa-sort-alpha-up")) {
+        $("#order-sortby").text(" 降序");
+        $("#order-sortby").attr("title", "排列顺序按照选择的排序方式降序排列");
+    }
 
     if (localStorage.indexViewMode === "1") {
         $(".thumbnail-options").show();

@@ -8,16 +8,16 @@ jobs:
     name: 构建和导出Windows构建的Docker rootfs
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@main
+    - uses: actions/checkout@master
     - name: Docker 构建和导出
       run: |
         git submodule init
         git submodule update
-        docker build -t windycloud/lanraragi_cn -f ./tools/build/docker/Dockerfile-legacy .
+        docker build -t windycloud/lanraragi_cn -f ./tools/build/docker/Dockerfile --build-arg INSTALL_PARAMETER=-w .
         docker create --name rootfs windycloud/lanraragi_cn
         docker export --output=package.tar rootfs
     - name: 上传 rootfs
-      uses: actions/upload-artifact@main
+      uses: actions/upload-artifact@v1
       with:
         name: package
         path: package.tar 
@@ -27,9 +27,9 @@ jobs:
     needs: exportDockerRootFS
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@main
+    - uses: actions/checkout@master
     - name: 下载包
-      uses: actions/download-artifact@main
+      uses: actions/download-artifact@v1
       with:
         name: package
     - name: 构建MSI安装程序
@@ -46,7 +46,7 @@ jobs:
         choco install nuget.commandline
         ./tools/build/windows/build.ps1
     - name: 上传安装程序
-      uses: actions/upload-artifact@main
+      uses: actions/upload-artifact@v1
       with:
         name: wsl
         path: ./tools/build/windows/Karen/Setup/bin/LANraragi.msi
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 下载包
-      uses: actions/download-artifact@main
+      uses: actions/download-artifact@v1
       with:
         name: wsl
     - name: 上传安装程序以发布
@@ -76,12 +76,12 @@ jobs:
     name: 构建最新的Docker图像
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@main
+    - uses: actions/checkout@master
     - name: 设置 QEMU
-      uses: docker/setup-qemu-action@master
+      uses: docker/setup-qemu-action@v2
     - name: 设置 Docker Buildx
-      uses: docker/setup-buildx-action@master
-    - uses: actions/cache@main
+      uses: docker/setup-buildx-action@v2
+    - uses: actions/cache@v3
       with: 
         path: /tmp/buildxcache
         key: ${{ runner.os }}-docker-buildx-${{ github.sha }}
@@ -106,26 +106,8 @@ jobs:
           --cache-from "type=local,src=/tmp/buildxcache" \
           --cache-to "type=local,dest=/tmp/buildxcache" \
           --file ./tools/build/docker/Dockerfile .
-#    - uses: Ilshidur/action-discord@master
-#      env:
-#        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-#      with:
-#        args: 'Docker image built and available on Docker Hub! 🐳'
-
-#  discordNotifications:
-#    name: 发布一些通知
-#    runs-on: ubuntu-latest
-#    env:
-#      DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-#    steps:
-#    - name: 从 GITHUB_REF 中提取版本号
-#      run: echo "RELEASE_VERSION=${GITHUB_REF:10}" >> $GITHUB_ENV
-#    - uses: Ilshidur/action-discord@master
-#      with:
-#        args: 'LANraragi {{ RELEASE_VERSION }} is now available! @everyone'
-#    - uses: Ilshidur/action-discord@master
-#      with:
-#        args: 'https://github.com/WindyCloudCute/LANraragi_Chinese/releases/tag/{{ RELEASE_VERSION }}'
-#    - uses: Ilshidur/action-discord@master
-#      with:
-#        args: 'Docker image and Windows installer are building... Please wait warmly. ☕'
+    - uses: Ilshidur/action-discord@master
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      with:
+        args: 'Docker image built and available on Docker Hub! 🐳'

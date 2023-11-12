@@ -16,6 +16,7 @@ Edit.initializeAll = function () {
     $(document).on("click.delete-archive", "#delete-archive", Edit.deleteArchive);
     $(document).on("click.tagger", ".tagger", Edit.focusTagInput);
     $(document).on("click.goback", "#goback", () => { window.location.href = "/"; });
+    $(document).on("paste.tagger", ".tagger-new", Edit.handlePaste);
 
     Edit.updateOneShotArg();
 
@@ -52,6 +53,22 @@ Edit.initializeAll = function () {
         });
 };
 
+Edit.handlePaste = function (event) {
+    // Stop data actually being pasted into div
+    event.stopPropagation();
+    event.preventDefault();
+
+    // Get pasted data via clipboard API
+    const pastedData = event.originalEvent.clipboardData.getData("Text");
+
+    if (pastedData !== "") {
+        pastedData.split(/,\s?/).forEach((tag) => {
+            // Remove trailing/leading spaces from tag before adding it
+            Edit.tagInput.add_tag(tag.trim());
+        });
+    }
+};
+
 Edit.hideTags = function () {
     $("#tag-spinner").css("display", "block");
     $("#tagText").css("opacity", "0.5");
@@ -75,7 +92,7 @@ Edit.showHelp = function () {
     LRR.toast({
         toastId: "pluginHelp",
         heading: "关于插件",
-        text: "您可以使用插件自动获取此存档的元数据。 <br/> 只需从下拉菜单中选择一个插件即可点击! <br/> 一些插件可能会提供可选的参数供您指定。如果是这样，将提供一个文本框来输入所述参数。",
+        text: "您可以使用插件自动获取此存档的元数据。 <br/> 只需从下拉菜单中选择一个插件即可点击！ <br/> 一些插件可能会提供可选的参数供您指定。如果是这样，将提供一个文本框来输入所述参数。",
         icon: "info",
         hideAfter: 33000,
     });
@@ -106,11 +123,11 @@ Edit.saveMetadata = function () {
     formData.append("title", $("#title").val());
 
     return fetch(`api/archives/${id}/metadata`, { method: "PUT", body: formData })
-        .then((response) => (response.ok ? response.json() : { success: 0, error: "反应不好" }))
+        .then((response) => (response.ok ? response.json() : { success: 0, error: "响应不正确" }))
         .then((data) => {
             if (data.success) {
                 LRR.toast({
-                    heading: "元数据保存了!",
+                    heading: "元数据保存了！",
                     icon: "success",
                 });
             } else {

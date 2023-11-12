@@ -20,7 +20,7 @@
         <input id="enablecryptofs" name="enablecryptofs" class="fa" type="checkbox" checked> [% ELSE %]
         <input id="enablecryptofs" name="enablecryptofs" class="fa" type="checkbox"> [% END %]
         <label for="enablecryptofs">
-            <br>如果启用，LANraragi 会将存档文件名截断为 143 字节，这是 eCryptFS 接受的最大值.
+            <br>如果启用，LANraragi 会将存档文件名截断至 143 字节，这是 eCryptFS 接受的最大值.
         </label>
     </td>
 </tr>
@@ -97,7 +97,7 @@
         <input id="replacedupe" name="replacedupe" class="fa" type="checkbox"> [% END %]
         <label for="replacedupe">
             <br>如果启用了，当通过Web Uploader或下载系统上载的新档案（具有相同名称）时，Lanraragi将覆盖旧档案。
-            <br> <i class="fas fa-exclamation-triangle" style="color:red"></i> 旧文件更换时，这将删除元数据!谨慎使用。
+            <br> <i class="fas fa-exclamation-triangle" style="color:red"></i> 旧文件更换时，这将删除元数据！谨慎使用。
         </label>
     </td>
 </tr>

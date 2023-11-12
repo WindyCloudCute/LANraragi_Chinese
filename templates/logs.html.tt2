@@ -38,7 +38,7 @@
 			<li>Shinobu日志对应于后台监视进程。</li>
 			<li>插件日志仅针对元数据插件。 </li>
 			<li>除非您正在运行“调试模式”，否则Mojolicious日志不会告诉您太多信息。 </li>
-			<li>如果您从源代码运行，则Redis日志将无法在此处使用!。 </li>
+			<li>如果您从源代码运行，则Redis日志将无法在此处使用！。 </li>
 		</ul>
 		<br>历代汉化：昭君。访问<a href="http://yuanfangblog.xyz"> 我的博客 </a>和<a href="https://space.bilibili.com/6976331"> Bilibili空间 </a>获取更多信息和教程<br>
 		<br>接手汉化：WindyMadman。访问<a href="https://bs.windycloud.cn"> 我的论坛 </a>获取一站式的教程和服务<br>

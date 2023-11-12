@@ -17,7 +17,7 @@ no warnings 'experimental::signatures';
 use FindBin;
 use Parallel::Loops;
 use Sys::CpuAffinity;
-use Storable qw(lock_store);
+use Storable   qw(lock_store);
 use Mojo::JSON qw(to_json);
 
 #As this is a new process, reloading the LRR libs into INC is needed.
@@ -29,10 +29,10 @@ use File::Find;
 use File::Basename;
 use Encode;
 
-use LANraragi::Utils::Database qw(redis_encode invalidate_cache compute_id);
+use LANraragi::Utils::Database   qw(redis_encode invalidate_cache compute_id change_archive_id);
 use LANraragi::Utils::TempFolder qw(get_temp clean_temp_partial);
-use LANraragi::Utils::Logging qw(get_logger);
-use LANraragi::Utils::Generic qw(is_archive split_workload_by_cpu);
+use LANraragi::Utils::Logging    qw(get_logger);
+use LANraragi::Utils::Generic    qw(is_archive split_workload_by_cpu);
 
 use LANraragi::Model::Config;
 use LANraragi::Model::Plugins;
@@ -67,7 +67,7 @@ sub initialize_from_new_process {
     $logger->info("内容文件夹为: $userdir.");
 
     update_filemap();
-    $logger->info("初始扫描完成! 将观监视器添加到内容文件夹以监视进一步的文件变动。");
+    $logger->info("初始扫描完成！ 将观监视器添加到内容文件夹以监视进一步的文件变动。");
 
     # Add watcher to content directory
     my $contentwatcher = File::ChangeNotify->instantiate_watcher(
@@ -75,6 +75,7 @@ sub initialize_from_new_process {
         filter          => qr/\.(?:zip|rar|7z|tar|tar\.gz|lzma|xz|cbz|cbr|cb7|cbt|pdf|epub)$/i,
         follow_symlinks => 1,
         exclude         => [ 'thumb', '.' ],                                                      #excluded subdirs
+        depth       => 5,        #扫描档案目录时扫描的最大目录深度
     );
 
     my $class = ref($contentwatcher);
@@ -113,15 +114,15 @@ sub update_filemap {
     my $dirname = LANraragi::Model::Config->get_userdir;
     my @files;
 
-    # Get all files in content directory and subdirectories.
+    # 在内容目录和子目录中获取所有文件。
     find(
         {   wanted => sub {
-                return if -d $_;    #Directories are excluded on the spot
+                return if -d $_;    #目录当场被排除在外
                 return unless is_archive($_);
-                push @files, $_;    #Push files to array
+                push @files, $_;    #将文件推入数组
             },
-            no_chdir    => 1,
-            follow_fast => 1
+            no_chdir    => 5,
+            follow_fast => 1        #扫描档案目录时扫描的最大目录深度
         },
         $dirname
     );
@@ -136,7 +137,7 @@ sub update_filemap {
     my @deletedfiles = grep { !$fshash{$_} } @filemapfiles;
 
     $logger->info( "找到 " . scalar @newfiles . " 个新文件." );
-    $logger->info( scalar @deletedfiles . " 个文件在数据库里找到文件,但在文件系统上找不到文件。" );
+    $logger->info( scalar @deletedfiles . " 个文件在数据库里找到文件，但在文件系统上找不到文件。" );
 
     # Delete old files from filemap
     foreach my $deletedfile (@deletedfiles) {
@@ -226,7 +227,7 @@ sub add_to_filemap ( $redis_cfg, $file ) {
                 $logger->debug("$file 文件的ID与数据库中现有的ID不同! ($filemap_id)");
                 $logger->info("$file 文件已被修改,已将其在数据库中的ID从 $filemap_id 修改为 $id.");
 
-                LANraragi::Utils::Database::change_archive_id( $filemap_id, $id );
+                change_archive_id( $filemap_id, $id );
 
                 # Don't forget to update the filemap, later operations will behave incorrectly otherwise
                 $redis_cfg->hset( "LRR_FILEMAP", $file, $id );
@@ -250,7 +251,7 @@ sub add_to_filemap ( $redis_cfg, $file ) {
             #Update the real file path and title if they differ from the saved one
             #This is meant to always track the current filename for the OS.
             unless ( $file eq $filecheck ) {
-                $logger->debug("在数据库和文件系统之间检测到文件名差异!");
+                $logger->debug("在数据库和文件系统之间检测到文件名差异！");
                 $logger->debug("文件系统: $file");
                 $logger->debug("数据库内: $filecheck");
                 my ( $name, $path, $suffix ) = fileparse( $file, qr/\.[^.]*/ );
@@ -260,9 +261,14 @@ sub add_to_filemap ( $redis_cfg, $file ) {
                 invalidate_cache();
             }
 
+            unless ( LANraragi::Utils::Database::get_arcsize( $redis_arc, $id ) ) {
+                $logger->debug("arcsize is not set for $id, storing now!");
+                LANraragi::Utils::Database::add_arcsize( $redis_arc, $id );
+            }
+
             # Set pagecount in case it's not already there
             unless ( $redis_arc->hget( $id, "pagecount" ) ) {
-                $logger->debug("未计算 $id 的页数,立即执行!");
+                $logger->debug("未计算 $id 的页数，立即执行！");
                 LANraragi::Utils::Database::add_pagecount( $redis_arc, $id );
             }
 
@@ -273,14 +279,14 @@ sub add_to_filemap ( $redis_cfg, $file ) {
             invalidate_cache();
         }
     } else {
-        $logger->debug("$file 未被识别为存档,正在跳过。");
+        $logger->debug("$file 未被识别为存档，正在跳过。");
     }
     $redis_arc->quit;
 }
 
 # Only handle new files. As per the ChangeNotify doc, it
 # "handles the addition of new subdirectories by adding them to the watch list"
-sub new_file_callback($name) {
+sub new_file_callback ($name) {
 
     $logger->debug("检测到新文件: $name");
     unless ( -d $name ) {
@@ -297,9 +303,9 @@ sub new_file_callback($name) {
 
 # Deleted files are simply dropped from the filemap.
 # Deleted subdirectories trigger deleted events for every file deleted.
-sub deleted_file_callback($name) {
+sub deleted_file_callback ($name) {
 
-    $logger->info("$name 已从内容文件夹中删除!");
+    $logger->info("$name 已从内容文件夹中删除！");
     unless ( -d $name ) {
 
         my $redis = LANraragi::Model::Config->get_redis_config;

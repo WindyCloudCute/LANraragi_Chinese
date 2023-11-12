@@ -25,8 +25,8 @@ use Archive::Libarchive::Peek;
 use File::Temp qw(tempdir);
 
 use LANraragi::Utils::TempFolder qw(get_temp);
-use LANraragi::Utils::Logging qw(get_logger);
-use LANraragi::Utils::Generic qw(is_image shasum);
+use LANraragi::Utils::Logging    qw(get_logger);
+use LANraragi::Utils::Generic    qw(is_image shasum);
 
 # Utilitary functions for handling Archives.
 # Relies on Libarchive, ImageMagick and GhostScript for PDFs.
@@ -41,14 +41,19 @@ sub is_pdf {
 
 # use ImageMagick to make a thumbnail, height = 500px (view in index is 280px tall)
 # If use_hq is true, the scale algorithm will be used instead of sample.
-sub generate_thumbnail ( $orig_path, $thumb_path, $use_hq ) {
+# If use_jxl is true, JPEG XL will be used instead of JPEG.
+sub generate_thumbnail ( $orig_path, $thumb_path, $use_hq, $use_jxl ) {
 
     my $img = Image::Magick->new;
+
+    my $format = $use_jxl ? 'jxl' : 'jpg';
 
     # For JPEG, the size option (or jpeg:size option) provides a hint to the JPEG decoder
     # that it can reduce the size on-the-fly during decoding. This saves memory because
     # it never has to allocate memory for the full-sized image
-    $img->Set( option => 'jpeg:size=500x' );
+    if ( $format eq 'jpg' ) {
+        $img->Set( option => 'jpeg:size=500x' );
+    }
 
     # If the image is a gif, only take the first frame
     if ( $orig_path =~ /\.gif$/ ) {
@@ -63,7 +68,8 @@ sub generate_thumbnail ( $orig_path, $thumb_path, $use_hq ) {
     } else {    # Sample is very fast due to not applying filters.
         $img->Sample( geometry => '500x1000' );
     }
-    $img->Set( quality => "50", magick => "jpg" );
+
+    $img->Set( quality => "50", magick => $format );
     $img->Write($thumb_path);
     undef $img;
 }
@@ -150,45 +156,50 @@ sub extract_thumbnail ( $thumbdir, $id, $page, $use_hq ) {
 
     my $logger = get_logger( "Archive", "lanraragi" );
 
+    # JPG is used for thumbnails by default
+    my $use_jxl = LANraragi::Model::Config->get_jxlthumbpages;
+    my $format  = $use_jxl ? 'jxl' : 'jpg';
+
     # Another subfolder with the first two characters of the id is used for FS optimization.
     my $subfolder = substr( $id, 0, 2 );
-    my $thumbname = "$thumbdir/$subfolder/$id.jpg";
+    my $thumbname = "$thumbdir/$subfolder/$id.$format";
     make_path("$thumbdir/$subfolder");
 
     my $redis = LANraragi::Model::Config->get_redis;
 
-    my $file = $redis->hget( $id, "file" );
+    my $file     = $redis->hget( $id, "file" );
     my $temppath = tempdir();
 
     # Get first image from archive using filelist
     my ( $images, $sizes ) = get_filelist($file);
 
     # Dereference arrays
-    my @filelist = @$images;
+    my @filelist        = @$images;
     my $requested_image = $filelist[ $page > 0 ? $page - 1 : 0 ];
 
-    die "Requested image not found" unless $requested_image;
+    die "Requested image not found: $id page $page" unless $requested_image;
     $logger->debug("Extracting thumbnail for $id page $page from $requested_image");
 
     # Extract first image to temp dir
     my $arcimg = extract_single_file( $file, $requested_image, $temppath );
 
-    if ( $page > 0 ) {
+    if ( $page - 1 > 0 ) {
 
         # Non-cover thumbnails land in a dedicated folder.
-        $thumbname = "$thumbdir/$subfolder/$id/$page.jpg";
+        $thumbname = "$thumbdir/$subfolder/$id/$page.$format";
         make_path("$thumbdir/$subfolder/$id");
     } else {
 
         # For cover thumbnails, grab the SHA-1 hash for tag research.
         # That way, no need to repeat a costly extraction later.
         my $shasum = shasum( $arcimg, 1 );
+        $logger->debug("Setting thumbnail hash: $shasum");
         $redis->hset( $id, "thumbhash", $shasum );
         $redis->quit();
     }
 
     # Thumbnail generation
-    generate_thumbnail( $arcimg, $thumbname, $use_hq );
+    generate_thumbnail( $arcimg, $thumbname, $use_hq, $use_jxl );
 
     # Clean up safe folder
     remove_tree($temppath);
@@ -203,7 +214,7 @@ sub expand {
 }
 
 # Returns a list of all the files contained in the given archive.
-sub get_filelist($archive) {
+sub get_filelist ($archive) {
 
     my @files = ();
     my @sizes = ();
@@ -212,7 +223,7 @@ sub get_filelist($archive) {
 
         # For pdfs, extraction returns images from 1.jpg to x.jpg, where x is the pdf pagecount.
         # Using -dNOSAFER or --permit-file-read is required since GS 9.50, see https://github.com/doxygen/doxygen/issues/7290
-        my $pages = `gs -q -dNOSAFER -c "($archive) (r) file runpdfbegin pdfpagecount = quit"`;
+        my $pages = `gs -q -dNOSAFER -sDEVICE=jpeg -c "($archive) (r) file runpdfbegin pdfpagecount = quit"`;
         for my $num ( 1 .. $pages ) {
             push @files, "$num.jpg";
             push @sizes, 0;
@@ -244,11 +255,11 @@ sub get_filelist($archive) {
 
     # Move front cover pages to the start of a gallery, and miscellaneous pages such as translator credits to the end.
     my @cover_pages  = grep { /^(?!.*(back|end|rear|recover|discover)).*cover.*/i } @files;
-    my @credit_pages = grep { /^end_card_save_file|notes\.[^\.]*$|note\.[^\.]*$|^artist_info|credit|999nhnl\./i } @files;
+    my @credit_pages = grep { /^end_card_save_file|notes\.[^\.]*$|note\.[^\.]*$|^artist_info|credit|^999.*/i } @files;
 
     # Get all the leftover pages
-    my %credit_hash = map { $_ => 1 } @credit_pages;
-    my %cover_hash  = map { $_ => 1 } @cover_pages;
+    my %credit_hash = map  { $_ => 1 } @credit_pages;
+    my %cover_hash  = map  { $_ => 1 } @cover_pages;
     my @other_pages = grep { !$credit_hash{$_} && !$cover_hash{$_} } @files;
     @files = ( @cover_pages, @other_pages, @credit_pages );
 
@@ -340,17 +351,14 @@ sub extract_single_file ( $archive, $filepath, $destination ) {
 }
 
 # Variant for plugins.
-# Extracts the file with a timestamp to a folder in /temp/plugin.
+# Extracts the file to a folder in /temp/plugin.
 sub extract_file_from_archive ( $archive, $filename ) {
 
-    # Timestamp extractions in microseconds
-    my ( $seconds, $microseconds ) = gettimeofday;
-    my $stamp = "$seconds-$microseconds";
-    my $path  = get_temp . "/plugin/$stamp";
-    mkdir get_temp . "/plugin";
+    my $path = get_temp . "/plugin";
     mkdir $path;
 
-    return extract_single_file( $archive, $filename, $path );
+    my $tmp = tempdir( DIR => $path, CLEANUP => 1 );
+    return extract_single_file( $archive, $filename, $tmp );
 }
 
 1;

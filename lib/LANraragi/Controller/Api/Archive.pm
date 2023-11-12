@@ -4,11 +4,11 @@ use Mojo::Base 'Mojolicious::Controller';
 use Redis;
 use Encode;
 use Storable;
-use Mojo::JSON qw(decode_json);
+use Mojo::JSON   qw(decode_json);
 use Scalar::Util qw(looks_like_number);
 use LANraragi::Utils::Database qw(redis_decode);
 
-use LANraragi::Utils::Generic qw(render_api_response);
+use LANraragi::Utils::Generic  qw(render_api_response);
 use LANraragi::Utils::Database qw(get_archive_json set_isnew);
 
 use LANraragi::Model::Archive;
@@ -65,7 +65,7 @@ sub serve_metadata {
 sub get_categories {
 
     my $self = shift;
-    my $id = check_id_parameter( $self, "find_arc_categories" ) || return;
+    my $id   = check_id_parameter( $self, "find_arc_categories" ) || return;
 
     my @categories = LANraragi::Model::Category::get_categories_containing_archive($id);
 
@@ -80,13 +80,13 @@ sub get_categories {
 
 sub serve_thumbnail {
     my $self = shift;
-    my $id = check_id_parameter( $self, "serve_thumbnail" ) || return;
+    my $id   = check_id_parameter( $self, "serve_thumbnail" ) || return;
     LANraragi::Model::Archive::serve_thumbnail( $self, $id );
 }
 
 sub update_thumbnail {
     my $self = shift;
-    my $id = check_id_parameter( $self, "update_thumbnail" ) || return;
+    my $id   = check_id_parameter( $self, "update_thumbnail" ) || return;
     LANraragi::Model::Archive::update_thumbnail( $self, $id );
 }
 
@@ -106,14 +106,14 @@ sub serve_file {
 sub serve_page {
     my $self = shift;
     my $id   = check_id_parameter( $self, "serve_page" ) || return;
-    my $path = $self->req->param('path') || "404.xyz";
+    my $path = $self->req->param('path')                 || "404.xyz";
 
     LANraragi::Model::Archive::serve_page( $self, $id, $path );
 }
 
 sub get_file_list {
     my $self = shift;
-    my $id = check_id_parameter( $self, "get_file_list" ) || return;
+    my $id   = check_id_parameter( $self, "get_file_list" ) || return;
 
     my $force = $self->req->param('force') eq "true" || "0";
     my $reader_json;
@@ -130,7 +130,7 @@ sub get_file_list {
 
 sub clear_new {
     my $self = shift;
-    my $id = check_id_parameter( $self, "clear_new" ) || return;
+    my $id   = check_id_parameter( $self, "clear_new" ) || return;
 
     set_isnew( $id, "false" );
 
@@ -145,9 +145,9 @@ sub clear_new {
 
 sub delete_archive {
     my $self = shift;
-    my $id = check_id_parameter( $self, "delete_archive" ) || return;
+    my $id   = check_id_parameter( $self, "delete_archive" ) || return;
 
-    my $delStatus = LANraragi::Utils::Database::delete_archive($id);
+    my $delStatus = LANraragi::Model::Archive::delete_archive($id);
 
     $self->render(
         json => {
@@ -161,7 +161,7 @@ sub delete_archive {
 
 sub update_metadata {
     my $self = shift;
-    my $id = check_id_parameter( $self, "update_metadata" ) || return;
+    my $id   = check_id_parameter( $self, "update_metadata" ) || return;
 
     my $title = $self->req->param('title');
     my $tags  = $self->req->param('tags');
@@ -177,9 +177,10 @@ sub update_metadata {
 
 sub update_progress {
     my $self = shift;
-    my $id = check_id_parameter( $self, "update_progress" ) || return;
+    my $id   = check_id_parameter( $self, "update_progress" ) || return;
 
     my $page = $self->stash('page') || 0;
+    my $time = time();
 
     # Undocumented parameter to force progress update
     my $force = $self->req->param('force') || 0;
@@ -206,7 +207,8 @@ sub update_progress {
     }
 
     # Just set the progress value.
-    $redis->hset( $id, "progress", $page );
+    $redis->hset( $id, "progress",     $page );
+    $redis->hset( $id, "lastreadtime", $time );
 
     # Update total pages read statistic
     $redis_cfg->incr("LRR_TOTALPAGESTAT");
@@ -216,10 +218,11 @@ sub update_progress {
 
     $self->render(
         json => {
-            operation => "update_progress",
-            id        => $id,
-            page      => $page,
-            success   => 1
+            operation    => "update_progress",
+            id           => $id,
+            page         => $page,
+            lastreadtime => $time,
+            success      => 1
         }
     );
 

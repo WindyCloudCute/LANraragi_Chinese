@@ -21,7 +21,7 @@
 	<script src="/js/vendor/preact.umd.js" type="text/JAVASCRIPT"></script>
 	<script src="/js/vendor/hooks.umd.js" type="text/JAVASCRIPT"></script>
 	<script src="/js/vendor/compat.umd.js" type="text/JAVASCRIPT"></script>
-	<script>window.React=window.preactCompat;window.react=window.preactCompat;</script>
+	<script>window.React = window.preactCompat; window.react = window.preactCompat;</script>
 	<script src="/js/vendor/clsx.min.js" type="text/JAVASCRIPT"></script>
 	<script src="/js/vendor/react-toastify.umd.js" type="text/JAVASCRIPT"></script>
 	<script src="/js/vendor/jquery.ui.widget.js" type="text/JAVASCRIPT"></script>
@@ -83,6 +83,17 @@
 							<i class="fa fa-digital-tachograph" aria-hidden="true"></i> 元数据插件
 						</div>
 						<div class="collapsible-body">
+
+							<h1 class="ih" style="display:inline">允许插件替换档案标题: </h1>
+							[% IF replacetitles %]
+							<input id="replacetitles" name="replacetitles" class="fa" type="checkbox" checked> [% ELSE
+							%]
+							<input id="replacetitles" name="replacetitles" class="fa" type="checkbox"> [% END %]
+							<label for="replacetitles">
+								<br> 如果启用，则元数据插件将可以更改档案的标题。
+							</label>
+							<br />
+							<br />
 							[% INCLUDE pluginlist plugins = metadata %]
 						</div>
 					</li>
@@ -141,7 +152,7 @@
 	<br />
 
 	[% IF plugin.type == "download" %]
-	<pre title="此插件将在与该正则表达式匹配的URL上触发!">	[% plugin.url_regex %]</pre>
+	<pre title="此插件将在与该正则表达式匹配的URL上触发！">	[% plugin.url_regex %]</pre>
 	[% END %]
 	[% plugin.description %]
 	<br />

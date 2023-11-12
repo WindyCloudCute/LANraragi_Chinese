@@ -5,12 +5,12 @@ jobs:
     name: 运行测试套件和 Perl Critic
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@main
+    - uses: actions/checkout@master
     - name: 测试 Docker 构建
       run: |
         git submodule init
         git submodule update
-        docker build -t windycloud/lanraragi_cn -f ./tools/build/docker/Dockerfile .
+        docker build -t windycloud/lanraragi_cn:dev -f ./tools/build/docker/Dockerfile .
     - name: LANraragi测试套件
       uses: ./.github/action-run-tests
     - name: Perl Critic
