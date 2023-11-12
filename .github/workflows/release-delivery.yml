@@ -110,21 +110,3 @@ jobs:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
         args: 'Docker image built and available on Docker Hub! 🐳'
-
-  discordNotifications:
-    name: 发布一些通知
-    runs-on: ubuntu-latest
-    env:
-      DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-    steps:
-    - name: 从 GITHUB_REF 中提取版本号
-      run: echo "RELEASE_VERSION=${GITHUB_REF:10}" >> $GITHUB_ENV
-    - uses: Ilshidur/action-discord@master
-      with:
-        args: 'LANraragi {{ RELEASE_VERSION }} is now available! @everyone'
-    - uses: Ilshidur/action-discord@master
-      with:
-        args: 'https://github.com/WindyCloudCute/LANraragi_Chinese/releases/tag/{{ RELEASE_VERSION }}'
-    - uses: Ilshidur/action-discord@master
-      with:
-        args: 'Docker image and Windows installer are building... Please wait warmly. ☕'
