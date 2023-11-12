@@ -285,7 +285,7 @@ Server.deleteArchive = function (arcId, callback) {
     fetch(`/api/archives/${arcId}`, { method: "DELETE" })
         .then((response) => (response.ok ? response.json() : { success: 0, error: "响应不正确" }))
         .then((data) => {
-            if (data.success === "0") {
+            if (!data.success) {
                 LRR.toast({
                     heading: "无法删除存档文件. <br> (或许已被删除?)",
                     text: "存档元数据已完整删除. <br> 请在返资源库之前手动删除文件.",
