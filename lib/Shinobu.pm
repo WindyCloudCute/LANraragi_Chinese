@@ -17,7 +17,7 @@ no warnings 'experimental::signatures';
 use FindBin;
 use Parallel::Loops;
 use Sys::CpuAffinity;
-use Storable qw(lock_store);
+use Storable   qw(lock_store);
 use Mojo::JSON qw(to_json);
 
 #As this is a new process, reloading the LRR libs into INC is needed.
@@ -29,10 +29,10 @@ use File::Find;
 use File::Basename;
 use Encode;
 
-use LANraragi::Utils::Database qw(redis_encode invalidate_cache compute_id);
+use LANraragi::Utils::Database   qw(redis_encode invalidate_cache compute_id change_archive_id);
 use LANraragi::Utils::TempFolder qw(get_temp clean_temp_partial);
-use LANraragi::Utils::Logging qw(get_logger);
-use LANraragi::Utils::Generic qw(is_archive split_workload_by_cpu);
+use LANraragi::Utils::Logging    qw(get_logger);
+use LANraragi::Utils::Generic    qw(is_archive split_workload_by_cpu);
 
 use LANraragi::Model::Config;
 use LANraragi::Model::Plugins;
@@ -69,7 +69,7 @@ sub initialize_from_new_process {
     update_filemap();
     $logger->info("初始扫描完成！ 将观监视器添加到内容文件夹以监视进一步的文件变动。");
 
-    # 将观察器添加到内容目录
+    # Add watcher to content directory
     my $contentwatcher = File::ChangeNotify->instantiate_watcher(
         directories     => [$userdir],
         filter          => qr/\.(?:zip|rar|7z|tar|tar\.gz|lzma|xz|cbz|cbr|cb7|cbt|pdf|epub)$/i,
@@ -227,7 +227,7 @@ sub add_to_filemap ( $redis_cfg, $file ) {
                 $logger->debug("$file 文件的ID与数据库中现有的ID不同! ($filemap_id)");
                 $logger->info("$file 文件已被修改,已将其在数据库中的ID从 $filemap_id 修改为 $id.");
 
-                LANraragi::Utils::Database::change_archive_id( $filemap_id, $id );
+                change_archive_id( $filemap_id, $id );
 
                 # Don't forget to update the filemap, later operations will behave incorrectly otherwise
                 $redis_cfg->hset( "LRR_FILEMAP", $file, $id );
@@ -286,7 +286,7 @@ sub add_to_filemap ( $redis_cfg, $file ) {
 
 # Only handle new files. As per the ChangeNotify doc, it
 # "handles the addition of new subdirectories by adding them to the watch list"
-sub new_file_callback($name) {
+sub new_file_callback ($name) {
 
     $logger->debug("检测到新文件: $name");
     unless ( -d $name ) {
@@ -303,7 +303,7 @@ sub new_file_callback($name) {
 
 # Deleted files are simply dropped from the filemap.
 # Deleted subdirectories trigger deleted events for every file deleted.
-sub deleted_file_callback($name) {
+sub deleted_file_callback ($name) {
 
     $logger->info("$name 已从内容文件夹中删除！");
     unless ( -d $name ) {
