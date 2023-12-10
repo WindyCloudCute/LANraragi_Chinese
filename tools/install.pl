@@ -2,11 +2,11 @@
 
 use strict;
 use warnings;
-
+use utf8;
 use open ':std', ':encoding(UTF-8)';
 use Cwd;
 use Config;
-use utf8;
+
 use File::Copy;
 use feature qw(say);
 use File::Path qw(make_path);

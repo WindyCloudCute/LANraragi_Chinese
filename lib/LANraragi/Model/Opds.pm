@@ -60,7 +60,7 @@ sub generate_opds_catalog {
         version       => $mojo->LRR_VERSION,
         api_key_query => $api_key ? "?key=" . $api_key : "",
         api_key_and   => $api_key ? "&amp;key=" . $api_key : ""
-    );
+        );
     }else{
         return $mojo->render_to_string(
             template      => "opds",

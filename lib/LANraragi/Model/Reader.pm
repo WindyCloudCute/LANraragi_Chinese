@@ -2,7 +2,7 @@ package LANraragi::Model::Reader;
 
 use strict;
 use warnings;
-
+use utf8;
 
 use Redis;
 use File::Basename;

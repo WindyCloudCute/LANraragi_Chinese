@@ -2,7 +2,7 @@ package LANraragi::Model::Plugins;
 
 use strict;
 use warnings;
-
+use utf8;
 use feature 'fc';
 
 use Redis;

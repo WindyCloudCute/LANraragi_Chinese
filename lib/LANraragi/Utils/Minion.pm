@@ -2,7 +2,7 @@ package LANraragi::Utils::Minion;
 
 use strict;
 use warnings;
-use utf8;
+
 use Encode;
 use Mojo::UserAgent;
 use Parallel::Loops;
@@ -56,14 +56,14 @@ sub add_tasks {
             my @keys   = $redis->keys('????????????????????????????????????????');
             $redis->quit();
 
-            $logger->info("开始缩略图重新生成作业 (强制模式 = $force)");
+            $logger->info("Starting thumbnail regen job (force = $force)");
             my @errors = ();
 
             my $numCpus = Sys::CpuAffinity::getNumCpus();
             my $pl      = Parallel::Loops->new($numCpus);
             $pl->share( \@errors );
 
-            $logger->debug("可用于处理的核心数量: $numCpus");
+            $logger->debug("Number of available cores for processing: $numCpus");
             my @sections = split_workload_by_cpu( $numCpus, @keys );
 
             # Regen thumbnails for errythang if $force = 1, only missing thumbs otherwise
@@ -80,12 +80,12 @@ sub add_tasks {
 
                             unless ( $force == 0 && -e $thumbname ) {
                                 eval {
-                                    $logger->debug("正在重新生成:$id...");
+                                    $logger->debug("Regenerating for $id...");
                                     extract_thumbnail( $thumbdir, $id, 0, 1 );
                                 };
 
                                 if ($@) {
-                                    $logger->warn("生成缩略图时出错: $@");
+                                    $logger->warn("Error while generating thumbnail: $@");
                                     push @errors, $@;
                                 }
                             }
@@ -130,7 +130,7 @@ sub add_tasks {
               or die "Bullshit! File path could not be converted back to a byte sequence!"
               ;    # This error happening would not make any sense at all so it deserves the EYE reference
 
-            $logger->info("正在处理上传的文件 $file...");
+            $logger->info("Processing uploaded file $file...");
 
             # Since we already have a file, this goes straight to handle_incoming_file.
             my ( $status, $id, $title, $message ) = LANraragi::Model::Upload::handle_incoming_file( $file, $catid, "" );
@@ -153,7 +153,7 @@ sub add_tasks {
 
             my $ua     = Mojo::UserAgent->new;
             my $logger = get_logger( "Minion", "minion" );
-            $logger->info("正在下载 $url...");
+            $logger->info("Downloading url $url...");
 
             # Keep a clean copy of the url for display and tagging
             my $og_url = $url;
@@ -166,7 +166,7 @@ sub add_tasks {
                     {   success => 0,
                         url     => $og_url,
                         id      => $recorded_id,
-                        message => "链接已被下载!"
+                        message => "URL already downloaded!"
                     }
                 );
                 return;
@@ -177,7 +177,7 @@ sub add_tasks {
 
             if ($downloader) {
 
-                $logger->info( "发现下载器 " . $downloader->{namespace} );
+                $logger->info( "Found downloader " . $downloader->{namespace} );
 
                 # Use the downloader to transform the URL
                 my $plugname = $downloader->{namespace};
@@ -197,15 +197,15 @@ sub add_tasks {
 
                 $ua  = $plugin_result->{user_agent};
                 $url = $plugin_result->{download_url};
-                $logger->info("插件将 URL 转换为 $url");
+                $logger->info("URL transformed by plugin to $url");
             } else {
-                $logger->debug("找不到下载器，尝试直接下载 URL.");
+                $logger->debug("No downloader found, trying direct URL.");
             }
 
             # Download the URL
             eval {
                 my $tempfile = LANraragi::Model::Upload::download_url( $url, $ua );
-                $logger->info("URL将会被保存为 $tempfile ");
+                $logger->info("URL downloaded to $tempfile");
 
                 # Add the url as a source: tag
                 my $tag = "source:$og_url";
@@ -243,7 +243,7 @@ sub add_tasks {
             my ( $namespace, $id, $scriptarg ) = @args;
 
             my $logger = get_logger( "Minion", "minion" );
-            $logger->info("运行插件 $namespace...");
+            $logger->info("Running plugin $namespace...");
 
             my ( $pluginfo, $plugin_result ) = use_plugin( $namespace, $id, $scriptarg );
 

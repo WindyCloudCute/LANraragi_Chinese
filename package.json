@@ -1,8 +1,8 @@
 {
     "name": "lanraragi",
     "version": "0.9.10",
-    "version_name": "行尸走肉",
-    "description": "我一世英名恐怕要毁在日本文化的影响下了！",
+    "version_name": "Dead Man Walking",
+    "description": "I'm under Japanese influence and my honor's at stake!",
     "scripts": {
         "test": "prove -r -l -v tests/",
         "lanraragi-installer": "perl ./tools/install.pl",
@@ -11,21 +11,21 @@
         "dev-server": "perl ./script/launcher.pl -m -v ./script/lanraragi",
         "dev-server-verbose": "export LRR_DEVSERVER=1 && perl ./script/launcher.pl -m -v ./script/lanraragi",
         "kill-workers": "(kill -15 `cat ./public/temp/shinobu.pid-s6` || true) && (kill -15 `cat ./public/temp/minion.pid-s6` || true) && (pkill -9 -f ./script/lanraragi || true)",
-        "docker-build": "docker build -t windycloud/lanraragi_cn:dev -f ./tools/build/docker/Dockerfile .",
+        "docker-build": "docker build -t difegue/lanraragi -f ./tools/build/docker/Dockerfile .",
         "critic": "perlcritic ./lib/* ./script/* ./tools/install.pl",
         "backup-db": "perl ./script/backup",
         "get-version": "perl ./script/get_version"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/WindyCloudCute/LANraragi_Chinese.git"
+        "url": "git+https://github.com/Difegue/LANraragi.git"
     },
     "author": "dfug",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/WindyCloudCute/LANraragi_Chinese/issues"
+        "url": "https://github.com/Difegue/LANraragi/issues"
     },
-    "homepage": "https://github.com/WindyCloudCute/LANraragi_Chinesei#readme",
+    "homepage": "https://github.com/Difegue/LANraragi#readme",
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.2.1",
         "@jcubic/tagger": "^0.4.2",

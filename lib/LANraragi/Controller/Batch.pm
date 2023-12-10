@@ -43,7 +43,7 @@ sub socket {
 
     my $logger = get_logger( "Batch Tagging", "lanraragi" );
 
-    $logger->info('客户端连接到 Batch Tagging 服务');
+    $logger->info('Client connected to Batch Tagging service');
 
     # Increase inactivity timeout for connection a bit to account for clientside timeouts
     $self->inactivity_timeout(80);
@@ -81,7 +81,7 @@ sub socket {
                 my @args = @{ $command->{"args"} };
 
                 if ( !@args ) {
-                    $logger->debug("没有覆盖插件全局参数.");
+                    $logger->debug("No user overrides given.");
 
                     # Try getting the saved defaults
                     @args = get_plugin_parameters($pluginname);
@@ -127,7 +127,7 @@ sub socket {
 
             if ( $operation eq "tagrules" ) {
 
-                $logger->debug("将标签规则应用于$id...");
+                $logger->debug("Applying tag rules to $id...");
                 my $tags = $redis->hget( $id, "tags" );
                 $tags = redis_decode($tags);
 
@@ -137,7 +137,7 @@ sub socket {
 
                 # Merge array with commas
                 my $newtags = join( ', ', @tagarray );
-                $logger->debug("新标签: $newtags");
+                $logger->debug("New tags: $newtags");
                 set_tags( $id, $newtags );
 
                 $client->send(
@@ -155,7 +155,7 @@ sub socket {
             }
 
             if ( $operation eq "delete" ) {
-                $logger->debug("正在删除 $id...");
+                $logger->debug("Deleting $id...");
 
                 my $delStatus = LANraragi::Model::Archive::delete_archive($id);
 
@@ -187,7 +187,7 @@ sub socket {
 
         # If the client doesn't respond, halt processing
         finish => sub {
-            $logger->info('客户端断开连接，停止剩余操作');
+            $logger->info('Client disconnected, halting remaining operations');
             $cancelled = 1;
             $redis->quit();
         }

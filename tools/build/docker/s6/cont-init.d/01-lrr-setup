@@ -24,10 +24,10 @@ chmod -R u+rwx /root/lanraragi/database
 
 if [ "$FIX_PERMS" -eq 1 ]; then
   echo "Fixing permissions, hold on!"
-#Ensure thumbnail folder is writable
-chown -R root /root/lanraragi/content/thumb
-find /root/lanraragi/content/thumb -type f -exec chmod u+rw  {} \;
-find /root/lanraragi/content/thumb -type d -exec chmod u+rwx {} \;
+  #Ensure thumbnail folder is writable
+  chown -R root /root/lanraragi/content/thumb
+  find /root/lanraragi/content/thumb -type f -exec chmod u+rw  {} \;
+  find /root/lanraragi/content/thumb -type d -exec chmod u+rwx {} \;
 
   # Ensure the rest of the content folder is at least readable
   find /root/lanraragi/content -name thumb -prune -o -type f -exec chmod u+r  {} \;

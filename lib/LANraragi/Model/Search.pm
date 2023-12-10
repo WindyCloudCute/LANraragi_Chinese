@@ -2,8 +2,8 @@ package LANraragi::Model::Search;
 
 use strict;
 use warnings;
-
 use utf8;
+
 use List::Util qw(min);
 use Redis;
 use Storable qw/ nfreeze thaw /;
@@ -27,7 +27,7 @@ sub do_search {
     my $logger = get_logger( "Search Engine", "lanraragi" );
 
     unless ( $redis->exists("LAST_JOB_TIME") ) {
-        $logger->error("搜索引擎尚未初始化。 请稍等几秒钟。");
+        $logger->error("Search engine is not initialized yet. Please wait a few seconds.");
         return ( -1, -1, () );
     }
 
@@ -41,7 +41,7 @@ sub do_search {
     my ( $cachehit, @filtered ) = check_cache( $cachekey, $cachekey_inv );
 
     unless ($cachehit) {
-        $logger->debug("没有可用的缓存，进行完整的DB解析。");
+        $logger->debug("No cache available, doing a full DB parse.");
         @filtered = search_uncached( $category_id, $filter, $sortkey, $sortorder, $newonly, $untaggedonly );
 
         # Cache this query in the search database
@@ -70,10 +70,10 @@ sub check_cache {
 
     my @filtered = ();
     my $cachehit = 0;
-    $logger->debug("搜索请求： $cachekey");
+    $logger->debug("Search request: $cachekey");
 
     if ( $redis->exists("LRR_SEARCHCACHE") && $redis->hexists( "LRR_SEARCHCACHE", $cachekey ) ) {
-        $logger->debug("将缓存用于此查询。");
+        $logger->debug("Using cache for this query.");
         $cachehit = 1;
 
         # Thaw cache and use that as the filtered list
@@ -81,7 +81,7 @@ sub check_cache {
         @filtered = @{ thaw $frozendata };
 
     } elsif ( $redis->exists("LRR_SEARCHCACHE") && $redis->hexists( "LRR_SEARCHCACHE", $cachekey_inv ) ) {
-        $logger->debug("与对面的排序订单存在缓存密钥.");
+        $logger->debug("A cache key exists with the opposite sortorder.");
         $cachehit = 1;
 
         # Thaw cache, invert the list to match the sortorder and use that as the filtered list
@@ -147,7 +147,7 @@ sub search_uncached {
             my $isneg   = $token->{isneg};
             my $isexact = $token->{isexact};
 
-            $logger->debug("正在搜索 $tag, isneg=$isneg, isexact=$isexact");
+            $logger->debug("Searching for $tag, isneg=$isneg, isexact=$isexact");
 
             # Encode tag as we'll use it in redis operations
             $tag = redis_encode($tag);
@@ -162,7 +162,7 @@ sub search_uncached {
                 my $operator  = $2;
                 my $pagecount = $3;
 
-                $logger->debug("搜索具有页面的ID $operator $pagecount $col");
+                $logger->debug("Searching for IDs with $operator $pagecount $col");
 
                 # If no operator is specified, we assume it's an exact match
                 $operator = "=" if !$operator;
@@ -194,7 +194,7 @@ sub search_uncached {
 
                 # Get the list of IDs for this tag
                 @ids = $redis->smembers("INDEX_$tag");
-                $logger->debug( "找到了 $tag 的索引，包含 " . scalar @ids . "个 ID" );
+                $logger->debug( "Found tag index for $tag, containing " . scalar @ids . " IDs" );
             } else {
 
                 # Get index keys that match this tag.
@@ -206,7 +206,7 @@ sub search_uncached {
                 # Get the list of IDs for each key
                 foreach my $key (@keys) {
                     my @keyids = $redis->smembers($key);
-                    $logger->trace( "找到了 $tag 的索引 $key，包含了 " . scalar @ids . " 个 ID" );
+                    $logger->trace( "Found index $key for $tag, containing " . scalar @ids . " IDs" );
                     push @ids, @keyids;
                 }
             }
@@ -218,7 +218,7 @@ sub search_uncached {
 
                 # First iteration
                 if ( $scan == -1 ) { $scan = 0; }
-                $logger->trace("正在扫描 $namesearch, cursor=$scan");
+                $logger->trace("Scanning for $namesearch, cursor=$scan");
 
                 my @result = $redis->zscan( "LRR_TITLES", $scan, "MATCH", $namesearch, "COUNT", 100 );
                 $scan = $result[0];
@@ -226,7 +226,7 @@ sub search_uncached {
                 foreach my $title ( @{ $result[1] } ) {
 
                     if ( $title eq "0" ) { next; }    # Skip scores
-                    $logger->trace("找到标题匹配项: $title");
+                    $logger->trace("Found title match: $title");
 
                     # Strip everything before \x00 to get the ID out of the key
                     my $id = substr( $title, index( $title, "\x00" ) + 1 );
@@ -237,11 +237,11 @@ sub search_uncached {
             if ( scalar @ids == 0 && !$isneg ) {
 
                 # No more results, we can end search here
-                $logger->trace("该标记没有结果，正在停止搜索。");
+                $logger->trace("No results for this token, halting search.");
                 @filtered = ();
                 last;
             } else {
-                $logger->trace( "找到此标记的 " . scalar @ids . " 个结果." );
+                $logger->trace( "Found " . scalar @ids . " results for this token." );
 
                 # Intersect the new list with the previous ones
                 @filtered = intersect_arrays( \@ids, \@filtered, $isneg );
@@ -250,7 +250,7 @@ sub search_uncached {
     }
 
     if ( $#filtered > 0 ) {
-        $logger->debug( "筛选后找到了 " . $#filtered . " 个结果" );
+        $logger->debug( "Found " . $#filtered . " results after filtering." );
 
         if ( !$sortkey ) {
             $sortkey = "title";
@@ -268,7 +268,7 @@ sub search_uncached {
             # Remove the titles from the keys, which are stored as "title\x00id"
             @ordered = map { substr( $_, index( $_, "\x00" ) + 1 ) } @ordered;
 
-            $logger->trace( "有序列表中的示例元素: " . $ordered[0] );
+            $logger->trace( "Example element from ordered list: " . $ordered[0] );
 
             # Just intersect the ordered list with the filtered one to get the final result
             @filtered = intersect_arrays( \@filtered, \@ordered, 0 );
@@ -382,7 +382,7 @@ sub compute_search_filter {
         }
 
         # Escape already present regex characters
-        $logger->debug("预转义标签: $tag");
+        $logger->debug("Pre-escaped tag: $tag");
 
         $tag = trim($tag);
 

@@ -7,7 +7,7 @@ EXPOSE 3000
 # Enable UTF-8 (might not do anything extra on alpine tho)
 ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8 \
     # rootless user id
-    LRR_UID=1000 LRR_GID=1000 \
+    LRR_UID=0 LRR_GID=0 \
     # Environment variables overridable by the user on container deployment
     LRR_NETWORK=http://*:3000 \
     # extra variables
@@ -31,7 +31,7 @@ WORKDIR /tmp/lrr
 #This allows for Docker cache to preserve cpan dependencies
 COPY --chown=root:root /tools/cpanfile /tools/install.pl /tools/build/docker/install-everything.sh tools/
 COPY --chown=root:root /package.json package.json
-COPY --chown=root:root  /package-lock.json package-lock.json
+COPY --chown=root:root /package-lock.json package-lock.json
 
 # Run the install script as root, in dev mode to prevent wget etc from being uninstalled
 RUN sh ./tools/install-everything.sh -d

@@ -2,7 +2,7 @@ package LANraragi::Plugin::Metadata::Ksk;
 
 use strict;
 use warnings;
-
+use utf8;
 use LANraragi::Model::Plugins;
 use LANraragi::Utils::Logging qw(get_plugin_logger);
 use LANraragi::Utils::Archive qw(is_file_in_archive extract_file_from_archive);

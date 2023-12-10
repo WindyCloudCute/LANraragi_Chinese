@@ -93,7 +93,7 @@ sub start_minion {
     my $logger = get_logger( "Minion", "minion" );
 
     my $numcpus = Sys::CpuAffinity::getNumCpus();
-    $logger->info("在子进程中使用 $numcpus 并行作业启动新的 Minion 工作进程。");
+    $logger->info("Starting new Minion worker in subprocess with $numcpus parallel jobs.");
 
     my $worker = $mojo->app->minion->worker;
     $worker->status->{jobs} = $numcpus;
@@ -103,9 +103,9 @@ sub start_minion {
     my $proc = Proc::Simple->new();
     $proc->start(
         sub {
-            $logger->info("Minion 工作线程 $$ 开始运行");
+            $logger->info("Minion worker $$ started");
             $worker->run;
-            $logger->info("Minion 工作线程 $$ 停止运行");
+            $logger->info("Minion worker $$ stopped");
             return 1;
         }
     );
@@ -123,7 +123,7 @@ sub _spawn {
     my ( $job, $pid )  = @_;
     my ( $id,  $task ) = ( $job->id, $job->task );
     my $logger = get_logger( "Minion Worker", "minion" );
-    $job->app->log->debug(qq{进程 $pid 正在执行作业 "$id" 和任务 "$task"});
+    $job->app->log->debug(qq{Process $pid is performing job "$id" with task "$task"});
 }
 
 # Start Shinobu and return its Proc::Background object.
@@ -134,7 +134,7 @@ sub start_shinobu {
     $proc->start( $^X, "./lib/Shinobu.pm" );
     $proc->kill_on_destroy(0);
 
-    $mojo->LRR_LOGGER->debug( "Shinobu 工作进程新的 PID 为 " . $proc->pid );
+    $mojo->LRR_LOGGER->debug( "Shinobu Worker new PID is " . $proc->pid );
 
     # Freeze the process object in the PID file
     store \$proc, get_temp() . "/shinobu.pid";
@@ -159,7 +159,7 @@ sub shasum {
     };
 
     if ($@) {
-        $logger->error( "创建哈希时出错" . $_[0] . " -- " . $@ );
+        $logger->error( "Error building hash for " . $_[0] . " -- " . $@ );
 
         return "";
     }

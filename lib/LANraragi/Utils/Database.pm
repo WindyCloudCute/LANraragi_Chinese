@@ -344,7 +344,7 @@ sub set_title ( $id, $newtitle ) {
 # Set $append to 1 if you want to append the tags instead of replacing them.
 sub set_tags ( $id, $newtags, $append = 0 ) {
 
-    my $redis = LANraragi::Model::Config->get_redis;
+    my $redis   = LANraragi::Model::Config->get_redis;
     my $oldtags = $redis->hget( $id, "tags" );
     $oldtags = redis_decode($oldtags);
 

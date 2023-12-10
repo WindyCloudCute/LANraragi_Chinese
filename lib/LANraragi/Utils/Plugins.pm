@@ -2,7 +2,7 @@ package LANraragi::Utils::Plugins;
 
 use strict;
 use warnings;
-
+use utf8;
 
 use Mojo::JSON qw(decode_json);
 use LANraragi::Utils::Database qw(redis_decode);

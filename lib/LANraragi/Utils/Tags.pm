@@ -2,7 +2,7 @@ package LANraragi::Utils::Tags;
 
 use strict;
 use warnings;
-
+use utf8;
 use feature "switch";
 no warnings 'experimental';
 
